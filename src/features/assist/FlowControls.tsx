@@ -1,0 +1,20 @@
+'use client';
+import {useState} from 'react';
+import type {Conversation} from '../../contracts';
+import {presentationContextReady} from '../../domain/guide';
+import {conversationFlow,objectionChoices,type ConversationAction} from '../../domain/conversation';
+import s from '../workspace/Workspace.module.css';
+export function FlowControls({conversation,busy,answered,started,onAction,onObjection}:{conversation:Conversation;busy:boolean;answered:boolean;started:boolean;onAction:(action:ConversationAction)=>void;onObjection:(id:string)=>void}){
+ const flow=conversationFlow(conversation);const [reasonPage,setReasonPage]=useState(0);
+ const button=(label:string,action:ConversationAction,disabled=false)=><button key={action} disabled={busy||disabled} onClick={()=>onAction(action)}>{label}</button>;
+ return <section className={`${s.panel} ${s.flowControls}`}><div className={s.panelTitle}>{flow.stage.replaceAll('_',' ').toUpperCase()}</div>
+ {['opening','voicemail'].includes(flow.stage)&&<label className={s.voicemailChoice}><input type="checkbox" checked={flow.stage==='voicemail'} disabled={busy||answered} onChange={e=>onAction(e.target.checked?(flow.stage==='opening'?'report_no_answer':'no_answer'):'return_from_voicemail')}/>No answer / voicemail</label>}
+ {flow.stage==='opening'&&<>{button('Interested','report_interested')}{button('Not interested','report_not_interested')}{button('Busy / callback','report_callback')}{button('Wrong number','report_wrong_number')}<small>Choose the actual response after calling. This also records the call attempt.</small></>}
+ {flow.stage==='objection_selection'&&<>{button('Interested now → continue','resume')}<div className={s.flowChoices}>{objectionChoices.slice(reasonPage*4,reasonPage*4+4).map(x=><button disabled={busy} key={x.scenarioId} onClick={()=>onObjection(x.scenarioId)}>{x.label}</button>)}</div><div className={s.assistNav}><button disabled={reasonPage===0} onClick={()=>setReasonPage(reasonPage-1)}>Previous reasons</button><span>{reasonPage+1}/{Math.ceil(objectionChoices.length/4)}</span><button disabled={(reasonPage+1)*4>=objectionChoices.length} onClick={()=>setReasonPage(reasonPage+1)}>More reasons</button></div>{button('Still not interested','declined')}{button('Do not contact','do_not_contact')}</>}
+ {flow.stage==='objection_response'&&<>{button('Interested now → resume','resume')}{button('Change reason','change_reason')}{['S007','S009','S107'].includes(flow.objectionId??'')&&button('Agree a callback','callback')}{button('Still not interested','declined')}{button('Do not contact','do_not_contact')}</>}
+ {flow.stage==='voicemail'&&<>{button('Voicemail actually left','voicemail_left')}{button('Could not leave voicemail','voicemail_unavailable')}{button('Callback requested','callback')}<small>Report the actual action. The app does not deliver voicemail.</small></>}
+ {flow.stage==='offer_comparison'&&<>{!presentationContextReady(conversation)&&button('Confirm missing home base / schedule','interested')}{button(conversation.selectedOfferId?'Discuss application next step':'Choose a company below','application_next',!conversation.selectedOfferId||!presentationContextReady(conversation))}{button('Driver has an objection','not_interested',!answered)}{button('Callback','callback')}{button('Review outcome','review_outcome')}</>}
+ {flow.stage==='application_next_step'&&<>{button(flow.applicationIntent==='agreed'?'Agreement recorded':'Driver agrees to apply','agree_to_apply',flow.applicationIntent==='agreed'||conversation.answers.employment!=='w2'&&!conversation.selectedOfferId)}{button('Driver has an objection','not_interested',!answered)}{button('Callback','callback')}{button('Review outcome','review_outcome')}<small>Agreement is not submission or a confirmed application.</small></>}
+ {flow.stage==='outcome_review'&&<>{flow.outcomeDraft.outcome!=='do_not_contact'&&button('Return to conversation','return_from_outcome',!flow.interrupted)}<small>{flow.outcomeDraft.outcome==='do_not_contact'?'Contact suppressed. Save the Do Not Contact outcome to finish.':'Choose and save an explicit outcome in Outcome.'}</small></>}
+ </section>;
+}

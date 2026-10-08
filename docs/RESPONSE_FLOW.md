@@ -1,0 +1,22 @@
+# Response-driven recruiter conversation
+
+The owner FAQ update and current application-link behavior are documented in [OWNER_FAQ.md](OWNER_FAQ.md). It replaces the older FAQ UI and unconfigured generic-link restriction described in the earlier verification record below.
+
+The current two-page app now persists nine conversation stages independently of attempt, answer, and completion events. Recruiters operate the opening, objections, voicemail, application agreement, and outcome review with response buttons. The prior 14-item guide advances after confirmed dropdown choices; typed values require confirmation. Unknown/not-applicable answers retain a reason and cannot establish verified qualification.
+
+An objection preserves the interrupted stage and question. FAQ previews are temporary and preserve stored answers, company selection, and guide progress. Spoken questions and responses render in full; coach/source material has separate controls. Questions retain their input drafts during FAQ and objection interruptions. Editing qualification answers recalculates matches and invalidates company selection and application agreement. Only one company ID can be selected.
+
+Outcomes begin without a default. Outcome and callback drafts persist. Completion checks call evidence, application evidence, referral readiness, and future callback time. Do Not Contact suppresses immediately, blocks persuasion/outreach, and requires final outcome review. Completion writes before dashboard navigation and protects against duplicate or conflicting submissions.
+
+## Verification
+
+- 56 domain/repository tests pass, including all new branch, reload, validation, outcome, selection, agreement, and duplicate guards. Existing source-integrity checks cover all 172 supplied scenarios and the 14-item guide.
+- Lint and typecheck pass.
+- Production build passes.
+- Browser acceptance tests were updated to use response controls. The local runner cannot start Wrangler: `uv_interface_addresses returned Unknown system error 1`. No local browser test bodies executed. See `docs/qa/flow-e2e.log`. Cloud-browser checks on the deployed app confirmed the opener, 1099 automatic progression through all 14 questions, typed confirmation, inline invalid state/negative experience, objection and FAQ resumption including an unconfirmed input draft, unknown/reason handling, and selection invalidation. At the observed 1363×936 viewport the shell had no document overflow. A callback input race found in this check was corrected with a local draft and deferred persistence; Native browser input then confirmed that callback time and outcome survive refresh and panel reopening. A completion edge case was also corrected so draft autosaving stops once the conversation closes. Cloud-browser checks also confirmed the opening Not interested branch, full objection/coaching views, Still not interested → Declined, No answer → voicemail/verification fallback → explicit outcome, W-2 skipping internal questions, blocked unconfigured handoff actions, and clean dashboard navigation. Callback input/outcome persistence was checked through native input, refresh, and panel reopening. The final Do Not Contact/completion check is reported in the implementation response. The four exact local viewport cases remain unexecuted because the local runner cannot start.
+
+## Configuration limitations
+
+This remains the approved synthetic single-browser demo. Current carrier terms are fictional, and no verified live application receipt/submission integration is connected. Company selection and recorded driver agreement do not establish application submission. The recruiter-attributed W-2 referral and callback number are unconfigured, so those scripts/actions use the approved verification fallback. The implementation does not restore legacy endpoints, notifications, or application URLs. Offer fields absent from the documented snapshot require verification; they are never assumed to fit. A source-backed talk-track generator can quote only a currently approved, selected snapshot with documented pay basis, range, route, home time, and confirmed driver priority. Synthetic, missing, expired, conflicting, or differently selected terms fall back. The demo has no approved live carrier snapshot connected.
+
+The dashboard/workspace structure and explicit six-row responsive shell are retained. Long spoken content remains complete and can scroll inside its bounded panel when necessary. Source and coaching content remain separately reachable.

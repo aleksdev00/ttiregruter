@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {ONLINE_APPS_HEADERS,buildOnlineAppsRow,rowToOrderedValues} from '../../src/domain/application-export.ts';
+import type {Contact,Conversation,Recruiter} from '../../src/contracts/index.ts';
+
+const contact:Contact={id:'driver-1',firstName:'Maria',lastName:'Lopez',nameEvidence:'explicit_source',phoneRaw:'001-312-555-0199',phoneNormalized:'+13125550199',email:'maria@example.com',city:'Chicago',state:'IL',sourceLabel:'apply site',sourceRecordId:'external-1',status:'available',reservedBy:null,activeConversationId:null,callbackAt:null,rawFields:{},isDemo:false};
+const conversation:Conversation={id:'conversation-1',contactId:contact.id,recruiterId:'recruiter-1',status:'active',activeStepId:'application',answers:{safeToTalk:true,preferredName:null,priority:'home_time',homeState:'IL',licenseClass:'A',experienceMonths:24,employment:'1099',routePreference:'regional',homeTimePreference:'weekly',startWindow:'two_weeks',nonNegotiables:null},selectedOfferId:null,startedAt:'2026-10-02T10:00:00.000Z',updatedAt:'2026-10-02T10:00:00.000Z',closedAt:null,outcome:null,scriptVersion:'test',offerSnapshotVersion:'test',revision:1};
+const recruiter:Recruiter={id:'recruiter-1',fullName:'Nate Mitchell',alias:'Nate',referralUrl:null,reportingTimeZone:'America/Chicago',isDemo:false};
+
+test('ONLINE APPS mapping preserves the exact 71-column contract',()=>{const row=buildOnlineAppsRow({applicationId:'app-1',submittedAt:'2026-10-02T10:00:00.000Z',status:'Submitted',contact,conversation,recruiter,recruiterCode:'NATE-01',originalNotes:{applicationNumber:'legacy-7'},attribution:{teamId:'team-a',teamName:'Team A'}});assert.equal(ONLINE_APPS_HEADERS.length,71);const values=rowToOrderedValues(row);assert.equal(values.length,71);assert.equal(values[3],'Maria');assert.equal(values[4],'Lopez');assert.equal(values[5],contact.phoneRaw);assert.equal(values[6],contact.email);assert.equal(values[21],'24');assert.equal(values[69],'NATE-01');assert.match(values[70],/_ttiAttribution/);assert.match(values[70],/legacy-7/);});

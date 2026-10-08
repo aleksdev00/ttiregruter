@@ -1,0 +1,278 @@
+.workspace{width:100%;height:100vh;height:100dvh;display:grid;grid-template-rows:62px 0 minmax(0,1fr) 130px 56px 28px;gap:0;background:#edf1f5;min-width:0;min-height:0}.header{display:flex;align-items:center;padding:0 22px;gap:18px;border-bottom:1px solid #d5dfe9;background:white;min-width:0}.header button{display:flex;align-items:center;gap:6px;border:0;background:none}.contactTitle{font-size:14px;color:#587087}.demo{font-size:12px;background:#fff0d6;color:#805021;border-radius:4px;font-weight:800;padding:5px 8px}.save{margin-left:auto;display:flex;gap:6px;align-items:center;font-size:13px;color:#5b7187}.compactTabs{display:none}.main{display:grid;grid-template-columns:minmax(0,20fr) minmax(0,55fr) minmax(0,25fr);padding:18px;gap:16px;min-height:0;min-width:0}.main>div{min-width:0;min-height:0}.panel{height:100%;background:white;border:1px solid #dce4ed;border-radius:10px;padding:20px;min-height:0;min-width:0}.panelTitle{display:flex;justify-content:space-between;gap:10px;color:#73869a;font-size:12px;font-weight:700;letter-spacing:1px}.questions{display:flex;flex-direction:column;gap:18px}.questions h2{font-size:21px;line-height:1.2}.progress{height:4px;background:#e7edf4;border-radius:5px;flex-shrink:0}.progress span{display:block;height:4px;background:#1b578f}.answer{display:flex;flex-direction:column;gap:12px;font-size:14px}.answer label{color:#647a91}.questionNav{display:flex;flex-direction:column;gap:8px;margin-top:auto}.questionNav button{font-size:12px;padding:7px}.questionNote{font-size:12px;line-height:1.5;color:#8a97a6}.script{background:#fff;display:flex;flex-direction:column;padding:26px 30px;border-top:3px solid #205588}.scriptTop{display:flex;justify-content:space-between;gap:16px;font-size:12px;color:#6b85a0;font-weight:700;letter-spacing:.9px}.scriptTop>span:first-child{color:#245581}.scriptTop>span:last-child{font-size:12px;letter-spacing:0}.spoken{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0;min-width:0;padding:10px 0}.quoteMark{font-family:Georgia,serif;font-size:70px;color:#d6e3f0;height:44px;line-height:1}.spoken p{font-size:clamp(24px,2.6vw,40px);line-height:1.4;font-weight:500;letter-spacing:-.5px;overflow-wrap:anywhere;max-width:620px}.scriptNavigation{display:flex;align-items:center;gap:10px;color:#7a8c9e;font-size:12px}.scriptNavigation button{padding:7px;display:flex;align-items:center;justify-content:center}.scriptNavigation .nextQuestion{margin-left:auto;padding:8px 12px}.coaching{padding-top:20px;margin-top:20px;border-top:1px solid #e8edf3}.coaching span{font-size:10px;letter-spacing:1px;color:#8a98a7;font-weight:700}.coaching p{font-size:13px;line-height:1.5;color:#7c8d9e;margin-top:7px}.application{display:flex;flex-direction:column;gap:5px;margin-top:12px}.application button{font-size:13px}.application small{color:#7c8d9e}.assistance{display:flex;flex-direction:column;gap:14px;padding:17px}.assistTabs{display:flex;gap:2px;border-bottom:1px solid #e2e9f0;padding-bottom:10px}.assistTabs button{border:0;padding:6px;font-size:12px;color:#758699}.assistTabs button[aria-pressed=true]{background:#eaf2fa;color:#1b5588}.faqToggle{display:flex;align-items:center;gap:8px;background:#f4f7fa;font-size:14px;text-align:left;padding:10px}.faqQuestion{font-size:14px;line-height:1.4}.faqList{display:flex;flex-direction:column;gap:10px}.faqList button{font-size:13px;text-align:left;font-weight:400;padding:9px;line-height:1.4}.pages{display:flex;flex-direction:column;gap:10px;min-height:0;flex:1}.pagedText{font-size:16px;line-height:1.5;overflow-wrap:anywhere}.pageControls{display:flex;justify-content:center;align-items:center;gap:14px;font-size:12px;margin-top:auto}.pageControls button{display:flex;padding:5px}.assistNav{display:flex;gap:6px;align-items:center;justify-content:space-between;margin-top:auto;font-size:12px;color:#7f8fa2}.assistNav button{padding:6px;font-size:12px}.infoText{font-size:17px;line-height:1.6;overflow-wrap:anywhere}.help{font-size:14px;color:#708498;line-height:1.5}.assistance label{font-size:13px;color:#6e8397}.offers{padding:0 18px 10px;min-width:0;display:grid;grid-template-rows:29px minmax(0,1fr);gap:7px}.offerHeading{display:flex;align-items:center;gap:14px;font-size:14px}.offerHeading small{font-size:12px;color:#7c8c9c}.offerHeading>div{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;color:#7c8c9c}.offerHeading button{display:flex;padding:4px}.offerCards{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-height:0;min-width:0}.offerCard{display:flex;align-items:center;padding:12px 16px;background:white;border:1px solid #d5e0e9;border-radius:9px;gap:12px;min-width:0;min-height:0}.offerCard[data-selected=true]{border:2px solid #2b699f;background:#f5faff}.offerCard>div{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1}.offerCard strong{font-size:16px}.offerCard span{color:#648098;font-size:12px}.offerCard small{font-size:12px;color:#8092a3}.offerCard button{font-size:12px;padding:7px 10px}.detailsButton{display:flex;align-items:center;gap:4px;border:0;background:none}.noOffers{grid-column:1/-1;padding:14px;background:#fff;border:1px solid #d5e0e9;border-radius:8px;font-size:14px;color:#72879a}.actions{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;background:white;border-top:1px solid #d6e0ea}.actions>div{display:flex;align-items:center;gap:10px}.actions button{display:flex;align-items:center;gap:7px;font-size:13px;padding:8px 12px}.connected{font-size:13px;color:#3b647f}.bottomNotice{display:flex;align-items:center;padding:0 18px;color:#74889a;font-size:12px;background:#f3f6f9}.outcomes{display:flex;flex-direction:column;gap:17px;max-width:100%;justify-content:center;padding:26px 30px}.outcomes label{font-size:14px}.callback{display:flex;flex-direction:column;gap:8px}.outcomeSlot{display:none}.missing{padding:40px}.missing p{margin:24px 0}.questionsSlot,.scriptSlot,.assistSlot{height:100%}
+@media(max-width:1150px),(max-height:820px){.workspace{grid-template-rows:48px 38px minmax(0,1fr) 83px 47px 24px}.compactTabs{display:flex;align-items:center;padding:0 16px;gap:7px}.compactTabs button{border:0;background:none;padding:6px 12px;font-size:13px;color:#70849a}.compactTabs button[aria-pressed=true]{background:#164e82;color:white}.main{display:block;padding:6px 16px 12px}.questionsSlot,.scriptSlot,.assistSlot,.outcomeSlot{display:none}.main[data-tab=Script] .scriptSlot,.main[data-tab=Questions] .questionsSlot,.main[data-tab=Assist] .assistSlot,.main[data-tab=Outcome] .outcomeSlot{display:block;height:100%}.script{padding:12px 20px}.spoken{padding:5px 0}.spoken p{font-size:27px;max-width:700px;line-height:1.3}.quoteMark{display:none}.coaching{display:none}.scriptNavigation{gap:8px}.scriptNavigation button{padding:5px}.application{margin-top:5px;flex-direction:row;align-items:center;gap:10px}.application button{padding:7px 9px}.questions{gap:8px;padding:12px 20px}.questions h2{display:none}.answer{display:grid;grid-template-columns:1fr 2fr auto;align-items:center;gap:12px}.questionNav{flex-direction:row;margin-top:0}.questionNote{display:none}.progress{display:none}.assistance{padding:10px 20px;gap:7px;position:relative}.assistTabs{padding-bottom:4px;gap:10px}.faqToggle{position:absolute;top:10px;right:20px;padding:5px;font-size:12px}.faqList{flex-direction:row;gap:10px}.faqList button{flex:1;max-width:30%}.pages{flex-direction:row;align-items:center}.pagedText{flex:1;max-width:70%;font-size:18px}.pageControls{margin-top:0}.assistNav{margin-top:0;justify-content:start;gap:15px}.assistance select{max-width:300px}.infoText{font-size:18px}.outcomes{padding:12px 20px;gap:8px;display:grid;grid-template-columns:1fr 2fr;align-content:center;align-items:center}.outcomes .panelTitle{grid-column:1/-1}.outcomes button{grid-column:1}.outcomes .help{font-size:12px}.callback{grid-column:1/-1;display:flex;flex-direction:row;align-items:center}.offers{padding:0 16px 7px;grid-template-rows:22px minmax(0,1fr);gap:4px}.offerCard{padding:6px 12px;gap:8px}.offerCard strong{font-size:14px}.offerCard span{font-size:12px}.offerCard small{display:none}.offerCard button{padding:5px 8px}.offerHeading small{font-size:12px}.header{padding:0 16px;gap:12px}.actions{padding:0 16px}.bottomNotice{padding:0 16px;font-size:12px}.scriptTop{font-size:12px}}
+@media(max-height:450px),(max-width:720px){.workspace{grid-template-rows:42px 32px minmax(0,1fr) 68px 42px 22px}.header{padding:0 10px;gap:9px}.header button{padding:4px;font-size:12px}.contactTitle{font-size:12px}.save{font-size:12px}.demo{font-size:10px;padding:4px}.compactTabs{padding:0 10px;gap:5px}.compactTabs button{padding:5px 9px;font-size:12px}.main{padding:4px 10px 7px}.script{padding:8px 12px}.scriptTop{font-size:10px}.scriptTop>span:last-child{font-size:10px}.spoken p{font-size:18px;line-height:1.4;max-width:540px}.scriptNavigation{font-size:10px;gap:6px}.scriptNavigation button{padding:3px}.scriptNavigation .nextQuestion{padding:5px 7px;font-size:12px}.application{gap:6px}.application button{font-size:12px;padding:5px}.application small{font-size:10px}.questions{padding:8px 12px;gap:7px}.answer{grid-template-columns:100px 1fr auto;gap:7px}.answer label{font-size:12px}.answer input,.answer select{padding:5px;font-size:14px}.answer button{font-size:12px;padding:6px}.questionNav button{font-size:12px;padding:5px}.assistance{padding:8px 12px;gap:5px}.assistTabs{gap:0}.assistTabs button{font-size:12px;padding:5px}.faqToggle{right:10px;top:8px;font-size:10px;padding:5px}.faqToggle svg{display:none}.faqList{gap:5px}.faqList button{font-size:12px;padding:5px}.faqQuestion{font-size:12px}.pagedText,.infoText{font-size:14px;line-height:1.4}.pageControls{font-size:12px;gap:5px}.assistNav{gap:9px}.assistNav button{padding:4px;font-size:12px}.assistance select{padding:4px;font-size:14px}.outcomes{padding:8px 12px;gap:6px;grid-template-columns:1fr 2fr}.outcomes label{font-size:12px}.outcomes select,.outcomes input{padding:5px;font-size:14px}.outcomes button{font-size:12px;padding:6px}.outcomes .help{font-size:12px}.outcomes .panelTitle{font-size:10px}.callback{gap:6px}.callback label{font-size:12px}.callback input{font-size:12px}.offers{padding:0 10px 5px;grid-template-rows:20px minmax(0,1fr);gap:2px}.offerHeading{font-size:12px;gap:7px}.offerHeading small{font-size:10px}.offerCard{padding:4px 7px;gap:5px;border-radius:6px}.offerCard strong{font-size:12px}.offerCard span{font-size:10px}.offerCard button{font-size:12px;padding:5px}.offerCard .detailsButton{padding:2px;font-size:10px}.detailsButton svg{display:none}.offerCards{gap:7px}.actions{padding:0 10px;gap:5px}.actions>div{gap:6px}.actions button{font-size:12px;padding:6px 8px;gap:5px}.actions svg{display:none}.bottomNotice{font-size:10px;padding:0 10px}.noOffers{font-size:12px;padding:6px}.questionNote{display:none}}
+
+.main[data-tab=Outcome] .scriptSlot{display:none}.main[data-tab=Outcome] .outcomeSlot{display:block;grid-column:2;grid-row:1}.main[data-tab=Outcome] .assistSlot{grid-column:3;grid-row:1}.main[data-tab=Outcome] .questionsSlot{grid-column:1;grid-row:1}.bottomNotice{gap:9px}.bottomNotice button{font-size:12px;padding:2px 5px}.main[data-tab=Error] .scriptSlot{display:block;height:100%}
+
+/* Explicit rows keep desktop placement stable when the compact tab bar is hidden. */
+.workspace>.header{grid-row:1}
+.workspace>.compactTabs{grid-row:2}
+.workspace>.priorityBar{grid-row:3}
+.workspace>.main{grid-row:4}
+.workspace>.offers{grid-row:5}
+.workspace>.actions{grid-row:6}
+.workspace>.bottomNotice{grid-row:7}
+/* Bounded playbook controls; all long content is reachable by segment controls. */
+.playbookAssist{gap:10px}.assistTabs{flex-wrap:wrap;flex-shrink:0}.scenarioBrowser,.scenarioDetail,.noteEditor{display:flex;flex-direction:column;gap:8px;flex:1;min-height:0;min-width:0}.scenarioBrowser input,.scenarioBrowser select,.noteEditor input,.noteEditor select,.assistance>select{width:100%;max-width:100%;min-width:0}.scenarioResults{display:grid;gap:8px}.scenarioResults button{text-align:left;font-size:13px;line-height:1.3;overflow-wrap:anywhere;padding:8px}.suggestions,.scenarioModes,.scriptModes,.scenarioButtons{display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0}.suggestions button,.scenarioModes button,.scriptModes button{font-size:12px;padding:5px 7px}.scenarioModes button[aria-pressed=true],.scriptModes button[aria-pressed=true]{background:#e8f1fb;color:#164e82}.scriptModes{margin-top:12px;align-items:center}.scriptModes small{color:#805021;font-size:12px}.scenarioButtons button{flex:1;font-size:12px;padding:7px}.referenceControl{display:flex;flex-direction:column;gap:5px}.referenceControl button{font-size:12px;padding:6px}.segmentView{display:flex;flex-direction:column;gap:10px;flex:1;min-height:0;min-width:0}.segmentView>p{white-space:pre-wrap;font-size:17px;line-height:1.5;overflow-wrap:anywhere;margin:auto 0}.segmentView .assistNav{margin-top:auto}.noteEditor textarea{width:100%;min-width:0;resize:none;min-height:64px;font:inherit;padding:9px;border:1px solid #cad6e2;border-radius:6px}.noteEditor small,.handoffPanel small{font-size:12px;line-height:1.4;color:#637a90;overflow-wrap:anywhere}.noteEditor .assistNav{margin-top:0}.handoffPanel{display:flex;flex-direction:column;gap:8px;padding:16px}.handoffPanel label{font-size:12px}.handoffPanel>button,.handoffActions button{padding:7px;font-size:12px}.handoffActions{display:flex;flex-direction:column;gap:6px;flex-shrink:0}.handoffPanel select{min-width:0;width:100%;font-size:13px}.spoken p{white-space:pre-wrap}.questionNav select{width:100%;min-width:0}.questionNav label{font-size:12px}.outcomes select{min-width:0;width:100%}
+@media(max-width:1150px),(max-height:820px){.playbookAssist{gap:7px}.scenarioBrowser{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto auto minmax(0,1fr);align-content:start;gap:7px 16px}.scenarioBrowser>label{grid-column:1/-1}.scenarioBrowser .scenarioResults{grid-column:1;grid-row:3/5;align-content:start}.scenarioBrowser .suggestions{grid-column:2;grid-row:3}.scenarioBrowser .assistNav{grid-column:2;grid-row:4;align-self:start}.scenarioBrowser .referenceControl{grid-column:2;grid-row:4;margin-top:42px;align-self:start}.scenarioBrowser .referenceControl select{max-width:100%}.scenarioDetail .segmentView{flex:1}.scenarioDetail .segmentView>p{max-width:750px}.noteEditor{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);grid-template-rows:auto auto auto auto;align-content:center;gap:8px 16px}.noteEditor .panelTitle{grid-column:1/-1}.noteEditor textarea{grid-column:2;grid-row:2/4}.noteEditor small{grid-column:1/-1}.handoffPanel{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto minmax(0,1fr) auto;gap:8px 16px}.handoffPanel .panelTitle{grid-column:1}.handoffPanel>button{grid-column:2;grid-row:1}.handoffPanel .segmentView{grid-column:1;grid-row:2/5}.handoffPanel>label{grid-column:2;grid-row:2}.handoffPanel>select{grid-column:2;grid-row:3;align-self:start}.handoffActions{grid-column:2;grid-row:3;margin-top:44px}.handoffPanel small{grid-column:1/-1}.scriptModes{margin-top:8px}.answer input{min-width:0;width:100%}.questionNav{margin-top:auto}.segmentView .assistNav{margin-top:auto;justify-content:space-between}}
+.handoffControls{display:flex;flex-direction:column;gap:10px;min-height:0}.handoffControls label{font-size:12px}.handoffPanel>.scenarioModes{flex-shrink:0}
+@media(max-width:1150px),(max-height:820px){.handoffPanel{display:flex;gap:8px}.handoffPanel>button{align-self:flex-start}.handoffControls{display:grid;grid-template-columns:1fr 1fr;align-content:center;gap:10px 16px;flex:1}.handoffControls .handoffActions{grid-column:2;grid-row:1/4;margin-top:0}.handoffControls small{grid-column:1/-1}.handoffControls select{align-self:start}.handoffPanel .segmentView{flex:1}}
+.scenarioTitle{font-size:13px;line-height:1.35;overflow-wrap:anywhere;flex-shrink:0;color:#37556f}
+.guideAnswer{display:flex;flex-direction:column;gap:10px;min-width:0}.guideAnswer label{font-size:14px;color:#506a81}.guideAnswer input,.guideAnswer select{width:100%;min-width:0}.guideAnswer button{font-size:12px;padding:8px}.guideAnswer small{font-size:12px;line-height:1.4;color:#6b8093}.spoken p{font-size:clamp(24px,2.3vw,36px);line-height:1.35}
+@media(max-width:1150px),(max-height:820px){.guideAnswer{display:grid;grid-template-columns:1fr 2fr;gap:10px 16px}.guideAnswer button{grid-column:2}.guideAnswer small{grid-column:1/-1}.spoken p{font-size:27px;line-height:1.35}}
+.clickableBrowser{display:flex;flex-direction:column;flex:1;min-height:0;gap:8px}.quickChoices,.topicChoices{display:grid;gap:6px}.quickChoices button,.topicChoices button{text-align:left;font-size:12px;line-height:1.3;padding:7px;overflow-wrap:anywhere}.clickableBrowser .referenceControl{margin-top:4px}.clickableBrowser select{width:100%;min-width:0}.clickableBrowser .assistNav{margin-top:auto}.clickableBrowser>button{font-size:12px;padding:6px;align-self:flex-start}
+@media(max-width:1150px),(max-height:820px){.clickableBrowser{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto auto minmax(0,1fr);gap:8px 20px;align-content:start}.clickableBrowser>.panelTitle:first-child{grid-column:1;grid-row:1}.clickableBrowser>.quickChoices{grid-column:1;grid-row:2/5;align-content:start}.clickableBrowser>.panelTitle:nth-child(3){grid-column:2;grid-row:1}.clickableBrowser>.topicChoices{grid-column:2;grid-row:2/4;align-content:start}.clickableBrowser>.assistNav{grid-column:2;grid-row:4;align-self:start;margin-top:0}.clickableBrowser>.referenceControl{grid-column:1/-1;grid-row:5;margin-top:0;display:grid;grid-template-columns:1fr 1fr;gap:20px}.clickableBrowser>.scenarioResults{grid-column:1;grid-row:2/5;align-content:start}.clickableBrowser>.scenarioTitle{grid-column:2;grid-row:2}.clickableBrowser>.scenarioResults+.assistNav{grid-column:2;grid-row:3}}
+.questionStage{height:100%;min-height:0}.questionStage[hidden]{display:none}.flowControls{display:flex;flex-direction:column;gap:10px;overflow:auto}.flowControls button{font-size:13px;padding:9px;text-align:left}.flowControls small{font-size:12px;line-height:1.4;color:#637a90}.flowChoices{display:grid;gap:7px}.flowInline{display:flex;flex-wrap:wrap;gap:6px}.flowInline button{font-size:12px;padding:6px}.questions{overflow:auto}.faqFullResponse{font-size:17px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;margin:auto 0}.scenarioDetail{overflow:auto}.spoken[data-long=true] p{font-size:clamp(19px,1.9vw,28px)}.spoken{overflow:auto}.guideAnswer [role=alert]{color:#a42525}.questionStage>.handoffPanel{height:calc(100% - 38px)}
+@media(max-width:1150px),(max-height:820px){.flowControls{display:grid;grid-template-columns:1fr 1fr;align-content:center;gap:8px 16px}.flowControls>.panelTitle,.flowControls>small{grid-column:1/-1}.flowChoices{grid-column:1;grid-row:2/5}.flowControls .assistNav{grid-column:2}.spoken[data-long=true] p{font-size:22px}.faqFullResponse{font-size:17px}}
+@media(max-width:720px){.spoken[data-long=true] p{font-size:18px}.guideAnswer{display:flex}.questions{gap:9px}.flowControls{padding:12px}.faqFullResponse{font-size:15px}.spoken p{font-size:22px}}
+.ownerFaq{display:flex;flex-direction:column;flex:1;min-height:0;gap:8px}.ownerFaqActions{display:flex;flex-wrap:wrap;gap:6px;flex-shrink:0}.ownerFaqActions button{font-size:12px;padding:7px}.ownerFaqScroll{min-height:0;overflow:auto;flex:1;padding-right:5px;overflow-wrap:anywhere}.ownerFaqScroll p,.ownerFaqScroll li{font-size:14px;line-height:1.5}.ownerFaqScroll h3{font-size:15px}.ownerFaqScroll strong{font-size:12px}.nameCorrection{display:grid;gap:6px;flex-shrink:0}.nameCorrection input{width:100%;min-width:0}.nameCorrection label{font-size:12px}
+.voicemailChoice{display:flex;align-items:center;gap:8px;font-size:13px;line-height:1.4;padding:9px;border:1px solid #cad6e2;border-radius:6px}.voicemailChoice input{width:16px;height:16px;flex-shrink:0}
+
+.segmentView{overflow:auto;justify-content:flex-start}.segmentView>p{margin:0;font-size:14px;line-height:1.5}.spoken{justify-content:flex-start}.spoken p{margin:auto 0;flex-shrink:0}.flowChoices{grid-template-columns:1fr}.flowControls{align-content:start}.guideAnswer label,.guideAnswer small,.flowControls button{font-size:14px}.offerHeading small{overflow-wrap:anywhere}.offerCard span{overflow-wrap:anywhere}.offerCard>div{overflow:auto}.handoffControls{overflow:auto}.missingSummary{font-size:14px;line-height:1.5;overflow-wrap:anywhere}.topicChoices button{font-size:14px}.questionsSlot{overflow:hidden}
+@media(max-width:1150px),(max-height:820px){.flowChoices{grid-column:1/-1;grid-row:auto;grid-template-columns:1fr 1fr}.flowControls{display:flex}.flowChoices{display:grid}.guideAnswer{align-content:start}.guideAnswer label{font-size:14px}}
+/* Paged sections keep every item accessible without internal scrollbars. */
+.workspace{overflow:hidden}.spoken,.segmentView,.flowControls,.questions,.ownerFaqScroll,.handoffControls,.offerCard>div{overflow:visible;min-height:0}.segmentView{display:flex;flex-direction:column;gap:12px}.segmentView>p{white-space:pre-wrap;overflow-wrap:anywhere;flex:1}.segmentView>.assistNav{flex-shrink:0;margin-top:auto}.ownerFaqScroll{display:flex;flex-direction:column;gap:8px;padding-right:0}.ownerFaqScroll>.segmentView{flex:1}.ownerFaqScroll h3{margin:0}.ownerFaqScroll>.topicChoices{align-content:start}.guideAnswer[data-complex=true]>label:first-child{display:none}.questions{gap:10px}.questionNav{gap:5px}.questionNote{display:none}.spoken p{font-size:clamp(18px,1.6vw,25px);line-height:1.4;margin:0}.guideAnswer button,.flowInline button{font-size:14px}.flowChoices{grid-template-columns:1fr}.scenarioModes{flex-wrap:wrap}.scenarioModes button{font-size:14px}.panelTitle{flex-shrink:0}.flowControls>.assistNav{margin-top:0}.flowControls>.flowChoices{flex-shrink:0}.ownerFaqScroll>.topicChoices button{padding:7px;font-size:14px}.ownerFaqScroll>.assistNav{margin-top:auto}.contactTitle{overflow-wrap:anywhere}.offerCard span{font-size:14px}.offerCard>div{min-width:0}.offerHeading small{font-size:12px}.flowControls small{display:none}
+@media(max-width:1150px),(max-height:820px){.ownerFaqScroll>.topicChoices{grid-template-columns:1fr 1fr;gap:6px}.ownerFaqScroll .segmentView>p{max-width:1000px}.guideAnswer{gap:7px 12px}.questions{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);align-content:start;gap:8px 16px}.questions>.panelTitle{grid-column:1/-1}.questions>.guideAnswer{grid-column:1;grid-row:2/7}.questions>.questionNav{grid-column:2;grid-row:2}.questions>.flowInline{grid-column:2;grid-row:3}.questions>button{grid-column:2;grid-row:4}.flowControls{display:flex;gap:8px}.flowChoices{grid-template-columns:1fr 1fr}.spoken[data-long=true] p{font-size:20px}.segmentView>p{font-size:16px}.handoffControls{gap:8px}.scriptNavigation{flex-shrink:0}}
+.historyMain>.panel{display:flex;flex-direction:column;gap:12px}.historyMain .segmentView{flex:1}
+@media(max-width:1150px),(max-height:820px){.historyMain{display:grid;grid-template-columns:minmax(0,1fr)}.historyMain>.panel{display:none}.historyMain[data-history=Script]>.historySummary,.historyMain[data-history=Questions]>.historyAnswers,.historyMain[data-history=Assist]>.historyNotes{display:flex}}
+
+.offerCard[data-urgent="true"],.offerCard[data-urgent="true"][data-selected="true"]{border:2px solid #dc2626;}
+.offerCard .hotSeats{display:inline-block;margin-left:8px;padding:2px 6px;border-radius:4px;background:#b91c1c;color:white;font-size:12px;font-weight:700;line-height:1.4;}
+
+/* Catalog browse controls and documented terms remain reachable at supported sizes. */
+.workspace{grid-template-rows:62px 0 minmax(0,1fr) 190px 56px 28px}
+.offers{grid-template-rows:29px 30px minmax(0,1fr)}
+.carrierFilter{display:flex;align-items:center;gap:12px;font-size:12px;min-width:0}
+.carrierFilter select{width:410px;max-width:80%;padding:4px 8px;min-width:0;font-size:12px;background:white;border:1px solid #cad6e2;border-radius:5px}
+@media(max-width:1150px),(max-height:820px){.workspace{grid-template-rows:48px 38px minmax(0,1fr) 145px 47px 24px}.offers{grid-template-rows:22px 30px minmax(0,1fr)}}
+@media(max-height:450px),(max-width:720px){.workspace{grid-template-rows:42px 32px minmax(0,1fr) 150px 42px 22px}.offers{grid-template-rows:20px 28px minmax(0,1fr)}.carrierFilter select{max-width:70%}}
+/* Keep delivery errors and retry controls reachable inside the existing panel. */
+.handoffControls{overflow:auto;overscroll-behavior:contain}
+/* Read full catalog terms without paging sentences or obscuring actions. */
+.workspace{grid-template-rows:62px 0 minmax(0,1fr) 230px 56px 28px}
+.offerCard{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:8px 12px;overflow:hidden;padding:10px 12px}
+.offerCard>div{grid-column:1;grid-row:1/3;overflow:auto;height:100%;overscroll-behavior:contain;padding-right:6px}
+.offerCard>button{grid-column:2;align-self:start;white-space:normal;max-width:120px}
+.offerSummary{margin:4px 0 0;display:grid;gap:7px}
+.offerSummary dt{font-size:12px;font-weight:700;color:#48647d}
+.offerSummary dd{margin:2px 0 0;font-size:12px;line-height:1.45;color:#344f68;overflow-wrap:anywhere}
+.offerDetails{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding-right:8px;font-size:14px;line-height:1.5}
+.offerDetails h3{margin:0;color:#174f80}.offerDetails h4{font-size:14px;margin:12px 0 6px}.offerDetails>p{font-size:12px;color:#647a91}
+.offerDetails dl{display:grid;gap:12px}.offerDetails dt{font-weight:700;color:#355b7b}.offerDetails dd{margin:3px 0 0;white-space:pre-line;overflow-wrap:anywhere}.offerDetails ul{padding-left:20px}.offerDetails li{margin-bottom:6px}.offerDetails details{border-top:1px solid #dce4ed;padding-top:10px;overflow-wrap:anywhere}.offerDetails summary{cursor:pointer;font-weight:700}
+@media(max-width:1150px),(max-height:820px){.workspace{grid-template-rows:48px 38px minmax(0,1fr) 190px 47px 24px}.offerHeading{gap:7px}.offerHeading small{max-width:35%}.offerCard span{font-size:12px}}
+@media(max-width:720px){.offerCards{grid-template-columns:1fr;overflow:auto}.offerCard{min-height:130px}.offerHeading small{display:none}.offerHeading button{font-size:12px}.offerHeading{font-size:12px}.offers{padding:0 10px 8px}.workspace{grid-template-rows:42px 32px minmax(0,1fr) 190px 42px 22px}}
+@media(max-height:450px){.workspace{height:auto;min-height:100dvh;grid-template-rows:42px 32px minmax(260px,1fr) 190px 42px 22px;overflow:auto}}
+
+/* Four-phase call workspace: FAQ remains available for every account role. */
+.workspace {height:auto;min-height:100dvh;overflow:visible;display:flex;flex-direction:column;gap:10px;padding-bottom:12px}
+.compactTabs {display:flex!important;flex-wrap:wrap;height:auto;min-height:40px;gap:8px;align-items:center}
+.compactTabs span {padding:9px 12px;color:#48647d;border-radius:8px;background:#eaf0f7}
+.compactTabs span[aria-current=step] {background:#2563eb;color:white;font-weight:700}
+.main {display:grid!important;grid-template-columns:minmax(310px,1.2fr) minmax(280px,1fr) minmax(280px,1fr);height:auto;min-height:500px;overflow:visible!important;align-items:start}
+.main .questionsSlot,.main .scriptSlot,.main .assistSlot {display:block!important;min-height:0;height:auto;overflow:visible}
+.main .outcomeSlot {display:none!important}
+.panel,.questionStage {height:auto;max-height:none;overflow:visible}
+.questions,.handoffPanel,.flowControls {height:auto;max-height:none;overflow:visible}
+.assistSlot {background:#fff;border:1px solid #cad6e2;border-radius:12px;padding:12px}
+.assistSlot>.ownerFaq {height:500px;min-height:360px;display:flex;flex-direction:column}
+.ownerFaqScroll {flex:1;overflow:auto;min-height:0}
+.secondaryAssist {margin-top:14px;border-top:1px solid #cad6e2;padding-top:12px}
+.secondaryAssist summary {cursor:pointer;font-weight:600}
+.secondaryAssist .panel {margin-top:12px;min-height:320px}
+.groupedQualification nav {display:flex;flex-wrap:wrap;gap:5px}
+.groupedQualification nav button {font-size:14px;padding:8px}
+.groupedQualification nav button[aria-pressed=true] {background:#2563eb;color:#fff}
+.groupedQualification>p {font-size:12px;line-height:1.4;color:#48647d;margin:10px 0}
+.groupFields {display:grid;gap:12px}
+.groupFields .guideAnswer {display:flex;flex-direction:column;gap:5px;border-bottom:1px solid #dce4ed;padding-bottom:10px;height:auto;overflow:visible;max-height:none}
+.groupFields .guideAnswer>label {font-size:14px;font-weight:600}
+.groupFields input,.groupFields select {width:100%;min-height:36px}
+.groupFields .guideAnswer>button {font-size:12px;padding:5px 8px;align-self:flex-start}
+.groupFields small {font-size:12px}
+.offers {height:auto;min-height:0;max-height:none;overflow:visible}
+.offers[hidden],.carrierFilter[hidden] {display:none!important}
+.offerCards {height:auto;overflow:visible}.offerCard {min-height:170px;height:auto}.offerSummary {max-height:none}
+.actions {height:auto;min-height:52px;flex-wrap:wrap}.script {min-height:350px}.spoken {min-height:180px;height:auto;max-height:none}
+@media(max-width:1000px){.main{grid-template-columns:minmax(280px,1fr) minmax(280px,1fr)}.main .assistSlot{grid-column:1 / -1}.assistSlot>.ownerFaq{height:420px}}
+@media(max-width:650px){.main{grid-template-columns:1fr}.main .assistSlot{grid-column:auto}.workspace{padding:10px}.compactTabs span{font-size:12px;padding:8px}.offerCards{display:grid;grid-template-columns:1fr}.header{flex-wrap:wrap;height:auto;min-height:60px}}
+
+.questions {display:flex!important;flex-direction:column;gap:12px}.groupedQualification{width:100%;min-width:0}.scriptSlot,.questionsSlot,.assistSlot{min-width:0}.flowControls small{display:block}.groupFields .guideAnswer[data-complex=true]>label:first-child{display:block}.offerCard>div{height:auto;overflow:visible}
+
+/* Keep the short spoken script dominant and the carrier catalog always exposed. */
+.main {grid-template-columns:minmax(260px,.85fr) minmax(340px,1.45fr) minmax(280px,1fr);min-height:390px}
+.assistSlot>.ownerFaq {height:390px;min-height:320px}
+.shortQualification {width:100%;min-width:0}.shortPrompt{font-size:16px;line-height:1.45;margin:0 0 12px;color:#174f80;font-weight:600}
+.shortQualification>.guideAnswer {height:auto;max-height:none;display:flex;flex-direction:column;overflow:visible;gap:8px}
+.shortQualification details,.additionalReview{margin-top:14px;padding-top:10px;border-top:1px solid #dce4ed}
+.shortQualification summary,.additionalReview summary{font-size:14px;cursor:pointer;color:#174f80;font-weight:600}
+.additionalDetails{display:flex;flex-direction:column;gap:10px;min-width:0;margin-top:12px}.additionalDetails>p{font-size:14px;line-height:1.45;color:#48647d;margin:0}.additionalDetails .guideAnswer{height:auto;max-height:none;overflow:visible;display:flex;flex-direction:column;gap:8px}
+.additionalDetails .guideAnswer>label:first-child{display:block}.additionalDetails input,.additionalDetails select{min-height:36px;width:100%}
+.offerHeading{height:auto;min-height:35px;flex-wrap:wrap}.carrierFilter select{width:min(410px,70vw)}
+@media(max-width:1000px){.main{grid-template-columns:minmax(260px,1fr) minmax(300px,1.3fr)}.main .assistSlot{grid-column:1/-1}}
+@media(max-width:650px){.main{grid-template-columns:minmax(0,1fr)}.main .assistSlot{grid-column:auto}}
+
+/* Desktop: the companies stay in the bottom row within the viewport. */
+@media(min-width:761px){
+.workspace{height:100dvh;min-height:0;display:grid;grid-template-rows:52px 40px minmax(0,1fr) 205px 50px 28px;gap:5px;overflow:hidden;padding-bottom:0}
+.workspace>.main{height:100%;min-height:0;overflow:hidden!important;grid-template-columns:minmax(210px,.85fr) minmax(260px,1.45fr) minmax(230px,1fr);align-items:stretch}
+.main .questionsSlot,.main .scriptSlot,.main .assistSlot{height:100%;min-height:0;max-height:100%;overflow:auto!important;grid-column:auto}
+.main .assistSlot{display:flex!important;flex-direction:column;overflow:hidden!important}
+.questionsSlot>.questionStage{height:100%;overflow:auto}.questions,.flowControls,.handoffPanel,.script{height:100%;max-height:100%;min-height:0;overflow:auto}.questionsSlot>.flowControls{height:auto}
+.assistSlot>.ownerFaq{height:auto;min-height:0;flex:1;overflow:hidden}.secondaryAssist{max-height:45%;overflow:auto;flex:0 0 auto}.secondaryAssist[open]{flex:1;min-height:0}.secondaryAssist .panel{min-height:240px}
+.spoken{min-height:0;flex:1;overflow:auto}.scriptNavigation{flex-shrink:0}.spoken p{font-size:clamp(20px,1.7vw,28px)}
+.offers{height:100%;max-height:100%;overflow:hidden;grid-template-rows:30px 30px minmax(0,1fr);gap:5px}.offerCards{height:100%;overflow:hidden}.offerCard{height:100%;min-height:0;padding:8px 12px;overflow:auto}.offerCard>div{overflow:auto;height:100%}.offerSummary{gap:4px}.offerSummary dd{font-size:12px;margin:1px 0}.offerHeading small{max-width:38%}
+}
+@media(min-width:761px) and (max-height:720px){.workspace{grid-template-rows:45px 35px minmax(0,1fr) 175px 42px 24px}.main{padding:4px 14px}.panel{padding:12px}.scriptModes{margin-top:5px}.scriptModes button{font-size:12px;padding:5px}.shortPrompt{font-size:14px}.shortQualification .guideAnswer{gap:5px}.shortQualification details{margin-top:8px}.guideAnswer>small{font-size:12px}}
+
+/* Give the compatible Hot Seat shortlist more space and show six cards together. */
+@media(min-width:721px) and (min-height:721px){
+ .workspace{grid-template-rows:52px 40px minmax(0,1fr) 245px 50px 28px}
+ .offers{grid-template-rows:30px 28px minmax(0,1fr)}
+ .offerCards{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:7px}
+ .offerCard{padding:6px 9px;gap:7px}
+ .offerCard strong{font-size:14px}
+ .offerCard span{font-size:12px}
+ .offerSummary{display:none}
+}
+@media(max-width:720px),(max-height:720px){
+ .offerCards{grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);grid-template-columns:none;grid-template-rows:minmax(0,1fr);overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity}
+ .offerCard{scroll-snap-align:start}
+}
+.offerHeading strong{color:#234f75}
+.offerHeading small{max-width:42%;line-height:1.25}
+.offerHeading button[aria-pressed=false]{background:#fff2f2;color:#a11d1d;border-color:#e5a3a3}
+
+.historyWorkspace{grid-template-rows:62px auto minmax(0,1fr)}.historyWorkspace>.compactTabs{display:flex;gap:8px;padding:8px 16px;flex-wrap:wrap}
+
+/* Urgent companies stay above the conversation in every stage and FAQ view. */
+.workspace{grid-template-rows:52px 40px 52px minmax(0,1fr) 245px 50px 28px}
+.priorityBar{display:flex;align-items:center;gap:12px;padding:4px 18px;background:#fff5f5;border-top:1px solid #f3c4c4;border-bottom:1px solid #f3c4c4;min-width:0;min-height:0}
+.priorityBar>strong{font-size:12px;color:#991b1b;flex-shrink:0}
+.priorityBar>div{display:flex;gap:8px;overflow-x:auto;min-width:0;align-items:center;flex:1;height:100%}
+.priorityBar button{display:flex;flex-direction:column;align-items:flex-start;white-space:nowrap;border:2px solid #dc2626;background:white;color:#991b1b;padding:3px 9px;flex-shrink:0;font-size:12px}
+.priorityBar small{font-size:10px;color:#7f1d1d}
+.priorityBar span{font-size:12px;color:#854545}
+@media(max-width:720px),(max-height:720px){.workspace{grid-template-rows:48px 38px 52px minmax(0,1fr) 140px 50px 28px}.priorityBar{padding:4px 10px;gap:8px}}
+
+.applicationResponses{flex-shrink:0;min-width:0;padding:2px;border-radius:8px}
+.applicationResponses:focus-within{outline:2px solid #2563eb;outline-offset:2px}
+.applicationResponses .flowControls{height:auto;max-height:none;padding:10px;display:flex;flex-direction:column;gap:8px}
+.applicationResponses .flowControls .panelTitle{font-size:11px}
+
+/* Version 2 read-aloud responses stay whole; scrolling preserves access at small heights. */
+.spoken{overflow:auto;justify-content:flex-start}.spoken p{flex:none;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.ownerFaqScroll{overflow:auto;min-height:0}.ownerFaqScroll .faqFullResponse{flex:none;margin:8px 0;font-size:15px}.ownerFaqScroll>.topicChoices{flex:none;display:grid;gap:7px}
+.shortQualification textarea{width:100%;min-height:80px;resize:vertical;font:inherit}.callback{flex-direction:column;align-items:stretch}
+
+/* Laptop workspace: reserve most height for the conversation, not chrome.
+   All three panels stay present; each long panel owns its scroll area. */
+@media(min-width:901px){
+ .workspace:not(.historyWorkspace){height:100dvh;min-height:0;display:grid;grid-template-rows:44px 30px 40px minmax(0,1fr) 160px 44px 22px;gap:4px;padding:0;overflow:hidden}
+ .workspace:not(.historyWorkspace) .header{padding:0 12px;gap:10px}
+ .workspace:not(.historyWorkspace) .compactTabs{min-height:0;height:100%;flex-wrap:nowrap;padding:0 12px;gap:6px;overflow-x:auto}
+ .compactTabs span{font-size:12px;padding:5px 8px;white-space:nowrap}
+ .workspace:not(.historyWorkspace) .priorityBar{padding:2px 12px;gap:8px}
+ .workspace:not(.historyWorkspace) .priorityBar button{padding:2px 8px}
+ .workspace:not(.historyWorkspace) .main{height:100%;min-height:0;padding:4px 12px;gap:10px;grid-template-columns:minmax(180px,.8fr) minmax(0,1.85fr) minmax(220px,1fr);align-items:stretch;overflow:hidden!important}
+ .workspace:not(.historyWorkspace) .main .questionsSlot,.workspace:not(.historyWorkspace) .main .scriptSlot{display:block!important;height:100%;min-height:0;overflow:auto!important;grid-column:auto}
+ .workspace:not(.historyWorkspace) .main .assistSlot{display:flex!important;height:100%;min-height:0;padding:10px;grid-column:auto;overflow:hidden!important}
+ .workspace:not(.historyWorkspace) .main .panel{padding:12px;min-height:0;max-height:100%}
+ .workspace:not(.historyWorkspace) .questionsSlot .flowControls,.workspace:not(.historyWorkspace) .questionsSlot .handoffPanel,.workspace:not(.historyWorkspace) .questionsSlot .outcomes{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:8px;overflow:auto}
+ .workspace:not(.historyWorkspace) .script{display:flex;flex-direction:column;height:100%;overflow:hidden;padding:14px 18px}
+ .workspace:not(.historyWorkspace) .scriptTop{font-size:11px;letter-spacing:.4px;flex-shrink:0;flex-wrap:wrap;gap:4px}
+ .workspace:not(.historyWorkspace) .scriptModes{margin-top:8px;gap:4px}
+ .workspace:not(.historyWorkspace) .scriptModes button{padding:5px 7px;font-size:12px}
+ .workspace:not(.historyWorkspace) .spoken{min-height:0;flex:1;overflow:auto;padding:14px 0;scrollbar-gutter:stable;overscroll-behavior:contain}
+ .workspace:not(.historyWorkspace) .spoken p{font-size:clamp(22px,2vw,30px);line-height:1.4;max-width:none}
+ .workspace:not(.historyWorkspace) .spoken[data-long=true] p{font-size:clamp(20px,1.8vw,26px)}
+ .workspace:not(.historyWorkspace) .scriptNavigation{flex:0 0 auto;flex-wrap:wrap;gap:6px;padding-top:6px}
+ .workspace:not(.historyWorkspace) .scriptNavigation .nextQuestion{font-size:12px;padding:7px 10px}
+ .workspace:not(.historyWorkspace) .assistSlot>.ownerFaq{height:auto;min-height:0;flex:1;overflow:hidden}
+ .workspace:not(.historyWorkspace) .ownerFaqScroll{min-height:0;overflow:auto;scrollbar-gutter:stable;overscroll-behavior:contain}
+ .workspace:not(.historyWorkspace) .ownerFaqActions{flex-wrap:wrap;gap:5px}
+ .workspace:not(.historyWorkspace) .ownerFaqActions button{font-size:12px;padding:5px 7px}
+ .workspace:not(.historyWorkspace) .topicChoices button{font-size:12px;line-height:1.35;padding:7px}
+ .workspace:not(.historyWorkspace) .secondaryAssist{margin-top:8px;padding-top:8px;max-height:44%;overflow:auto;flex:0 0 auto}
+ .workspace:not(.historyWorkspace) .secondaryAssist[open]{flex:0 1 44%;min-height:0}
+ .workspace:not(.historyWorkspace) .secondaryAssist .panel{height:auto;min-height:0;max-height:none;overflow:visible;padding:8px}
+ .workspace:not(.historyWorkspace) .offers{height:100%;min-height:0;overflow:hidden;padding:0 12px 4px;grid-template-rows:36px 26px minmax(0,1fr);gap:4px}
+ .workspace:not(.historyWorkspace) .offerHeading{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;min-height:0;gap:2px 8px}
+ .workspace:not(.historyWorkspace) .offerHeading>strong{font-size:13px;grid-column:1;grid-row:1}
+ .workspace:not(.historyWorkspace) .offerHeading>small{display:block;max-width:none;font-size:11px;grid-column:1;grid-row:2;white-space:nowrap;overflow-x:auto}
+ .workspace:not(.historyWorkspace) .offerHeading>div{grid-column:2;grid-row:1/3;gap:6px;margin:0}
+ .workspace:not(.historyWorkspace) .carrierFilter{font-size:12px;gap:8px}
+ .workspace:not(.historyWorkspace) .carrierFilter select{padding:3px 6px;width:min(410px,55vw)}
+ .workspace:not(.historyWorkspace) .offerCards{height:100%;min-height:0;display:grid;grid-auto-flow:column;grid-auto-columns:clamp(270px,28vw,360px);grid-template-columns:none;grid-template-rows:minmax(0,1fr);gap:8px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity}
+ .workspace:not(.historyWorkspace) .offerCard{height:100%;min-height:0;padding:7px 9px;gap:5px 8px;scroll-snap-align:start;overflow:auto}
+ .workspace:not(.historyWorkspace) .offerCard>div{height:100%;overflow:auto}
+ .workspace:not(.historyWorkspace) .offerCard strong{font-size:14px}
+ .workspace:not(.historyWorkspace) .offerCard>button{font-size:12px;padding:6px 8px;max-width:105px}
+ .workspace:not(.historyWorkspace) .actions{height:100%;min-height:0;flex-wrap:nowrap;padding:0 12px;gap:8px}
+ .workspace:not(.historyWorkspace) .actions>div{min-width:0;overflow:auto;gap:8px}
+ .workspace:not(.historyWorkspace) .actions button{flex-shrink:0;font-size:12px;padding:7px 9px}
+ .workspace:not(.historyWorkspace) .bottomNotice{font-size:11px;padding:0 12px;min-width:0;overflow:auto;white-space:nowrap}
+}
+@media(min-width:901px) and (max-height:650px){
+ .workspace:not(.historyWorkspace){grid-template-rows:40px 28px 36px minmax(0,1fr) 135px 40px 20px}
+ .workspace:not(.historyWorkspace) .main{padding:2px 10px;gap:8px}
+ .workspace:not(.historyWorkspace) .main .panel{padding:10px}
+ .workspace:not(.historyWorkspace) .spoken{padding:8px 0}
+ .workspace:not(.historyWorkspace) .spoken p{font-size:22px}
+ .workspace:not(.historyWorkspace) .spoken[data-long=true] p{font-size:20px}
+ .workspace:not(.historyWorkspace) .offers{grid-template-rows:32px 24px minmax(0,1fr);gap:3px}
+}
+@media(min-width:901px) and (min-height:850px){
+ .workspace:not(.historyWorkspace){grid-template-rows:48px 32px 44px minmax(0,1fr) 190px 46px 24px}
+}
+/* Narrow, very short or heavily zoomed screens use page scroll. */
+@media(max-width:900px),(max-height:500px){
+ .workspace:not(.historyWorkspace){display:flex;height:auto;min-height:100dvh;overflow:visible;gap:8px;padding-bottom:10px}
+ .workspace:not(.historyWorkspace) .header{height:auto;min-height:44px;flex-wrap:wrap;padding:8px 12px}
+ .workspace:not(.historyWorkspace) .compactTabs{height:auto;min-height:0;flex-wrap:wrap;padding:0 12px}
+ .workspace:not(.historyWorkspace) .main{height:auto;min-height:0;grid-template-columns:minmax(0,1fr);padding:0 12px;gap:10px;overflow:visible!important}
+ .workspace:not(.historyWorkspace) .main .questionsSlot,.workspace:not(.historyWorkspace) .main .scriptSlot,.workspace:not(.historyWorkspace) .main .assistSlot{display:block!important;height:auto;max-height:none;overflow:visible!important;grid-column:auto}
+ .workspace:not(.historyWorkspace) .main .panel{height:auto;max-height:none;overflow:visible}
+ .workspace:not(.historyWorkspace) .assistSlot>.ownerFaq{height:420px;min-height:0}
+ .workspace:not(.historyWorkspace) .script{min-height:260px}
+ .workspace:not(.historyWorkspace) .spoken{min-height:120px}
+ .workspace:not(.historyWorkspace) .offers{height:auto;min-height:175px;overflow:visible;grid-template-rows:auto auto minmax(110px,1fr);padding:0 12px}
+ .workspace:not(.historyWorkspace) .offerCards{grid-auto-flow:column;grid-auto-columns:280px;grid-template-columns:none;grid-template-rows:130px;overflow-x:auto;overflow-y:hidden}
+ .workspace:not(.historyWorkspace) .offerCard{min-height:0;height:130px}
+ .workspace:not(.historyWorkspace) .actions{height:auto;min-height:44px;flex-wrap:wrap;padding:8px 12px}
+ .workspace:not(.historyWorkspace) .bottomNotice{height:auto;min-height:24px;white-space:normal}
+}
+
+/* Screenshot correction: one card body, two stable actions, no nested card scrollbars. */
+.workspace:not(.historyWorkspace),.workspace:not(.historyWorkspace) *{scrollbar-width:thin;scrollbar-color:#adbdcd transparent}
+.workspace:not(.historyWorkspace) ::-webkit-scrollbar{width:6px;height:6px}
+.workspace:not(.historyWorkspace) ::-webkit-scrollbar-thumb{background:#adbdcd;border-radius:6px}
+.workspace:not(.historyWorkspace) ::-webkit-scrollbar-track{background:transparent}
+.workspace:not(.historyWorkspace) ::-webkit-scrollbar-button{display:none;width:0;height:0}
+.workspace:not(.historyWorkspace) .priorityBar>div{overflow-y:hidden}
+.workspace:not(.historyWorkspace) .priorityBar button,.workspace:not(.historyWorkspace) .priorityBar small{line-height:1.05}
+@media(min-width:901px) and (min-height:501px){
+ .workspace:not(.historyWorkspace){grid-template-rows:44px 30px 40px minmax(0,1fr) 180px 44px 22px}
+ .workspace:not(.historyWorkspace) .main .questionsSlot,.workspace:not(.historyWorkspace) .main .scriptSlot{overflow:hidden!important}
+ .workspace:not(.historyWorkspace) .questionsSlot>.flowControls{height:100%;max-height:100%;gap:6px;overflow:auto}
+ .workspace:not(.historyWorkspace) .questionsSlot>.flowControls>button{padding:7px 9px;font-size:13px;flex-shrink:0}
+ .workspace:not(.historyWorkspace) .questionsSlot>.flowControls>.voicemailChoice{padding:7px;flex-shrink:0}
+ .workspace:not(.historyWorkspace) .questionsSlot>.flowControls>.panelTitle,.workspace:not(.historyWorkspace) .questionsSlot>.flowControls>small{flex-shrink:0}
+ .workspace:not(.historyWorkspace) .offerCards{grid-auto-columns:calc((100% - 16px)/3);gap:8px;padding-bottom:3px}
+ .workspace:not(.historyWorkspace) .offerCard{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:minmax(0,1fr) 30px;align-items:stretch;min-height:0;overflow:hidden;padding:8px 10px;gap:6px 8px}
+ .workspace:not(.historyWorkspace) .offerCard>div{grid-column:1/-1;grid-row:1;display:flex;flex-direction:column;justify-content:flex-start;gap:4px;height:auto;min-height:0;padding:0;overflow:auto}
+ .workspace:not(.historyWorkspace) .offerCard>button{grid-row:2;align-self:stretch;max-width:none;min-height:30px;height:auto;white-space:nowrap;padding:5px 9px;font-size:12px}
+ .workspace:not(.historyWorkspace) .offerCard>button:not(.detailsButton){grid-column:1;justify-self:start}
+ .workspace:not(.historyWorkspace) .offerCard>.detailsButton{grid-column:2;justify-self:end}
+ .workspace:not(.historyWorkspace) .offerCard strong{font-size:14px;line-height:1.25}
+ .workspace:not(.historyWorkspace) .offerCard span{font-size:12px;line-height:1.3}
+ .workspace:not(.historyWorkspace) .offerCard .hotSeats{font-size:11px;padding:1px 5px;margin-left:6px}
+ .workspace:not(.historyWorkspace) .offerSummary{display:none}
+}
+@media(min-width:901px) and (min-height:501px) and (max-height:650px){
+ .workspace:not(.historyWorkspace){grid-template-rows:40px 28px 36px minmax(0,1fr) 175px 40px 20px}
+ .workspace:not(.historyWorkspace) .questionsSlot>.flowControls>button{padding:6px 9px;font-size:12px}
+ .workspace:not(.historyWorkspace) .questionsSlot>.flowControls>.voicemailChoice{font-size:12px;padding:6px}
+}
+@media(min-width:901px) and (min-height:850px){
+ .workspace:not(.historyWorkspace){grid-template-rows:48px 32px 44px minmax(0,1fr) 190px 46px 24px}
+}

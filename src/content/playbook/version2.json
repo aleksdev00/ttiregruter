@@ -1,0 +1,499 @@
+{
+  "version": "2026-10-05-owner-script-v3",
+  "blocks": [
+    {
+      "id": "B01",
+      "title": "Introduce TTI and check whether the driver can talk",
+      "useWhen": "The driver answers a first contact call.",
+      "spoken": "Hey [Name], it's [Recruiter] with TTI Recruiting. You got a minute to talk about CDL-A jobs?",
+      "coach": "Pause after the question. If the name is missing, begin 'Hi, this is...'. If the driver says they are busy or asks for another time, arrange a callback. Do not assume that answering means they can complete an application.",
+      "record": "The actual response; call connected only when the driver answered.",
+      "next": "Open to talking -> B02 | Busy or unavailable -> O01 | Not interested -> O04 | Wrong number -> O09 | Do not contact -> O10",
+      "source": "C01 00:00-00:22; C05 00:08-00:21; C07 00:20-00:42; C08 00:36-00:58; I01; I02"
+    },
+    {
+      "id": "B02",
+      "title": "Confirm the position and application path",
+      "useWhen": "The driver is open to a conversation.",
+      "spoken": "What are you looking for: a company driver job, a lease option, or owner-operator work?",
+      "followThrough": "For a company driver job, would you prefer W-2, 1099, or are you open to either?",
+      "coach": "Ask the second question after the first answer. W-2 is the short external application path for a company driver. 1099, lease and owner-operator stay internal. A lease or owner-operator choice takes precedence over an old W-2 value. If 'either', clarify which path they want to start with before sending a form. Do not give a tax explanation or promise benefits you have not checked.",
+      "record": "Position type and employment choice; use the driver's explicit answer.",
+      "next": "W-2 company driver -> B03 | 1099, lease or owner-operator -> B05 | Either or unsure -> O11",
+      "source": "C02 00:55-01:03; C03 04:25-04:53; C04 00:31-01:01; V01 02:59-03:30; V01 09:56-12:37"
+    },
+    {
+      "id": "B03",
+      "title": "Explain and agree the W2 application next step",
+      "useWhen": "A company driver explicitly chooses W-2.",
+      "spoken": "For W-2, the next step is our driver application. It gives us the details we need to check options that fit you. Is it okay if I text you your application link?",
+      "followThrough": "I'll send it to this number. If something does not work, let me know. What time would work for us to follow up?",
+      "coach": "Use the assigned referral link for this recruiter. Clarify only a specific requirement that the driver raises; do not run the 1099 questionnaire. The form does not guarantee a job or a specific company. Use a callback time the recruiter can meet. Do not quote a 10-minute response promise unless that service is staffed and receipt tracking supports it.",
+      "record": "Agreement, permission, destination number, actual send status, follow-up time and time zone. Link copied or opened is not application received.",
+      "next": "Permission given -> send manually through the approved channel and record actual status | Wants details first -> O23 | Cannot use the form now -> O28 | Driver says completed -> O29 | Declines -> outcome review",
+      "source": "C06 03:10-03:38; C07 01:03-01:20; C08 01:24-01:34; V01 10:23-12:37"
+    },
+    {
+      "id": "B05",
+      "title": "Check location schedule and equipment",
+      "useWhen": "Collecting internal matching information.",
+      "spoken": "What state are you based in?",
+      "followThrough": "And your city and ZIP? Are you looking for local, regional, or OTR? How long can you stay out, and how many days do you need at home? What trailer would you like to run?",
+      "coach": "These are separate questions. Read only the next unanswered one. Location means home base, not the driver's current load location. A daily-home requirement rules out a three-weeks-out pitch. For teams, check both drivers' locations and requirements. Ask truck brand only if it affects the decision. Confirm percentages such as drop and hook separately from no-touch freight.",
+      "record": "Home state, city and ZIP, route, time out and trailer. Add a material truck preference and days at home in notes.",
+      "next": "Practical requirements known -> B06 | Local only -> O14 | Home time mismatch -> O15 | Route exclusions -> O16 | Team -> O18",
+      "source": "C02 04:17-04:45; C02 07:22-08:05; C03 02:10-02:32; C03 24:21-25:14; C06 01:07-02:18"
+    },
+    {
+      "id": "B06",
+      "title": "Check experience safety details and start timing",
+      "useWhen": "The practical requirements are known.",
+      "spoken": "How much recent, verifiable CDL-A experience do you have?",
+      "followThrough": "Any moving violations or accidents I need to account for? Any SAP or return-to-duty history? If the company approves you and the terms work, when could you start?",
+      "coach": "Ask each question separately. A driver's statement is not carrier clearance. Record the type and date of an incident; confirm dates back to them. Keep tickets and accidents separate from SAP status. Do not translate 'clean' into 'no SAP' automatically. Ask only the details needed for carrier review. Do not promise approval or advise bypassing a carrier's safety review. For a current employee, record notice and practical travel timing.",
+      "record": "CDL-A experience in months, SAP status, relevant incident details and dates, and start availability. Convert stated years to months accurately.",
+      "next": "Required details recorded -> B07 | SAP or return-to-duty issue -> O19 | Incident or record uncertainty -> O20 | Background issue -> O21 | Urgent start -> O26",
+      "source": "C02 01:03-01:23; C02 06:35-07:06; C03 22:17-23:21; C03 31:04-34:44; C09 02:20-02:40; V01 03:30-04:41"
+    },
+    {
+      "id": "B07",
+      "title": "Summarize the driver before presenting a company",
+      "useWhen": "Enough internal details are recorded to assess the options.",
+      "spoken": "Let me check I've got this right: you want [position and path], you're based in [home location], and [main requirement] matters most. You're open to [trailer and schedule], and you could start [start timing] after approval. Did I miss anything?",
+      "coach": "Render only known facts. Correct any mismatch before discussing offers. Keep driver-reported eligibility separate from verified carrier acceptance. Use compatible Hot Seats first after applying the hard requirements. An urgent company never overrides a SAP restriction, location limit, experience minimum or home-time conflict.",
+      "record": "Confirmed summary, outstanding checks, and the specific requirements each option must meet.",
+      "next": "Two suitable options available -> B08 | One suitable option -> present that one honestly | Terms or eligibility need confirmation -> O25 | No compatible option -> record a follow-up if the driver wants one",
+      "source": "C02 04:25-05:23; C03 30:05-32:44; V01 04:41-05:44; V01 13:11-14:11"
+    },
+    {
+      "id": "B08",
+      "title": "Explain at most two suitable options",
+      "useWhen": "The catalog contains one or two compatible options with enough verified terms to discuss.",
+      "spoken": "Based on [driver priority], I'd start with [Company A]. Its confirmed terms are [pay and basis], [home time], and [equipment or route]. [Company B] gives you [relevant difference]. Which is closer to what you want?",
+      "followThrough": "For [chosen company], we still need to confirm [specific remaining condition]. If that checks out, would you want to move forward?",
+      "coach": "Read the source and date of the terms. Separate starting rate, possible bonus, paid-mile definition, company or truck gross, deductions, and tax treatment. Never call a CPM calculation take-home pay. If only one company fits, present one. If none fit, do not invent a second choice. An urgent opening can lead the comparison only when compatible and currently confirmed.",
+      "record": "Companies discussed, actual terms and their basis, remaining checks, selected company and driver preference. Selection is not agreement or submission.",
+      "next": "Driver chooses an option -> B09 | Pay objection -> O12 | Trust objection -> O22 | Wants to think -> O24 | Terms not verified -> O25",
+      "source": "C01 01:39-03:12; C02 02:21-05:18; C03 10:58-12:13; C03 14:38-14:43; V01 05:11-05:44"
+    },
+    {
+      "id": "B09",
+      "title": "Ask for the internal application and documents",
+      "useWhen": "A 1099, lease or owner-operator driver chooses a company and the next step is clear.",
+      "spoken": "Would you like me to move forward with your application for [Company]?",
+      "followThrough": "Great. I'll complete it here using the details we've discussed. Next, please send your CDL front and back and your medical card through [approved document channel]. Once we have the required information, we can submit it for the company's review.",
+      "coach": "Pause for a real yes. Do not send an external apply link on this path. Check any required application fields and the document checklist. An agreement to provide documents is still a pending application. Use the explicit Submit Application action. Finish Conversation saves the call outcome and summary; it does not submit the driver application.",
+      "record": "Explicit intent, selected company, required details, document requested and received states, local application status and delivery status.",
+      "next": "Agrees -> internal application and document checklist | Documents pending -> O27 | Wants carrier confirmation first -> O25 | Application delivered with evidence -> B10 | Declines -> accurate outcome review",
+      "source": "C02 06:57-07:07; C03 23:21-24:20; C03 37:35-38:11; C04 00:14-00:31; C04 02:53-03:28; V01 06:20-08:24"
+    },
+    {
+      "id": "B10",
+      "title": "Close with an accurate next action",
+      "useWhen": "Ending any answered call.",
+      "spoken": "Here's the next step: [who will do what]. We'll follow up on [date] at [time and driver's time zone]. You can reach me on [verified callback number]. Thanks, [Name].",
+      "coach": "Read only the actual status. If the application is locally saved but delivery is pending, say so. If the driver says the form was submitted but no receipt is visible, record driver-reported completion. A received application still needs carrier review. Save the actual outcome and check the separate summary email status.",
+      "record": "Outcome, next action, responsible recruiter, due date/time/time zone, channel and unresolved question. Keep agreement, submission, receipt, approval and hire separate.",
+      "next": "Save outcome and Finish | Check owner summary delivery status | Continue to next eligible contact",
+      "source": "C01 04:47-06:45; C02 07:56-08:15; C04 06:16-06:46; C06 04:48-05:16; V01 07:57-09:01"
+    },
+    {
+      "id": "O01",
+      "title": "Busy or at an event",
+      "useWhen": "The driver says they are busy or asks to talk later.",
+      "spoken": "No problem. What time should I call you back, and what time zone will you be in?",
+      "coach": "Stop the offer pitch. Ask only what is needed for the callback. If they cannot choose a time, let them call the verified line when ready; do not invent an agreed appointment.",
+      "next": "Callback outcome if requested or agreed; preserve existing answers.",
+      "source": "C07 00:55-01:02; C08 00:36-01:18"
+    },
+    {
+      "id": "O02",
+      "title": "Call me tomorrow",
+      "useWhen": "The driver asks for a later call.",
+      "spoken": "Sure. What time tomorrow works, and is that your local time in [known location]?",
+      "coach": "Use the driver's time zone and confirm the date. 'Tomorrow morning' is a window, not a precise appointment. If they prefer a window, record it as a window and arrange a realistic follow-up.",
+      "next": "Save callback details and finish.",
+      "source": "C05 00:20-01:07; C07 00:55-01:15"
+    },
+    {
+      "id": "O03",
+      "title": "It is late here",
+      "useWhen": "The driver says the call is too late.",
+      "spoken": "You're right, this is a bad time. What would be a better time for a quick call?",
+      "coach": "Do not explain how hard you work or use a late call as a selling point. Record the contact's local time zone for future contact.",
+      "next": "Callback if agreed, otherwise end accurately.",
+      "source": "C05 00:28-00:54; C07 00:20-00:22; C07 00:55-01:02"
+    },
+    {
+      "id": "O04",
+      "title": "Not interested",
+      "useWhen": "A mild initial decline without a request to stop contact.",
+      "spoken": "Understood. Would you be open to one quick comparison if there's something closer to what you want, or would you rather leave it here?",
+      "coach": "Use this once. If the driver says no, close with 'Fair enough. Thanks for your time.' Do not guarantee a better job. A clear repeated refusal ends the pitch.",
+      "next": "Interested now -> resume; still not interested -> review outcome; DNC -> immediate stop.",
+      "source": "C01 00:20-00:53; C10 00:17-00:23"
+    },
+    {
+      "id": "O05",
+      "title": "I already have a good job",
+      "useWhen": "The driver is employed and satisfied.",
+      "spoken": "Good to hear. Would you be open to a quick comparison of the options we have?",
+      "coach": "Respect a satisfied driver. If they agree to compare, continue with the practical matching questions. If they decline, finish politely. Do not tell them their current employer is bad.",
+      "next": "Continue only with their interest; otherwise not interested.",
+      "source": "C01 00:20-00:53; I02"
+    },
+    {
+      "id": "O06",
+      "title": "Who is this",
+      "useWhen": "The driver does not recognize the caller or message.",
+      "spoken": "This is [Recruiter], a driver recruiter with TTI Recruiting. I'm reaching out about CDL-A job options. Is now a good time?",
+      "coach": "Answer the identity question directly. State the company and purpose before an offer or link. Never use 'the guy who will change your life' as the introduction.",
+      "next": "Opening response or callback.",
+      "source": "C05 00:08-00:14; C06 00:07-00:30; I01; I02"
+    },
+    {
+      "id": "O07",
+      "title": "Where did you get my number",
+      "useWhen": "The driver asks about the source of the contact.",
+      "spoken": "The contact source shown in our record is [verified contact source]. I can tell you what is recorded there. Would you like to continue, or stop here?",
+      "fallback": "I don't have a confirmed source in front of me. I won't guess. I can have it checked, or stop contact if that's what you prefer.",
+      "coach": "Render the source only when verified. Never claim an application, prior consent or previous conversation without evidence.",
+      "next": "Continue with permission, arrange a source check, or DNC if requested.",
+      "source": "Additional branch for workflow coverage"
+    },
+    {
+      "id": "O08",
+      "title": "I do not remember you or that is not my name",
+      "useWhen": "The driver rejects the assumed prior contact or corrects their name.",
+      "spoken": "No problem. I'm [Recruiter] with TTI Recruiting. Thanks for correcting me, [corrected name]. I'll update that. Are you open to hearing about driving options?",
+      "coach": "Remove the incorrect name immediately. Do not argue that the driver should remember you. If no earlier contact is verified, treat this as a new introduction.",
+      "next": "Correct driver information; continue or finish based on the answer.",
+      "source": "C03 03:26-04:01; C06 00:07-00:37; C07 00:09-00:22"
+    },
+    {
+      "id": "O09",
+      "title": "Wrong number",
+      "useWhen": "The person says the intended driver is not at this number.",
+      "spoken": "Thanks for letting me know. I'll correct the record. Have a good day.",
+      "coach": "Stop qualifying the person who answered. Record wrong number and do not keep calling the same incorrect contact.",
+      "next": "Wrong number outcome and record correction.",
+      "source": "Additional branch for workflow coverage"
+    },
+    {
+      "id": "O10",
+      "title": "Do not contact me",
+      "useWhen": "Any explicit request to stop calls or texts.",
+      "spoken": "Understood. I'll mark this number Do Not Contact. Take care.",
+      "coach": "Use the DNC control immediately. Do not send a final offer, link, referral pitch or another persuasion message. Preserve the suppression when the call is finished.",
+      "next": "DNC -> outcome review -> finish. Resume must be unavailable.",
+      "source": "Additional branch for workflow coverage"
+    },
+    {
+      "id": "O11",
+      "title": "W2 or 1099 is unclear",
+      "useWhen": "The company driver says either or asks what is available.",
+      "spoken": "We can check both types where the carrier offers them. Which path would you like to start with?",
+      "coach": "Read the carrier's actual classification and terms. Do not promise benefits or give personal tax advice. If the driver needs an explanation, have a senior recruiter explain the verified offer. Lease and owner-operator work continue through the internal path.",
+      "next": "Confirm employment path before the W-2 link or internal application.",
+      "source": "C03 04:25-05:30; V01 02:59-03:30"
+    },
+    {
+      "id": "O12",
+      "title": "Tell me the pay first",
+      "useWhen": "The driver asks for pay before continuing.",
+      "spoken": "For [verified company and role], the confirmed starting rate is [verified rate and paid-mile or revenue basis]. The schedule is [verified schedule]. What rate or weekly amount are you looking for?",
+      "fallback": "I want to give you a number that applies to your situation. Tell me the type of work and your home location, and I'll check the current rate.",
+      "coach": "If a figure is not verified, use the fallback. Distinguish solo from team and base pay from conditional bonuses. A higher CPM does not establish higher take-home pay. State any remaining review condition.",
+      "next": "Record pay target and basis; compare like-for-like verified terms.",
+      "source": "C02 01:46-02:04; C02 03:21-04:40; C03 10:58-12:13; C09 00:47-01:38"
+    },
+    {
+      "id": "O13",
+      "title": "I do not want to tell you my current pay",
+      "useWhen": "The driver declines to share current compensation.",
+      "spoken": "That's fine. What pay range are you looking for?",
+      "coach": "Current pay is optional. If they decline the target too, use their other requirements and keep the pay field unconfirmed rather than guessing.",
+      "next": "Continue with known requirements; note the declined answer when necessary.",
+      "source": "Additional branch for workflow coverage"
+    },
+    {
+      "id": "O14",
+      "title": "Local only",
+      "useWhen": "The driver requires a local job or daily home time.",
+      "spoken": "Got it, local and home daily. What's your home city and ZIP? I'll check local openings that actually serve your area.",
+      "coach": "Do not pitch OTR as a local option. Use the W-2 short path when that is the confirmed company-driver classification. Never claim that every local opening is W-2 just because the training video describes the openings then available.",
+      "next": "Record location and daily-home requirement; choose the correct verified path.",
+      "source": "C06 01:07-02:18; V01 13:41-14:37"
+    },
+    {
+      "id": "O15",
+      "title": "The home time does not work",
+      "useWhen": "The schedule conflicts with a family or home requirement.",
+      "spoken": "How many days out would work for you, and how many days do you need at home? I'll compare that with the company's actual schedule.",
+      "coach": "Do not promise a pass through home, every weekend off, or parking near home unless the carrier confirms it. If the driver needs 14 days out and the offer requires 21, mark the conflict.",
+      "next": "Adjust hard requirements or verify another company; do not promise the conflicting offer.",
+      "source": "C01 03:40-04:03; C02 07:35-07:50; V01 03:30-04:16"
+    },
+    {
+      "id": "O16",
+      "title": "I will not go to certain states",
+      "useWhen": "The driver names route exclusions.",
+      "spoken": "Which areas are a hard no for you? I'll verify whether the carrier can support that before we move forward.",
+      "coach": "Avoid saying the dispatcher will always agree. Record every firm exclusion and check it against actual lanes and dispatch policy.",
+      "next": "Record route limits and seek carrier confirmation.",
+      "source": "C01 04:07-04:29"
+    },
+    {
+      "id": "O17",
+      "title": "No touch or mostly drop and hook",
+      "useWhen": "The driver has freight handling requirements.",
+      "spoken": "Is no-touch freight the main requirement, or do you also need a specific amount of drop and hook? Some no-touch loads still involve live loading or unloading.",
+      "coach": "Confirm the two requirements separately. Quote a drop-and-hook percentage only if the carrier has confirmed its basis. Ask whether 95 percent is a firm condition or a preference.",
+      "next": "Record handling requirements and compatible carrier conditions.",
+      "source": "C03 02:10-02:32; C03 03:22-04:24"
+    },
+    {
+      "id": "O18",
+      "title": "Team drivers",
+      "useWhen": "The driver says they run as a team.",
+      "spoken": "Are you staying together as a team? Is the pay figure you're comparing for the truck, or per driver? Let's check both drivers' experience and records.",
+      "coach": "Do not compare a combined team CPM with a solo rate. Both drivers need individual eligibility review. If the other driver needs to decide, agree a follow-up when both are available.",
+      "next": "Record team status, rate basis and both drivers' review requirements.",
+      "source": "C09 01:05-01:22; C09 02:20-02:40; C09 02:49-03:01"
+    },
+    {
+      "id": "O19",
+      "title": "SAP or return to duty history",
+      "useWhen": "SAP, a failed test or return-to-duty history is disclosed.",
+      "spoken": "Thanks for telling me. Is the SAP and return-to-duty process complete, or is something still pending? What dates should I use when checking carrier requirements?",
+      "coach": "Record no history, completed, incomplete or unknown accurately. Completed does not mean accepted by every carrier. Do not send a SAP driver to a carrier documented as not accepting that history. If a requirement is unclear, keep it pending and escalate.",
+      "next": "Apply hard carrier restrictions and arrange verification where needed.",
+      "source": "C03 12:46-13:12; V01 03:30-04:05; V01 05:40-06:08"
+    },
+    {
+      "id": "O20",
+      "title": "Tickets or accidents need review",
+      "useWhen": "The driver reports a violation, accident or inconsistent dates.",
+      "spoken": "What type of incident was it, and when did it happen? Let me repeat that back so I record it correctly: [confirmed type and date].",
+      "coach": "Use separate information for tickets, accidents and SAP. If the driver corrects the timing, save the corrected date. Do not say 'no problem' as a carrier approval.",
+      "next": "Pending eligibility review until checked against the carrier's policy.",
+      "source": "C09 02:26-02:40; C02 01:14-01:23"
+    },
+    {
+      "id": "O21",
+      "title": "Background history or unclear release dates",
+      "useWhen": "A material background issue is disclosed.",
+      "spoken": "Thanks for being upfront. Which conviction date and release date should I record for the carrier review? I'll confirm the requirement before telling you whether this carrier can proceed.",
+      "coach": "Confirm dates separately and read them back. Avoid asking for an unnecessary personal story or making judgments about allegations. The recruiter does not waive carrier safety or background requirements.",
+      "next": "Record the necessary facts as driver-reported; send for authorized individual review.",
+      "source": "C03 22:17-23:21; C03 27:39-28:10; C03 31:04-32:44; C04 00:14-00:26"
+    },
+    {
+      "id": "O22",
+      "title": "It sounds too good or I do not trust recruiters",
+      "useWhen": "The driver doubts the offer or mentions a bad experience.",
+      "spoken": "Fair question. Let's go through the confirmed terms and what still needs checking. I'll put those details in writing so you can compare them before deciding.",
+      "coach": "Use evidence, the named carrier and a clear remaining condition. Avoid personal guarantees, unverified 'best in the market' claims, invented experience, or promises to cover an income shortfall yourself.",
+      "next": "Review terms, answer the exact concern, or agree a follow-up.",
+      "source": "C03 09:14-09:45; C03 14:38-14:43; C06 04:48-05:16"
+    },
+    {
+      "id": "O23",
+      "title": "Just text me the information",
+      "useWhen": "The driver requests information rather than an application.",
+      "spoken": "Sure. Which details do you want first: pay, home time, equipment, or the company information? I'll send the confirmed details. Would you like a follow-up call, or would you prefer to contact me?",
+      "coach": "Honor the actual request. Do not replace a request for information with an application link unless they separately agree. Use a specific send time you can meet, rather than 'over the next few days'.",
+      "next": "Record permission and actual information sent status; callback only if agreed.",
+      "source": "C01 02:05-02:16; C01 04:33-05:33; C02 07:56-08:15; C10 01:02-01:05"
+    },
+    {
+      "id": "O24",
+      "title": "I need to think or speak to someone",
+      "useWhen": "The driver wants time, a spouse's input, or a teammate's decision.",
+      "spoken": "Of course. What do you still need to decide? Let's make sure you have that information, then choose a time to reconnect if you want.",
+      "coach": "Find the actual unresolved issue. Do not manufacture urgency or treat hesitation as agreement. For a team, bring both decision-makers into the next conversation when they choose.",
+      "next": "Record the issue and any agreed callback.",
+      "source": "C01 03:16-03:18; C09 01:49-01:53; C09 02:49-03:01"
+    },
+    {
+      "id": "O25",
+      "title": "Carrier terms opening or eligibility are unconfirmed",
+      "useWhen": "A material carrier fact is missing, including on a Hot Seat.",
+      "spoken": "I still need to confirm [specific fact] with [Company]. I can check that and get back to you at [agreed time]. I don't want you making a move on an unconfirmed detail.",
+      "coach": "A red Hot Seat card indicates priority, not automatic approval. Urgency follows compatibility. Keep mismatches out of recommendations; keep missing facts visible. If no company fits, explain that and offer a follow-up only if wanted.",
+      "next": "Pending verification with responsible recruiter and a due time.",
+      "source": "C02 04:48-05:18; C03 30:05-30:36; C03 36:41-37:35; V01 04:41-06:08"
+    },
+    {
+      "id": "O26",
+      "title": "I can start immediately",
+      "useWhen": "The driver wants an urgent start.",
+      "spoken": "If the carrier approves you and the terms work, what is the earliest date you can actually start? Are there any current loads, notice or travel arrangements we need to account for?",
+      "coach": "Urgent availability does not remove approval requirements. Confirm logistics and document readiness. A drug-screen appointment or orientation is arranged only through the actual carrier process.",
+      "next": "Record start date and practical constraints; continue the normal application checks.",
+      "source": "C02 06:35-06:50; C03 32:45-34:44; C03 34:45-35:15"
+    },
+    {
+      "id": "O27",
+      "title": "I cannot send the documents right now",
+      "useWhen": "The driver agrees to proceed but documents are unavailable.",
+      "spoken": "No problem. When can you send your CDL front and back and medical card through [approved document channel]? I'll keep the application pending until the required items are in.",
+      "coach": "Choose an agreed date and time. Do not say the documents arrived or the application was submitted.",
+      "next": "Pending documents; save the agreed follow-up.",
+      "source": "C02 06:57-07:07; C04 02:53-03:28; C04 05:23-05:47"
+    },
+    {
+      "id": "O28",
+      "title": "The W2 form is hard to use",
+      "useWhen": "The driver has a technical or usability problem with the external application.",
+      "spoken": "What happens when you open the link?",
+      "coach": "Use the verified referral destination. Do not claim a successful submission from an opened page. Escalate a broken link or form and agree a callback; do not create an unauthorized alternative application route.",
+      "next": "Record the specific problem and follow-up; application remains pending.",
+      "source": "Additional branch for workflow coverage"
+    },
+    {
+      "id": "O29",
+      "title": "I filled it out",
+      "useWhen": "The driver reports completing an external form.",
+      "spoken": "Thanks. I'll check for the submission record and let you know the next step. If anything is missing, I'll tell you exactly what we need.",
+      "coach": "Use driver-reported applied until a receipt is verified. Never count the statement as a hire or carrier approval. A receipt identifier can be recorded when supported by the actual application flow.",
+      "next": "Driver-reported completion or verified received based on the evidence.",
+      "source": "C04 06:16-06:46; V01 07:17-07:55; V01 11:33-12:37"
+    },
+    {
+      "id": "O30",
+      "title": "Lease or owner operator economics",
+      "useWhen": "The driver wants a lease, owns a truck, or is considering leaving a lease.",
+      "spoken": "Are you looking to stay in a lease, bring your own truck, or move to a company driver position? For a lease, let's compare the revenue share and the actual weekly expenses before discussing what you might keep.",
+      "coach": "Truck gross and revenue percentage are not the driver's net earnings. Verify fuel, truck and trailer costs, insurance, escrow, maintenance and exit conditions that apply. Do not forecast fuel prices or promise future truck ownership. A later lease discussion is separate from the current application.",
+      "next": "Confirm the actual position; verify the material contract terms; internal application path.",
+      "source": "C03 02:58-03:26; C03 07:20-08:15; C03 15:40-17:43; C04 00:31-01:28"
+    },
+    {
+      "id": "O31",
+      "title": "Requests to manipulate logs or bypass safety",
+      "useWhen": "The driver asks for log manipulation or a waiver outside the carrier's authorized review.",
+      "spoken": "I can check dispatch, realistic schedules and the carrier's review process. I can't arrange log manipulation or bypass safety approval. Are you looking for an option that works within those requirements?",
+      "coach": "Do not agree, improvise a workaround, or turn this into a pay promise. Keep the relevant concern for a senior recruiter and carrier review. A refusal to operate within the requirements ends that recommendation.",
+      "next": "Authorized review or accurate decline; no safety workaround.",
+      "source": "C02 02:45-02:49; C03 13:44-14:42; C03 18:13-21:10; C04 00:14-00:26"
+    },
+    {
+      "id": "O32",
+      "title": "Referrals from another driver",
+      "useWhen": "The driver asks about referring someone or the main application step is already settled.",
+      "spoken": "If someone you know wants to hear about driving options, they can contact me directly. If there is an approved referral reward, I'll send you its exact terms.",
+      "coach": "Keep referrals optional and after the driver's own next step. The recordings mention both $100 and $200; do not make either the team policy without owner confirmation. Verify the trigger, timing, eligibility and payment method.",
+      "next": "Record optional referral interest separately from the driver's application.",
+      "source": "C01 01:11-01:21; C02 05:27-05:44; C03 12:14-13:43; C04 07:16-08:16; C09 02:05-02:13"
+    },
+    {
+      "id": "O33",
+      "title": "I do not know the answer yet",
+      "useWhen": "The driver asks a carrier question whose answer is not verified.",
+      "spoken": "I don't have a confirmed answer to that yet. I'll check [specific question] with [Company] and come back to you at [agreed time]. Does that need to be settled before you move forward?",
+      "coach": "Preserve the driver's place in the call. Record the exact question and whether it blocks the decision. Return from the FAQ to the previous call step. If the driver has not agreed to move forward, do not mark an application.",
+      "next": "FAQ return or pending verification with a follow-up.",
+      "source": "C02 04:48-05:18; C03 24:51-25:43; V01 01:30-02:03"
+    },
+    {
+      "id": "O34",
+      "title": "The call disconnects",
+      "useWhen": "The conversation ends unexpectedly.",
+      "spoken": "Hi [Name], it's [Recruiter] with TTI Recruiting. We got disconnected while talking about [confirmed topic]. Is now still a good time?",
+      "coach": "Use only when the earlier call and topic are recorded. Preserve saved answers and selected path. Do not invent agreement, a callback appointment, or a new application.",
+      "next": "Resume the saved conversation or finish accurately if unreachable.",
+      "source": "Additional branch for workflow coverage"
+    },
+    {
+      "id": "O35",
+      "title": "Benefits deductions or employment classification",
+      "useWhen": "The driver asks about insurance, deductions or W-2 versus 1099 terms.",
+      "spoken": "I'll check the exact terms for this role. Which benefit or deduction matters most to your decision?",
+      "coach": "Do not say every W-2 offer includes the same insurance or every 1099 company driver has no expenses. Use the named carrier's verified terms and direct personal tax questions to the appropriate qualified adviser.",
+      "next": "Confirmed FAQ answer or pending verification.",
+      "source": "C06 03:38-04:15; C03 10:58-12:13"
+    },
+    {
+      "id": "O36",
+      "title": "W2 follow up before receipt",
+      "useWhen": "A permitted follow-up is due and no verified receipt exists.",
+      "spoken": "Hey [Name], it's [Recruiter] with TTI Recruiting. Did you have a chance to complete the form, or did you run into anything I can help with?",
+      "coach": "Use at the agreed time or according to the team's permitted follow-up process. If completed is only driver-reported, retain that evidence level. Respect an opt-out or declined follow-up.",
+      "next": "Help, driver-reported applied, verified receipt, callback, or decline as stated.",
+      "source": "Additional branch for workflow coverage"
+    },
+    {
+      "id": "O37",
+      "title": "Application delivery is pending or failed",
+      "useWhen": "The internal application is saved but LiveHQ delivery is not confirmed.",
+      "spoken": "I've saved your application details. The delivery is still being checked, and I'll update you once the submission status is confirmed.",
+      "coach": "Do not say the carrier received it. Follow the existing retry and duplicate-protection process. An uncertain delivery must not be blindly resubmitted. Keep the owner summary email status separate.",
+      "next": "Pending delivery or technical escalation; only mark delivered on a valid acknowledgement.",
+      "source": "Additional branch for workflow coverage"
+    },
+    {
+      "id": "O38",
+      "title": "Complete voicemail",
+      "useWhen": "No answer and the phone allows a voicemail.",
+      "spoken": "Hi [Name], this is [Recruiter] with TTI Recruiting. I'm calling about CDL-A driving opportunities. If you'd like to compare options on pay, home time or equipment, call me at [verified callback number]. Again, [Recruiter] with TTI Recruiting, [verified callback number]. Have a good day.",
+      "coach": "If the name is missing, omit it. Use only the verified callback number for that recruiter. If the number is missing, omit the number sentences and flag configuration; do not invent one. Do not mark left unless you actually left this message.",
+      "next": "Voicemail actually left or no answer if a message could not be left.",
+      "source": "Additional branch for workflow coverage"
+    },
+    {
+      "id": "O39",
+      "title": "A verified earlier conversation",
+      "useWhen": "The record confirms an earlier call and the driver returns or receives an agreed callback.",
+      "spoken": "Hey [Name], it's [Recruiter] with TTI Recruiting. We spoke about [recorded requirement]. Is that still what you're looking for?",
+      "coach": "Use verified notes, not an assumed memory. If a different recruiter takes over, introduce yourself accurately and explain that you are following the recorded conversation. Reuse confirmed answers and focus on the unresolved condition.",
+      "next": "Resume the correct step without repeating the whole questionnaire.",
+      "source": "C03 and C04 same driver and conversation; C08 00:25-00:28"
+    },
+    {
+      "id": "O40",
+      "title": "No longer seeking truck driving work",
+      "useWhen": "The person says they no longer drive or do not want truck-driving opportunities.",
+      "spoken": "Thanks for letting me know. I'll update the record. Take care.",
+      "coach": "Do not confuse 'I am busy at an event' with 'I no longer drive'. Ask for clarification only if the statement is genuinely unclear.",
+      "next": "Accurate not-interested or contact disposition; DNC only if requested.",
+      "source": "C08 00:36-00:58"
+    },
+    {
+      "id": "T01",
+      "title": "Confirmed information after a conversation",
+      "spoken": "Hi [Name], it's [Recruiter] with TTI Recruiting. As discussed, [Company] lists [verified starting pay and basis], [verified home time], and [verified equipment or route]. We still need to confirm [remaining condition, if any]. Let me know if you want to take the next step. [verified callback number]",
+      "coach": "Send the information the driver actually requested. Omit an unresolved placeholder rather than guessing. An application link requires separate agreement."
+    },
+    {
+      "id": "T02",
+      "title": "Callback confirmation",
+      "spoken": "Hi [Name], it's [Recruiter] with TTI Recruiting. We're set to talk on [date] at [time and driver's time zone] about [recorded requirement]. My number is [verified callback number].",
+      "coach": "Use only a callback that was actually agreed."
+    },
+    {
+      "id": "T03",
+      "title": "W2 application link",
+      "spoken": "Hi [Name], it's [Recruiter] with TTI Recruiting. Here's the driver application link we agreed on: [configured recruiter referral URL]. We'll follow up on [agreed date, time and time zone]. [verified callback number]",
+      "coach": "W-2 company driver only; explicit permission; use that recruiter's configured link. Sending is recorded only after it is actually sent."
+    },
+    {
+      "id": "T04",
+      "title": "Internal application document request",
+      "spoken": "Hi [Name], it's [Recruiter] with TTI Recruiting. To continue the application we discussed for [Company], please send your CDL front and back and medical card through [approved document channel]. I'll complete the application here using your recorded details. Our next follow-up is [agreed date, time and time zone].",
+      "coach": "1099, lease and owner-operator stay internal. No external apply link. The message is a document request, not evidence that documents were received."
+    },
+    {
+      "id": "T05",
+      "title": "Pending document reminder",
+      "spoken": "Hi [Name], it's [Recruiter] with TTI Recruiting. We're still waiting for [specific required document] to continue your application for [Company]. Is [agreed time] still workable, or do you need more time?",
+      "coach": "Use at the agreed follow-up. Do not send if the contact is DNC or has declined this channel."
+    },
+    {
+      "id": "T06",
+      "title": "Verified received update",
+      "spoken": "Hi [Name], it's [Recruiter] with TTI Recruiting. Your application has been received in [verified destination]. The next step is [actual review or follow-up action]. I'll update you at [agreed time].",
+      "coach": "Use only when there is verified receipt evidence. State the actual destination; local save, LiveHQ delivery, and carrier receipt may be different events. Do not claim carrier approval."
+    }
+  ]
+}

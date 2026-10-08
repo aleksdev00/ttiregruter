@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS account_setup_backups (id TEXT PRIMARY KEY NOT NULL, created_at INTEGER NOT NULL, data_json TEXT NOT NULL);

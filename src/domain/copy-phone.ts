@@ -1,0 +1,1 @@
+export async function copyStoredPhone(phone:string|null,clipboard:{writeText:(text:string)=>Promise<void>}|undefined){if(!phone)throw new Error('No phone number is recorded.');if(!clipboard)throw new Error('Clipboard unavailable. Select the displayed number and copy it manually.');await clipboard.writeText(phone);}

@@ -1,0 +1,8 @@
+'use client';
+import {useEffect,useRef,useState} from 'react';
+type Status={id:string;status:string;message:string};
+export function CompletionNotification({conversationId}:{conversationId:string}){const [record,setRecord]=useState<Status|null>(null),[error,setError]=useState(''),[busy,setBusy]=useState(false);const lock=useRef(false);
+ async function load(operation?:'retry'|'check'){if(lock.current)return;lock.current=true;setBusy(true);setError('');try{const r=await fetch(operation?'/api/completion-notification':`/api/completion-notification?conversationId=${encodeURIComponent(conversationId)}`,operation?{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({conversationId,operation})}:{cache:'no-store'});const p=await r.json() as any;if(!p.ok)throw new Error(p.message);setRecord(p.value);}catch(e){setError(e instanceof Error?e.message:'Could not check notification. Try again.');}finally{lock.current=false;setBusy(false);}}
+ useEffect(()=>{void load();},[conversationId]);
+ return <section aria-label="Completion email" style={{padding:12,border:'1px solid #dce5eb',borderRadius:8}}><strong>Owner summary email · {record?.status??'Status'}</strong><p role="status">{error||record?.message||(busy?'Checking saved notification…':'No Finish notification was recorded for this historical call.')}</p><button disabled={busy} onClick={()=>void load(record&&['unconfirmed','sending'].includes(record.status)?'check':undefined)}>Check status</button>{record&&['pending','failed','blocked'].includes(record.status)&&<button disabled={busy} onClick={()=>void load('retry')}>Retry summary email</button>}<small>Completed conversation stays saved. Notes edits never resend this email.</small></section>;
+}

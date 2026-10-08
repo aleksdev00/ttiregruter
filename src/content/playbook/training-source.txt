@@ -1,0 +1,108 @@
+A1: GROWTH.CO RECRUITING GROUP
+A2: CDL Class A Driver Recruitment Script (Training Guide for New Recruiters)
+A3: Goal
+A6: Build rapport, qualify the driver, understand their needs, and match them with the best company position or lease-purchase opportunity.
+A9: STEP 1: INTRODUCTION
+A12: "Hello, is this [Driver Name]?
+A14: My name is [Recruiter Name], and I'm calling from GROWTH.CO Recruiting Group. We specialize in helping CDL Class A drivers find the best opportunities based on their experience, income goals, home time preferences, and career plans.
+A16: Do you have a few minutes to discuss what you're looking for in your next driving position?"
+A18: STEP 2: BUILD RAPPORT
+A20: "Before we talk about opportunities, I'd like to learn more about you so I can find the best fit possible.
+A22: How long have you been driving commercially?"
+A24: Listen carefully and keep the conversation natural.
+A26: Additional questions:
+A28: What type of equipment have you driven?
+A29: Dry van, reefer, flatbed, tanker, intermodal?
+A30: What states do you usually run?
+A31: What do you enjoy most about trucking?
+A32: What are you hoping to improve with your next opportunity?
+A33: STEP 3: QUALIFY THE DRIVER
+A34: Experience
+A36: "How much verifiable CDL Class A experience do you currently have?"
+A38: License Status
+A40: "Is your CDL currently valid and active?"
+A42: Safety Record
+A44: "Any major accidents in the last 3 years?"
+A46: "Any moving violations recently?"
+A48: Employment Status
+A50: "Are you currently employed, or are you looking for something new?"
+A52: Drug Test
+A54: "Would you be able to pass a DOT drug screen?"
+A56: STEP 4: IDENTIFY THEIR GOALS
+A58: This is the most important part.
+A60: Ask:
+A62: Income
+A64: "What kind of weekly income are you looking for?"
+A66: Home Time
+A68: "How often do you want to be home?"
+A70: Examples:
+A72: Every weekend
+A73: Every other weekend
+A74: 2 weeks out / 2 days home
+A75: OTR lifestyle
+A76: Freight Preference
+A78: "What type of freight do you prefer?"
+A80: Company vs Lease Purchase
+A82: "Are you looking for a company driver position, or have you considered lease purchase opportunities?"
+A84: If unsure:
+A86: "No worries. I can explain both options and help determine what would make the most sense for your situation."
+A88: STEP 5: EDUCATE THE DRIVER
+A89: COMPANY POSITION EXPLANATION
+A91: "With a company position, you'll receive a steady paycheck, benefits, and lower financial risk. The company covers most operational expenses and maintenance."
+A93: Benefits
+A94: Stable income
+A95: Health benefits
+A96: Paid orientation
+A97: Lower risk
+A98: No truck expenses
+A101: LEASE PURCHASE EXPLANATION
+A103: "With lease purchase, you're working toward ownership of your truck. Earnings can be significantly higher, but you'll also have more responsibility and expenses."
+A105: Benefits
+A106: Higher earning potential
+A107: Path to truck ownership
+A108: More independence
+A109: Business-building opportunity
+A110: Important
+A112: "We only recommend lease purchase if it aligns with your goals and financial situation."
+A114: STEP 6: PRESENT THE VALUE OF GROWTH.CO
+A116: "At GROWTH.CO Recruiting Group, we're not tied to just one carrier.
+A118: Our job is to learn what matters most to you and connect you with the company that best fits your needs.
+A120: Whether you're looking for:
+A122: Better pay
+A123: More home time
+A124: Newer equipment
+A125: Lease purchase
+A126: Regional routes
+A127: OTR opportunities
+A129: We'll help you compare options and find the right fit."
+A131: STEP 7: OVERCOME COMMON OBJECTIONS
+A132: "I'm happy where I am."
+A134: "I completely understand. Many drivers we work with felt the same way initially. Out of curiosity, if a better opportunity came along with more pay or better home time, would you be open to hearing about it?"
+A136: "I'm not looking right now."
+A138: "No problem at all. Things change quickly in trucking. Would it be okay if I kept your information and reached out when a particularly strong opportunity becomes available?"
+A140: "I've heard bad things about lease purchase."
+A142: "That's understandable. There are good and bad programs in the industry. That's why we carefully review opportunities and only present options that make sense for each driver's goals."
+A144: STEP 8: CLOSE THE DRIVER
+A146: "Based on everything you've shared, I believe I have a few opportunities that could be a strong fit for you.
+A148: The next step would be gathering a few details and getting your profile submitted for review.
+A150: If everything looks good, we can start setting up interviews and moving toward orientation."
+A152: DRIVER INFORMATION CHECKLIST
+A154: Collect:
+A156: ✅ Full Name
+A158: ✅ Phone Number
+A160: ✅ Email Address
+A162: ✅ CDL Class
+A164: ✅ Years of Experience
+A166: ✅ Current Employer
+A168: ✅ Home State
+A170: ✅ Preferred Home Time
+A172: ✅ Preferred Freight Type
+A174: ✅ Company or Lease Purchase Interest
+A176: ✅ Recent Accidents/Violations
+A178: ✅ Desired Weekly Income
+A180: POWERFUL CLOSING STATEMENT
+A182: "At GROWTH.CO Recruiting Group, we're not just filling seats. We're helping professional drivers find opportunities that support their goals, families, and future. My job is to make sure you're in the best possible position to succeed."
+A184: GOLDEN RULE FOR NEW RECRUITERS
+A186: Don't sell a job.
+A187: Discover the driver's needs first.
+A189: The more questions you ask, the easier it becomes to find the right company and build trust with the driver. Trust closes more drivers than any sales pitch ever will.

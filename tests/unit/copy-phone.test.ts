@@ -1,0 +1,4 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {copyStoredPhone} from '../../src/domain/copy-phone.ts';
+test('Copy phone waits for confirmation and preserves the exact recorded number',async()=>{let copied='',confirmed=false,release!:()=>void;const pending=copyStoredPhone('(202) 555-0191',{writeText:async phone=>{copied=phone;await new Promise<void>(r=>release=r);}}).then(()=>confirmed=true);assert.equal(copied,'(202) 555-0191');assert.equal(confirmed,false);release();await pending;assert.equal(confirmed,true);});
+test('Clipboard failure and unavailable or missing number do not report success',async()=>{await assert.rejects(copyStoredPhone('+12025550191',{writeText:async()=>{throw new Error('Permission denied');}}));await assert.rejects(copyStoredPhone('+12025550191',undefined),/Select/);await assert.rejects(copyStoredPhone(null,undefined),/No phone/);});

@@ -1,0 +1,470 @@
+{
+  "sourceCommit": "0a5bfe719e4a1a6f460c5574a8b73534abbb5a6c",
+  "sourceFile": "public/legacy/app.js",
+  "questions": [
+    {
+      "id": "position",
+      "label": "Position type",
+      "group": "Position and employment type",
+      "spoken": "Are you looking for a company driver position, a lease option, or owner-operator work?",
+      "type": "select",
+      "options": [
+        [
+          "Company driver",
+          "Company driver"
+        ],
+        [
+          "Lease",
+          "Lease"
+        ],
+        [
+          "Owner-operator",
+          "Owner-operator"
+        ]
+      ]
+    },
+    {
+      "id": "employmentType",
+      "label": "W-2 or 1099",
+      "group": "Position and employment type",
+      "spoken": "Okay. Would you be interested in a 1099 option or a W-2 position?",
+      "type": "select",
+      "options": [
+        [
+          "W-2",
+          "W-2"
+        ],
+        [
+          "1099",
+          "1099"
+        ],
+        [
+          "Either",
+          "Either"
+        ]
+      ]
+    },
+    {
+      "id": "state",
+      "label": "State of residence",
+      "group": "Location and eligibility",
+      "spoken": "What state are you based out of?",
+      "type": "select",
+      "options": [
+        [
+          "AL",
+          "AL"
+        ],
+        [
+          "AK",
+          "AK"
+        ],
+        [
+          "AZ",
+          "AZ"
+        ],
+        [
+          "AR",
+          "AR"
+        ],
+        [
+          "CA",
+          "CA"
+        ],
+        [
+          "CO",
+          "CO"
+        ],
+        [
+          "CT",
+          "CT"
+        ],
+        [
+          "DE",
+          "DE"
+        ],
+        [
+          "FL",
+          "FL"
+        ],
+        [
+          "GA",
+          "GA"
+        ],
+        [
+          "HI",
+          "HI"
+        ],
+        [
+          "ID",
+          "ID"
+        ],
+        [
+          "IL",
+          "IL"
+        ],
+        [
+          "IN",
+          "IN"
+        ],
+        [
+          "IA",
+          "IA"
+        ],
+        [
+          "KS",
+          "KS"
+        ],
+        [
+          "KY",
+          "KY"
+        ],
+        [
+          "LA",
+          "LA"
+        ],
+        [
+          "ME",
+          "ME"
+        ],
+        [
+          "MD",
+          "MD"
+        ],
+        [
+          "MA",
+          "MA"
+        ],
+        [
+          "MI",
+          "MI"
+        ],
+        [
+          "MN",
+          "MN"
+        ],
+        [
+          "MS",
+          "MS"
+        ],
+        [
+          "MO",
+          "MO"
+        ],
+        [
+          "MT",
+          "MT"
+        ],
+        [
+          "NE",
+          "NE"
+        ],
+        [
+          "NV",
+          "NV"
+        ],
+        [
+          "NH",
+          "NH"
+        ],
+        [
+          "NJ",
+          "NJ"
+        ],
+        [
+          "NM",
+          "NM"
+        ],
+        [
+          "NY",
+          "NY"
+        ],
+        [
+          "NC",
+          "NC"
+        ],
+        [
+          "ND",
+          "ND"
+        ],
+        [
+          "OH",
+          "OH"
+        ],
+        [
+          "OK",
+          "OK"
+        ],
+        [
+          "OR",
+          "OR"
+        ],
+        [
+          "PA",
+          "PA"
+        ],
+        [
+          "RI",
+          "RI"
+        ],
+        [
+          "SC",
+          "SC"
+        ],
+        [
+          "SD",
+          "SD"
+        ],
+        [
+          "TN",
+          "TN"
+        ],
+        [
+          "TX",
+          "TX"
+        ],
+        [
+          "UT",
+          "UT"
+        ],
+        [
+          "VT",
+          "VT"
+        ],
+        [
+          "VA",
+          "VA"
+        ],
+        [
+          "WA",
+          "WA"
+        ],
+        [
+          "WV",
+          "WV"
+        ],
+        [
+          "WI",
+          "WI"
+        ],
+        [
+          "WY",
+          "WY"
+        ],
+        [
+          "DC",
+          "DC"
+        ]
+      ]
+    },
+    {
+      "id": "locationZip",
+      "label": "City / ZIP",
+      "group": "Location and eligibility",
+      "spoken": "And what’s your city and ZIP? I want to look at lanes that actually work from where you live.",
+      "type": "text",
+      "options": []
+    },
+    {
+      "id": "experienceMonths",
+      "label": "CDL-A experience (months)",
+      "group": "Location and eligibility",
+      "spoken": "How much recent, verifiable Class A experience are you working with?",
+      "type": "number",
+      "options": []
+    },
+    {
+      "id": "sap",
+      "label": "SAP / RTD status",
+      "group": "Location and eligibility",
+      "spoken": "And just so I match you correctly—where are you with SAP and return-to-duty right now?",
+      "type": "select",
+      "options": [
+        [
+          "no",
+          "No SAP history"
+        ],
+        [
+          "completed",
+          "SAP + RTD completed"
+        ],
+        [
+          "needsrtd",
+          "SAP — RTD not completed"
+        ],
+        [
+          "unknown",
+          "SAP — not confirmed"
+        ]
+      ]
+    },
+    {
+      "id": "trailer",
+      "label": "Trailer type",
+      "group": "Equipment",
+      "spoken": "And what equipment do you actually like running?",
+      "type": "select",
+      "options": [
+        [
+          "Reefer",
+          "Reefer"
+        ],
+        [
+          "Dry van",
+          "Dry van"
+        ],
+        [
+          "Flatbed",
+          "Flatbed"
+        ],
+        [
+          "Step Deck",
+          "Step Deck"
+        ],
+        [
+          "Conestoga",
+          "Conestoga"
+        ],
+        [
+          "Box Truck",
+          "Box Truck"
+        ],
+        [
+          "Intermodal",
+          "Intermodal"
+        ],
+        [
+          "Power Only",
+          "Power Only"
+        ],
+        [
+          "Oversized",
+          "Oversized"
+        ]
+      ]
+    },
+    {
+      "id": "truck",
+      "label": "Preferred truck",
+      "group": "Equipment",
+      "spoken": "Any truck brand you really want—or one you absolutely won’t drive?",
+      "type": "select",
+      "options": [
+        [
+          "Volvo",
+          "Volvo"
+        ],
+        [
+          "Freightliner",
+          "Freightliner"
+        ],
+        [
+          "Peterbilt",
+          "Peterbilt"
+        ],
+        [
+          "Kenworth",
+          "Kenworth"
+        ],
+        [
+          "International",
+          "International"
+        ],
+        [
+          "Mack",
+          "Mack"
+        ]
+      ]
+    },
+    {
+      "id": "route",
+      "label": "Route type",
+      "group": "Routes and home time",
+      "spoken": "What kind of lanes fit you best—OTR, regional, local, dedicated? What are you open to?",
+      "type": "select",
+      "options": [
+        [
+          "OTR",
+          "OTR"
+        ],
+        [
+          "Regional",
+          "Regional"
+        ],
+        [
+          "Local",
+          "Local"
+        ],
+        [
+          "Dedicated",
+          "Dedicated"
+        ]
+      ]
+    },
+    {
+      "id": "home",
+      "label": "Home time",
+      "group": "Routes and home time",
+      "spoken": "Got it. What does a good schedule look like for you—how long are you okay staying out, and how often do you need to be home?",
+      "type": "select",
+      "options": [
+        [
+          "1",
+          "Home daily"
+        ],
+        [
+          "7",
+          "7 days out"
+        ],
+        [
+          "14",
+          "14 days out"
+        ],
+        [
+          "21",
+          "21 days out"
+        ],
+        [
+          "28",
+          "28 days out"
+        ],
+        [
+          "35",
+          "35 days out"
+        ]
+      ]
+    },
+    {
+      "id": "payTarget",
+      "label": "Weekly pay target",
+      "group": "Pay and timing",
+      "spoken": "Alright, let’s talk money. What are you trying to clear each week—and are we talking gross or take-home?",
+      "type": "text",
+      "options": []
+    },
+    {
+      "id": "availability",
+      "label": "Availability to move",
+      "group": "Pay and timing",
+      "spoken": "If I line up the right fit, how soon could you move—right away, or do you need to give notice?",
+      "type": "text",
+      "options": []
+    },
+    {
+      "id": "priority",
+      "label": "Main priority",
+      "group": "Priority and deal-breakers",
+      "spoken": "",
+      "type": "text",
+      "options": []
+    },
+    {
+      "id": "dealbreakers",
+      "label": "Deal-breakers",
+      "group": "Priority and deal-breakers",
+      "spoken": "",
+      "type": "text",
+      "options": []
+    }
+  ]
+}

@@ -1,0 +1,555 @@
+{
+  "sourceSha256": "8931dd02dc17e71dff269c15fd62e08dd43a77985a211c3a46c017ecfc4178cf",
+  "categories": [
+    {
+      "id": 1,
+      "title": "Job and carrier"
+    },
+    {
+      "id": 2,
+      "title": "Pay and deductions"
+    },
+    {
+      "id": 3,
+      "title": "Routes, schedule, and home time"
+    },
+    {
+      "id": 4,
+      "title": "Truck, trailer, and work duties"
+    },
+    {
+      "id": 5,
+      "title": "Experience and hiring requirements"
+    },
+    {
+      "id": 6,
+      "title": "Orientation, benefits, and support"
+    },
+    {
+      "id": 7,
+      "title": "Lease or owner-operator questions"
+    },
+    {
+      "id": 8,
+      "title": "TTI Recruiting and next steps"
+    }
+  ],
+  "entries": [
+    {
+      "id": "F001",
+      "category": 1,
+      "question": "What type of driving position is this?",
+      "answer": "This opening is for a [company-driver / lease / owner-operator] position with [carrier]. I’ll walk you through the pay structure and responsibilities so you can decide whether it fits what you want."
+    },
+    {
+      "id": "F002",
+      "category": 1,
+      "question": "Which carrier is hiring for this position?",
+      "answer": "The carrier is [carrier name]. TTI Recruiting works with carriers to connect them with drivers; [carrier] makes the final hiring decision."
+    },
+    {
+      "id": "F003",
+      "category": 1,
+      "question": "Is this a company-driver, lease, or owner-operator position?",
+      "answer": "This specific opening is [verified type]. The costs and responsibilities depend on that structure, so I’ll show you the written terms before you make a decision."
+    },
+    {
+      "id": "F004",
+      "category": 1,
+      "question": "What makes this position a good fit for my experience and preferences?",
+      "answer": "You told me [driver priority], and this opening appears to match that through [verified detail]. Let’s also check [remaining concern] before I recommend it."
+    },
+    {
+      "id": "F005",
+      "category": 1,
+      "question": "What are the carrier’s main hiring requirements?",
+      "answer": "The carrier’s current requirements are [verified requirements]. I can compare those with your experience, but the carrier reviews the application and decides whether to move forward."
+    },
+    {
+      "id": "F006",
+      "category": 1,
+      "question": "Is the position currently open for drivers in my area?",
+      "answer": "I’m checking the carrier’s current hiring area and open status for [ZIP/state]. I’ll confirm before I tell you it’s available."
+    },
+    {
+      "id": "F007",
+      "category": 1,
+      "question": "Do you work with one carrier or can you help me compare several companies?",
+      "answer": "TTI works with multiple motor carriers. I’ll first understand what matters to you, then show you the current options that fit your location and qualifications."
+    },
+    {
+      "id": "F008",
+      "category": 1,
+      "question": "Who makes the final hiring decision?",
+      "answer": "[Carrier] makes the final hiring decision. I can help organize your application and communicate with the carrier, but I can’t promise approval."
+    },
+    {
+      "id": "F009",
+      "category": 1,
+      "question": "Can I review the company’s terms before I decide?",
+      "answer": "Absolutely. I’ll send you the current written details we have, including pay structure and any applicable costs, so you can review them before deciding."
+    },
+    {
+      "id": "F010",
+      "category": 1,
+      "question": "What happens after I choose a company?",
+      "answer": "We’ll confirm the carrier you want to pursue, complete the application steps, and share your information with that carrier as authorized. The carrier will then explain its screening and hiring steps."
+    },
+    {
+      "id": "F011",
+      "category": 2,
+      "question": "How is the pay calculated: cents per mile, percentage, hourly, or another method?",
+      "answer": "For this opening, the verified pay method is [method] at [rate or formula]. I’ll show you how the carrier calculates it, including what counts as paid miles or loads."
+    },
+    {
+      "id": "F012",
+      "category": 2,
+      "question": "Is the amount you quoted gross pay or estimated take-home pay?",
+      "answer": "That figure is [gross / estimated take-home] and is based on [verified basis]. Your actual take-home can depend on taxes, benefits, deductions, and miles or loads worked."
+    },
+    {
+      "id": "F013",
+      "category": 2,
+      "question": "What is the pay rate, and how is it calculated?",
+      "answer": "The current written rate is [rate], calculated by [method]. I can send you the pay plan so you can see exactly how it applies."
+    },
+    {
+      "id": "F014",
+      "category": 2,
+      "question": "How many miles or loads do drivers typically receive?",
+      "answer": "The carrier’s verified typical range is [range, if provided]. That is historical or expected information, not a guarantee for every week; I’ll clarify how freight and downtime affect it."
+    },
+    {
+      "id": "F015",
+      "category": 2,
+      "question": "Are miles guaranteed, or can they vary from week to week?",
+      "answer": "The carrier says [guaranteed terms / miles are not guaranteed]. I’ll make sure we distinguish a written guarantee from a typical estimate."
+    },
+    {
+      "id": "F016",
+      "category": 2,
+      "question": "How often do drivers get paid?",
+      "answer": "The carrier’s pay schedule is [weekly / biweekly / other], with payment usually issued [verified timing]. I’ll confirm the first-pay timing and any cutoff dates."
+    },
+    {
+      "id": "F017",
+      "category": 2,
+      "question": "Are there deductions from my paycheck or settlement?",
+      "answer": "The known deductions are [itemized list]. I don’t want to leave anything out, so I’ll get the full current deduction list in writing before you commit."
+    },
+    {
+      "id": "F018",
+      "category": 2,
+      "question": "Are detention, layover, breakdown, stop, or unload payments available?",
+      "answer": "For this carrier, the verified policy is [terms for each applicable item]. If the carrier hasn’t confirmed a category, I’ll check rather than assume it’s paid."
+    },
+    {
+      "id": "F019",
+      "category": 2,
+      "question": "Is there a sign-on or retention bonus? What are the exact terms?",
+      "answer": "The carrier offers [bonus / no confirmed bonus]. If there is a bonus, I’ll show you the amount, eligibility rules, payment timing, and any repayment conditions in writing."
+    },
+    {
+      "id": "F020",
+      "category": 2,
+      "question": "Are there reimbursements for travel, orientation, or other expenses?",
+      "answer": "The carrier’s confirmed reimbursement policy is [items and limits]. I’ll verify whether you need approval or receipts and when reimbursement is paid."
+    },
+    {
+      "id": "F021",
+      "category": 2,
+      "question": "Are taxes, insurance, or benefits deducted from my pay?",
+      "answer": "The confirmed deductions are [items]. Taxes and benefit costs depend on your employment arrangement and elections; I’ll show you the carrier’s figures where available."
+    },
+    {
+      "id": "F022",
+      "category": 2,
+      "question": "Can I see a written pay plan or sample settlement before accepting?",
+      "answer": "Yes. I’ll request the current pay plan and, if the carrier provides one, a sample settlement with the deductions identified. Please review it before you decide."
+    },
+    {
+      "id": "F023",
+      "category": 3,
+      "question": "Is this local, regional, or OTR work?",
+      "answer": "This opening is described as [local / regional / OTR]. I’ll confirm what that means for the lanes and time away for this specific fleet."
+    },
+    {
+      "id": "F024",
+      "category": 3,
+      "question": "What areas or lanes would I run?",
+      "answer": "The carrier’s current lanes are [verified lanes/regions]. Freight can change, so I’ll distinguish regular lanes from guaranteed routes."
+    },
+    {
+      "id": "F025",
+      "category": 3,
+      "question": "How often would I get home?",
+      "answer": "The carrier’s stated home-time schedule is [schedule]. I’ll confirm whether that is a written commitment or the usual schedule, because freight and dispatch can affect timing."
+    },
+    {
+      "id": "F026",
+      "category": 3,
+      "question": "Is home time guaranteed or based on freight and scheduling?",
+      "answer": "The carrier’s policy is [verified policy]. I won’t call it guaranteed unless the carrier confirms that in writing."
+    },
+    {
+      "id": "F027",
+      "category": 3,
+      "question": "How long are drivers usually out on the road?",
+      "answer": "The usual time out is [verified range]. I’ll confirm whether that depends on your lane, home-time request, or freight."
+    },
+    {
+      "id": "F028",
+      "category": 3,
+      "question": "Do routes include nights, weekends, or holidays?",
+      "answer": "The carrier’s schedule may include [verified nights/weekends/holidays]. I’ll check the expectations for this specific position and whether the schedule rotates."
+    },
+    {
+      "id": "F029",
+      "category": 3,
+      "question": "Can I request specific lanes or schedules?",
+      "answer": "You can tell the carrier what you prefer. The current policy is [verified process]; I can’t promise a particular lane unless the carrier confirms it."
+    },
+    {
+      "id": "F030",
+      "category": 3,
+      "question": "How are loads assigned?",
+      "answer": "Loads are assigned through [verified dispatch process]. I’ll check whether drivers can request loads or whether dispatch determines them."
+    },
+    {
+      "id": "F031",
+      "category": 3,
+      "question": "Is there forced dispatch?",
+      "answer": "The carrier’s policy is [verified policy]. I’ll get the exact definition from them so you know what choice you have before accepting."
+    },
+    {
+      "id": "F032",
+      "category": 3,
+      "question": "How much waiting at shippers and receivers should I expect?",
+      "answer": "The carrier reports [verified information, if available]. Wait times vary by facility; I’ll also confirm whether detention pay applies and when it starts."
+    },
+    {
+      "id": "F033",
+      "category": 4,
+      "question": "What truck make, model, and year would I drive?",
+      "answer": "The truck assigned for this opening is [verified make/model/year, if confirmed]. I’ll confirm availability before treating a specific truck as reserved."
+    },
+    {
+      "id": "F034",
+      "category": 4,
+      "question": "Is the truck automatic or manual?",
+      "answer": "The truck is [automatic/manual], according to the carrier’s current information. I’ll confirm whether that applies to the truck you’d be assigned."
+    },
+    {
+      "id": "F035",
+      "category": 4,
+      "question": "Is the truck assigned to one driver or shared?",
+      "answer": "The carrier’s policy is [assigned/shared/slip-seat]. I’ll confirm how truck assignments work for this terminal and schedule."
+    },
+    {
+      "id": "F036",
+      "category": 4,
+      "question": "What safety technology or equipment is installed?",
+      "answer": "The carrier has confirmed [equipment/features]. I’ll check the specific truck configuration because equipment can differ across the fleet."
+    },
+    {
+      "id": "F037",
+      "category": 4,
+      "question": "Who handles maintenance and roadside repairs?",
+      "answer": "The carrier’s process is [verified maintenance/roadside process]. For a lease or owner-operator arrangement, I’ll separately confirm which costs are yours."
+    },
+    {
+      "id": "F038",
+      "category": 4,
+      "question": "What type of trailer would I pull?",
+      "answer": "This position uses [trailer type]. I’ll confirm whether that is the regular equipment or whether assignments can vary."
+    },
+    {
+      "id": "F039",
+      "category": 4,
+      "question": "Is the freight drop-and-hook, live load, or live unload?",
+      "answer": "The carrier describes the work as [verified mix]. I’ll check how often each type occurs and whether the driver waits or handles paperwork."
+    },
+    {
+      "id": "F040",
+      "category": 4,
+      "question": "Does the job involve touch freight or driver unloading?",
+      "answer": "The confirmed requirement is [no touch / some touch freight / driver unloading details]. I’ll verify the physical duties before you apply."
+    },
+    {
+      "id": "F041",
+      "category": 4,
+      "question": "Would I need to secure, tarp, or handle the freight?",
+      "answer": "For this freight, the carrier requires [verified securement/tarping/handling]. If that depends on the load, I’ll make that clear."
+    },
+    {
+      "id": "F042",
+      "category": 4,
+      "question": "Are pets or passengers allowed?",
+      "answer": "The carrier’s current policy is [verified pet/passenger policy], including any age, fee, or approval requirements. I’ll confirm before you rely on it."
+    },
+    {
+      "id": "F043",
+      "category": 5,
+      "question": "How much CDL-A experience do I need?",
+      "answer": "The current minimum for this opening is [verified experience requirement]. I’ll compare that with your actual driving history before sending your application."
+    },
+    {
+      "id": "F044",
+      "category": 5,
+      "question": "Do you consider drivers with less than two years of experience?",
+      "answer": "Some openings accept less experience than others. Our latest note for Yankee lists a one-year minimum, so 18 months may meet that experience requirement if you meet the carrier’s other criteria. I’ll confirm the opening is still available before we proceed."
+    },
+    {
+      "id": "F045",
+      "category": 5,
+      "question": "Do you accept recent CDL graduates?",
+      "answer": "That depends on the carrier and position. The current policy for this opening is [verified policy]; I’ll check whether additional training or endorsements are required."
+    },
+    {
+      "id": "F046",
+      "category": 5,
+      "question": "Are any endorsements required?",
+      "answer": "The required endorsements are [verified endorsements / none stated]. I’ll confirm whether they’re required at application or only for certain loads."
+    },
+    {
+      "id": "F047",
+      "category": 5,
+      "question": "What driving history or accident requirements does the carrier have?",
+      "answer": "The carrier’s written criteria are [verified criteria]. I can help you understand what information they ask for, but the carrier reviews your record and decides."
+    },
+    {
+      "id": "F048",
+      "category": 5,
+      "question": "Does the carrier review MVR or PSP records?",
+      "answer": "The carrier’s screening process includes [confirmed checks]. I’ll explain who requests each report and the required authorization before any check is ordered."
+    },
+    {
+      "id": "F049",
+      "category": 5,
+      "question": "Will I need to authorize any background or safety-record checks?",
+      "answer": "If a check is needed, you’ll be told what it is, who will receive it, and what authorization is required before it’s requested."
+    },
+    {
+      "id": "F050",
+      "category": 5,
+      "question": "Is a drug test or physical required?",
+      "answer": "The carrier requires [verified test/physical requirements]. I’ll confirm where it happens, who schedules it, and whether any costs apply to you."
+    },
+    {
+      "id": "F051",
+      "category": 5,
+      "question": "Which states or ZIP codes are eligible for this position?",
+      "answer": "The carrier currently accepts drivers from [states/ZIP areas]. Tell me your ZIP code and I’ll verify the opening is available to you."
+    },
+    {
+      "id": "F052",
+      "category": 5,
+      "question": "What documents should I prepare?",
+      "answer": "The carrier’s current list is [documents]. You can complete the initial application at https://apply.ttirecruiting.us/; we’ll tell you how to provide any sensitive documents securely."
+    },
+    {
+      "id": "F053",
+      "category": 5,
+      "question": "How long does the hiring process usually take?",
+      "answer": "The carrier’s recent process typically takes [verified timeframe], but timing depends on document completion, screening, and scheduling. I’ll keep you updated on the next step."
+    },
+    {
+      "id": "F054",
+      "category": 6,
+      "question": "Where is orientation, and how long does it last?",
+      "answer": "Orientation is in [location] and is expected to take [duration], according to the carrier. I’ll confirm the schedule for your start date."
+    },
+    {
+      "id": "F055",
+      "category": 6,
+      "question": "Is orientation paid?",
+      "answer": "The carrier’s policy is [verified paid/unpaid terms]. I’ll confirm whether travel time, meals, or other expenses are handled separately."
+    },
+    {
+      "id": "F056",
+      "category": 6,
+      "question": "Does the company cover travel, hotel, or meals for orientation?",
+      "answer": "The carrier covers [verified items and limits]. I’ll confirm whether you need approval, receipts, or upfront payment."
+    },
+    {
+      "id": "F057",
+      "category": 6,
+      "question": "What benefits are available, and when do they start?",
+      "answer": "The available benefits are [verified benefits], starting [eligibility date]. I’ll send you the plan details so you can check coverage and employee cost."
+    },
+    {
+      "id": "F058",
+      "category": 6,
+      "question": "Is health insurance available?",
+      "answer": "The carrier offers [verified health coverage details / no confirmed information yet]. I’ll check the options, employee contribution, and effective date."
+    },
+    {
+      "id": "F059",
+      "category": 6,
+      "question": "Is paid time off offered?",
+      "answer": "The carrier’s policy is [verified PTO terms]. I’ll confirm eligibility, accrual, and any limits that apply."
+    },
+    {
+      "id": "F060",
+      "category": 6,
+      "question": "Is there 24/7 dispatch or breakdown support?",
+      "answer": "The carrier’s support hours are [verified hours and contact process]. I’ll confirm who you call after hours or during a roadside issue."
+    },
+    {
+      "id": "F061",
+      "category": 6,
+      "question": "Who do I contact if I have a problem on the road?",
+      "answer": "The carrier directs drivers to [dispatch/safety/roadside contact process]. Before you start, make sure you have the correct contact numbers."
+    },
+    {
+      "id": "F062",
+      "category": 6,
+      "question": "Does the carrier have terminals or parking near my area?",
+      "answer": "The confirmed facilities near [driver’s location] are [locations]. I’ll check whether parking is available to drivers and whether it’s secure."
+    },
+    {
+      "id": "F063",
+      "category": 7,
+      "question": "What is the weekly truck payment?",
+      "answer": "The written payment is [amount and frequency]. I’ll also show you the other recurring charges so you can estimate total weekly costs."
+    },
+    {
+      "id": "F064",
+      "category": 7,
+      "question": "Is a down payment required?",
+      "answer": "The carrier’s required upfront amount is [verified amount / none]. I’ll confirm what it covers and whether any part is refundable."
+    },
+    {
+      "id": "F065",
+      "category": 7,
+      "question": "How long is the lease, and what happens if I leave early?",
+      "answer": "The lease term is [duration], and the early-termination terms are [written terms]. I’ll send you the actual contract language to review."
+    },
+    {
+      "id": "F066",
+      "category": 7,
+      "question": "Who pays for maintenance, tires, insurance, and repairs?",
+      "answer": "The agreement assigns those costs as follows: [itemized responsibilities]. I’ll separate what’s included from what can be charged to your settlement."
+    },
+    {
+      "id": "F067",
+      "category": 7,
+      "question": "Are there escrow, maintenance-reserve, or other account deductions?",
+      "answer": "The required accounts and deductions are [verified amounts and release terms]. I’ll confirm when funds are withheld and how any balance is returned."
+    },
+    {
+      "id": "F068",
+      "category": 7,
+      "question": "What other fixed or variable costs should I expect?",
+      "answer": "The listed costs are [itemized cost sheet]. I’ll ask the carrier for a full list, including insurance, fuel, maintenance, permits, and any settlement deductions that apply."
+    },
+    {
+      "id": "F069",
+      "category": 7,
+      "question": "Can I choose my loads, or is dispatch mandatory?",
+      "answer": "The dispatch policy is [verified policy]. I’ll confirm how load choices work and what happens if you decline a load."
+    },
+    {
+      "id": "F070",
+      "category": 7,
+      "question": "Is there a balloon payment or buyout at the end?",
+      "answer": "The agreement says [verified buyout/balloon terms or none]. I’ll show you the relevant section in writing before you decide."
+    },
+    {
+      "id": "F071",
+      "category": 7,
+      "question": "Who owns the truck during the lease, and how does title transfer?",
+      "answer": "The contract identifies [owner] during the term and states [verified title-transfer terms]. I’ll have the carrier confirm any conditions for ownership."
+    },
+    {
+      "id": "F072",
+      "category": 7,
+      "question": "Can I review the full contract and a sample settlement before signing?",
+      "answer": "Yes. You should review the full contract, the cost schedule, and a sample settlement before signing. I’ll request those documents from the carrier."
+    },
+    {
+      "id": "F073",
+      "category": 7,
+      "question": "What could my estimated net settlement look like after expenses?",
+      "answer": "I can help you review a sample using the carrier’s actual figures, but it’s an estimate, not a guarantee. We should include revenue assumptions, fuel, fixed costs, variable costs, and deductions."
+    },
+    {
+      "id": "F074",
+      "category": 8,
+      "question": "Are you a recruiter or an employee of the carrier?",
+      "answer": "I’m with TTI Recruiting, a recruiting firm that works with motor carriers. The carrier itself reviews your application and makes the hiring decision."
+    },
+    {
+      "id": "F075",
+      "category": 8,
+      "question": "Do I have to pay TTI Recruiting a fee?",
+      "answer": "I’ll give you TTI’s confirmed fee policy before we proceed: [insert approved policy]. I won’t ask you to agree to a charge that hasn’t been explained in writing."
+    },
+    {
+      "id": "F076",
+      "category": 8,
+      "question": "Can you send me the job details in writing?",
+      "answer": "Yes. I’ll send the current details the carrier has confirmed, including the pay structure, schedule, requirements, and known deductions."
+    },
+    {
+      "id": "F077",
+      "category": 8,
+      "question": "Can I take time to review the offer before deciding?",
+      "answer": "Of course. Take the time you need to review the written terms and ask questions. We’ll move forward only if the opportunity makes sense to you."
+    },
+    {
+      "id": "F078",
+      "category": 8,
+      "question": "What information or documents do you need from me now?",
+      "answer": "To see whether there’s a fit, I’ll start with your location, CDL-A experience, equipment preference, pay expectations, and home-time needs. I’ll explain any additional information or documents before requesting them."
+    },
+    {
+      "id": "F079",
+      "category": 8,
+      "question": "How will my information and records be used or shared?",
+      "answer": "I’ll explain what information is needed, why it’s needed, and which carrier will receive it. Any required authorization will be obtained before a report is requested or shared."
+    },
+    {
+      "id": "F080",
+      "category": 8,
+      "question": "Will my records be sent only to the carrier I am considering?",
+      "answer": "We’ll identify the carrier you’re considering and explain any permitted sharing before sending records. I won’t tell you a report has been shared until that has actually happened."
+    },
+    {
+      "id": "F081",
+      "category": 8,
+      "question": "Where can I complete the application?",
+      "answer": "You can start the TTI Recruiting application here: https://apply.ttirecruiting.us/. I can stay with you while you complete it or explain what happens next."
+    },
+    {
+      "id": "F082",
+      "category": 8,
+      "question": "If I am not a fit for this company, can you look for another option?",
+      "answer": "If another current opening matches your experience, location, pay expectations, and home-time needs, I can discuss it with you. I’ll be clear about which carrier and terms apply to each option."
+    },
+    {
+      "id": "F083",
+      "category": 8,
+      "question": "What is the next step, and when should I expect an update?",
+      "answer": "The next step is [specific action]. I expect to update you by [realistic date/time]; if I’m waiting on the carrier, I’ll tell you that rather than leave you guessing."
+    },
+    {
+      "id": "C001",
+      "category": 0,
+      "question": "If the offer appears to fit",
+      "answer": "Based on what you told me, [verified feature] seems to line up with your priorities. Would you like me to send you the written details and application so you can review them?"
+    },
+    {
+      "id": "C002",
+      "category": 0,
+      "question": "If a key fact is still unverified",
+      "answer": "I don’t want to guess on something that affects your decision. I’ll confirm [detail] with the carrier and get back to you by [time]. If it checks out, would you be open to taking the next step?"
+    },
+    {
+      "id": "C003",
+      "category": 0,
+      "question": "If the driver is not ready",
+      "answer": "No problem. What would you need to know before deciding whether this is worth another conversation?"
+    }
+  ]
+}

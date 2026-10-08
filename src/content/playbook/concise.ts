@@ -1,0 +1,41 @@
+// Adapted from the owner's Nate call recording, 2026-10-03.
+// Version 3 wording supersedes the earlier call variants; stored IDs stay stable.
+export const callQuestionOrder = ['position','employmentType','state','locationZip','route','home','trailer','experienceMonths','sap','availability','truck','payTarget','priority','dealbreakers'];
+export const callQuestions:Record<string,string> = {
+ position:'What are you looking for: a company driver job, a lease option, or owner-operator work?',
+ employmentType:'For a company driver job, would you prefer W-2, 1099, or are you open to either?',
+ experienceMonths:'How much recent, verifiable CDL-A experience do you have?',
+ sap:'Any SAP or return-to-duty history?',
+ home:'How long can you stay out, and how many days do you need at home?',
+ availability:'If the company approves you and the terms work, when could you start?',
+ trailer:'What type of trailer would you like to run—dry van, reefer, flatbed, or something else?',
+ truck:'Any truck preference?',
+ route:'OTR, regional, or local?',
+ state:'What state are you based in?',
+ locationZip:'And your city and ZIP?',
+ payTarget:'What weekly pay are you looking for—gross or take-home?',
+ priority:'',
+ dealbreakers:'',
+};
+export const callScenarioLines:Record<string,string> = {
+ S001:'Got it. Company driver, lease, or owner-operator?',
+ S002:'[Recruiter] with TTI Recruiting. Calling about CDL jobs. Got two minutes?',
+ S004:'Understood. Want to hear the quick version, or should I leave it here?',
+ S008:'Quick one: company driver, lease, or owner-operator? When can we talk?',
+ S011:'I hear you. Are you open to a move, or should I leave it here?',
+ S014:'Hey, glad we connected. Company driver, lease, or owner-operator?',
+ S017:'Good to hear. Is there anything you’d want to improve, or are you happy to stay where you are?',
+ S018:'Good to hear. Want to compare options, or leave it here?',
+ S019:'What weekly pay would make a move worth it—gross or take-home?',
+ S020:'How often do you need to be home?',
+ S021:'Steady schedule, steady miles, or both?',
+ S022:'Got it. What needs to change?',
+ S023:'If the company approves you and the terms work, when could you start?',
+ S024:'What start date works for you?',
+ S025:'No problem. What would make you switch?',
+ S026:'Let’s check the practical details against the current offers.',
+ S027:'I’ll keep that requirement in the comparison.',
+ S028:'Sure. What details do they need?',
+ S030:'Got it—1099. I’ll take your details here.',
+ S032:'No problem. Which setup would you prefer?',
+};
