@@ -1,4 +1,4 @@
-import {env} from 'cloudflare:workers';
+import {env} from '@/src/server/platform';
 import {checkOrigin,failure} from '@/src/server/runtime';
 import {resetPrivatePassword} from '@/src/server/private-auth';
 export const dynamic='force-dynamic';

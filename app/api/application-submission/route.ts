@@ -1,4 +1,4 @@
-import {env} from 'cloudflare:workers';import {z} from 'zod';
+import {env} from '@/src/server/platform';import {z} from 'zod';
 import {runtime,failure,json,checkOrigin} from '@/src/server/runtime';
 import {applicationDelivery,submitApplication} from '@/src/server/application-submission';
 export async function GET(request:Request){try{const {db,actor}=await runtime();const id=z.string().min(1).max(160).parse(new URL(request.url).searchParams.get('conversationId'));return json({ok:true,value:await applicationDelivery(db,actor,id,new URL(request.url).searchParams.get('offerId')??undefined)});}catch(error){return failure(error);}}

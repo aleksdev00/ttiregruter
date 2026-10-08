@@ -1,71 +1,54 @@
-# TTI Recruiter — new workflow demo
+# TTI Recruiter — private Vercel test app
 
-A new, English-only, two-screen recruiting practice app. All contacts, companies, offer conditions and application confirmations are synthetic. No existing TTI application was reused or modified.
+This repository is the isolated private test app. It does not modify or deploy the main TTI Recruiter application. It uses Next.js on Vercel's Node.js runtime, a Turso/libSQL SQLite-compatible database, and private Vercel Blob storage for documents and recoverable backups.
 
-This is a single-tab, single-browser-profile demo. It has no production authentication, shared database, multi-device reservation protection, telephony, messaging, real referral or verified application ingestion. Do not enter real driver data. Google Sheets and apply.ttirecruiting.us are not connected.
+## Connect and deploy on Vercel
 
-## Run locally
+1. Import `aleksdev00/ttiregruter` into Vercel and keep the repository private.
+2. Add Turso Cloud from the Vercel Marketplace and connect it to this project. Add `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` to Development, Preview, and Production as needed.
+3. In Vercel Storage, create a **private** Blob store and connect it to this project. Vercel supplies the Blob credentials. Do not create a public store; driver documents and migration backups are private.
+4. Configure the server-only environment values listed in `.env.example`. Keep `HQ_TRANSFER_ENABLED`, `HQ_MAPPING_VERIFIED`, and `HQ_NOTIFICATION_AUTHORIZED` disabled until the owner verifies the webhook contract and mapping.
+5. Run the schema migration once against the connected Turso database: `pnpm db:migrate:turso`. Then deploy from `main`.
 
-Use Node 24 (verified here: 24.19.0) and pnpm 11.25.0. From this directory:
+Vercel's environment variables are read at server runtime. Never prefix webhook keys, database tokens, or Blob credentials with `NEXT_PUBLIC_`.
+
+The app currently seeds its private test accounts, approved company catalog, and 500 synthetic test contacts for the owner when the owner first signs in to a fresh database. Other test accounts are created on their first sign-in. Initial accounts must change their password. Do not add real driver data to this private test deployment unless the owner has separately approved it.
+
+## Existing Cloudflare data
+
+This migration changes the app runtime and storage adapter. It does **not** export data from the previous Cloudflare D1 or R2 environment. The Vercel database starts fresh after schema migration; the previous database remains untouched. Before using Vercel as the working app, separately review whether any private test records or documents need a controlled export/import. Do not point Vercel at production data by copying credentials into source code.
+
+## Local development
+
+Use Node.js 22.13 or newer and pnpm 11.25.0:
 
 ```sh
 corepack enable
 corepack prepare pnpm@11.25.0 --activate
 pnpm install --frozen-lockfile
+cp .env.example .env.local
+# Fill in local Turso and private Blob credentials in .env.local.
+pnpm db:migrate:turso
 pnpm dev
 ```
 
-Open http://localhost:5173 for the development application. To run the built application:
+Open http://localhost:5173. To verify a production build locally, run `pnpm build` then `pnpm start`; it serves on port 3000.
 
-```sh
-pnpm build
-pnpm start
-```
-
-Open http://127.0.0.1:8787. Development uses Vinext; the build targets a Cloudflare Worker. App Router source, React, TypeScript and CSS Modules are retained. This runtime adjustment supports the available hosting environment. Pinning and the single pnpm lockfile are included.
-
-## Check the implementation
-
-Run each check separately:
+## Checks
 
 ```sh
 pnpm lint
 pnpm typecheck
 pnpm test:unit
 pnpm build
-pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
-E2E starts the built app on port 8787. Build first. Browser binaries are an explicit prerequisite. For an already running local instance, the test runner reuses it. `DEMO_TEST_URL` can change the test base URL; update the webServer URL as well for a nondefault local port. The published private host is not an E2E target in this execution environment.
+The API routes use Node.js runtime and are forced dynamic so private cookies and database access are evaluated per request. Document bytes upload directly from the authenticated browser to a **private** Blob store, avoiding Vercel Function request-body limits. The upload token is issued only after server-side recruiter access checks; the completed upload is recorded durably in the database.
 
-Verified versions: Next.js 16.3.4, React 19.2.6, TypeScript 5.9.3, Vinext 1.0.0-beta.5, Vite 8.0.13, Wrangler 4.92.0, Playwright 1.63.0. See package.json and pnpm-lock.yaml for the complete pinned installation.
+## Important integration limits
 
-## Use the demo
-
-The September 30 recruiter playbook replaces the short demo script. All 172 scenarios are clickable from right-side FAQ with source references, coach guidance and explicit temporary center display/return. See [the walkthrough](docs/DEMO_WALKTHROUGH.md).
-
-W-2 skips internal qualification and enters referral readiness; the actual referral is unconfigured. The previous recruiter’s 14-question configuration and answer-driven script are now recovered and connected; qualification requires all confirmed answers, with unknown/review reasons kept distinct. Existing factual history is preserved. Undecided remains an explicit clarification branch. Current carrier offers are fictional, and no verified application receipt or live sending is connected.
-
-See [previous script migration](docs/GUIDE_MIGRATION.md), [implementation and question mapping](docs/PLAYBOOK_IMPLEMENTATION.md) and [actual verification](docs/QA.md). Do not interpret an application report, company selection, URL opening or copying as a confirmed conversion.
-
-## Reset and recovery
-
-The app saves synthetic data under `tti-recruiter:new-demo:v1`. Reset demo data on the dashboard requires confirmation and replaces only this namespace. Corrupted storage is preserved until an explicit reset. Save failures show a retry action; workspace error details use bounded segments. Storage receipts deduplicate mutations. This does not establish server-side concurrency protection.
-
-UTC timestamps are grouped in Europe/Belgrade for reporting. Weeks begin Monday. Daily average covers the previous seven completed calendar days. Callback input uses the browser time zone, displayed in its label; UTC and its time zone are retained.
-
-## Structure and handoff
-
-- `app`: the two App Router routes and demo composition.
-- `src/contracts`: repository and future integration boundaries.
-- `src/domain`: pure naming, matching, validation and analytics.
-- `src/adapters/demo`: synthetic seed, validated snapshot and asynchronous serialized persistence.
-- `src/content`: versioned English script and FAQ.
-- `src/features`: dashboard and bounded conversation workspace.
-- `tests/unit`, `tests/e2e`: behavioral and viewport checks.
-- `docs/STATUS.md`, `docs/QA.md`: actual results and open verification work.
-- `docs/DEMO_WALKTHROUGH.md`: the five-minute review flow.
-- `docs/spec`: the supplied product package.
-
-Lint, typecheck, 25 unit tests and build passed in the execution environment. Browser tests did not execute: Chromium download failed, and the local built server could not start because the environment rejected network interface enumeration. No screenshots or completed browser/zoom/viewport acceptance are claimed. See docs/QA.md. The demo is implemented but is not fully D0-accepted or ready for live recruiting.
+- HQ webhook delivery is disabled until its server-side environment settings and mapping are checked.
+- Quo ingestion remains disabled until its signed webhook key and event version are configured.
+- Vercel import/build does not itself provision database/blob stores or copy old D1 records.
+- This is a private test app, separate from the main app and `ttirecruiting.us` production domain.

@@ -1,4 +1,4 @@
-import {env} from 'cloudflare:workers';
+import {env} from '@/src/server/platform';
 import {runtime,checkOrigin,json,failure} from '@/src/server/runtime';
 import {ServiceError} from '@/src/server/access';
 import {releaseImportedContacts} from '@/src/server/contact-readiness';

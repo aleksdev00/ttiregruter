@@ -1,6 +1,6 @@
 import {cookies} from 'next/headers';
 import {redirect} from 'next/navigation';
-import {env} from 'cloudflare:workers';
+import {env} from '@/src/server/platform';
 import {ServiceError} from './access';
 
 export const OWNER_EMAIL='cvetanovicaleksa45@gmail.com';

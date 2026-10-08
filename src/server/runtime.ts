@@ -1,5 +1,5 @@
 import {privateReviewActor} from './private-review-bootstrap';
-import {env} from 'cloudflare:workers';
+import {env} from '@/src/server/platform';
 import {getPrivateUser} from './private-auth';
 import {ServiceError} from './access';
 export async function runtime(_requireShift=true){if(!env.DB)throw new ServiceError('Private test database is unavailable.',503,'not_configured');const user=await getPrivateUser(env.DB);if(!user)throw new ServiceError('Sign in with your private test email and password.',401,'not_allowed');const actor=await privateReviewActor(env.DB,user);return {db:env.DB,actor};}

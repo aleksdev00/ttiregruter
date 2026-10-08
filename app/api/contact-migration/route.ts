@@ -1,5 +1,5 @@
 import {contactCSVManifest} from '@/src/server/contact-csv';
-import {env} from 'cloudflare:workers';import {z} from 'zod';
+import {env} from '@/src/server/platform';import {z} from 'zod';
 import {runtime,failure,json,checkOrigin} from '@/src/server/runtime';
 import {ServiceError,requireAdmin} from '@/src/server/access';
 import {prepareContactMigration,commitContactMigration,verifyContactMigration,migrationReview,LEGACY_SOURCE,WORKBOOK_SOURCE} from '@/src/server/contact-migration';

@@ -1,4 +1,4 @@
-import {env} from 'cloudflare:workers';
+import {env} from '@/src/server/platform';
 import {runtime,failure,json,checkOrigin} from '@/src/server/runtime';
 import {requireAdmin} from '@/src/server/access';
 import {checkHQConnection} from '@/src/server/hq';

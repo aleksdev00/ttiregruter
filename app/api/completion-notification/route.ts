@@ -1,4 +1,4 @@
-import {env} from 'cloudflare:workers';
+import {env} from '@/src/server/platform';
 import {z} from 'zod';
 import {runtime,failure,json,checkOrigin} from '@/src/server/runtime';
 import {notificationRecord,publicNotification,deliverCompletion} from '@/src/server/completion-notifications';
