@@ -1,6 +1,5 @@
-import {PrivateSiteShell} from '@/src/features/PrivateSiteShell';
+import {AppShell} from '@/src/features/AppShell';
 import type { Metadata } from 'next';
-import { DemoProvider } from '@/src/features/provider';
 import './globals.css';
-export const metadata: Metadata = { title: 'TTI Recruiter — PRIVATE performance test', description: 'TTI recruiter conversation and application workflow.' };
-export default function RootLayout({ children }: {children: React.ReactNode}) { return <html lang="en"><body><PrivateSiteShell>{children}</PrivateSiteShell></body></html>; }
+export const metadata: Metadata = { title: 'TTI Recruiting', description: 'TTI recruiter conversation and application workflow.' };
+export default function RootLayout({ children }: {children: React.ReactNode}) { return <html lang="en"><body><AppShell>{children}</AppShell></body></html>; }

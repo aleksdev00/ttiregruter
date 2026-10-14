@@ -2,6 +2,8 @@ import type {Recruiter} from '../contracts/index.ts';
 export interface Actor {id:string;userId:string;email:string;role:'owner'|'admin'|'recruiter';profile:Recruiter}
 export class ServiceError extends Error {status:number;code:string;constructor(message:string,status=400,code='invalid_input'){super(message);this.status=status;this.code=code;}}
 export const isAdmin=(a:Actor)=>a.role==='owner'||a.role==='admin';
+export const isSenior=(a:Actor)=>a.profile.isSenior===true;
+export const requireSeniorOrAdmin=(a:Actor)=>{if(!isAdmin(a)&&!isSenior(a))throw new ServiceError('Administrator access required. Senior recruiter access is also permitted.',403,'not_allowed');};
 export function requireAdmin(a:Actor){if(!isAdmin(a))throw new ServiceError('Administrator access required.',403,'not_allowed');}
 export function authorizeDriver(a:Actor,d:{owner_id:string|null;blocked:number}|null,contact=false){if(!d||(!isAdmin(a)&&d.owner_id!==a.id))throw new ServiceError('This record is not available. Request assignment from an administrator.',403,'not_allowed');if(contact&&d.blocked)throw new ServiceError('Do Not Contact: contact and forwarding are suppressed.',409,'not_allowed');return d;}
 export function normalizePhone(raw:string):string|null{const n=raw.replace(/[^\d+]/g,'');const digits=n.replace(/\D/g,'');if(digits.length===10)return '+1'+digits;if(digits.length===11&&digits.startsWith('1'))return '+'+digits;return /^\+[1-9]\d{7,14}$/.test(n)?n:null;}

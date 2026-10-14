@@ -15,6 +15,7 @@ export interface Recruiter {
   fullName: string;
   alias: string;
   accountRole?: 'owner' | 'admin' | 'recruiter';
+  isSenior?: boolean;
   referralUrl: string | null;
   callbackNumber?: string | null;
   contactEmail?: string | null;

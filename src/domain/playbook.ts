@@ -54,4 +54,4 @@ export function verifiedOffer(o:Offer|undefined):boolean {
   return !!o&&!o.isDemo&&o.source==='approved_snapshot'&&!!o.verifiedAt&&Number.isFinite(Date.parse(o.verifiedAt))&&Date.parse(o.verifiedAt)<=Date.now()&&o.active&&o.recruitingApproved!==false&&(!o.approvalStatus||o.approvalStatus==='approved')&&(!o.expiresAt||new Date(o.expiresAt)>new Date());
 }
 
-export function applicationDestination(_recruiter:Recruiter):{ready:boolean;url:string|null;message:string}{return {ready:false,url:null,message:'Private test: external application destinations are disabled.'};}
+export function applicationDestination(recruiter:Recruiter){const attributed=referralReadiness(recruiter);return attributed.ready?attributed:{ready:true,url:'https://apply.ttirecruiting.us/',message:'Owner-approved TTI application destination. Recruiter attribution is not configured; opening the link is not an application submission.'};}

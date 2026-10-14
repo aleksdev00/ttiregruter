@@ -39,11 +39,14 @@ export function evaluateCarrierCriteria(offer:Offer,c:Conversation,m:OfferMatch)
  const minOut=Math.max(k.minimumOutDays??0,state?k.stateMinimumOutDays[state]??0:0);
  if(home&&minOut){
   // Home answers record the maximum number of days the driver is willing out.
-  if(Number(home)<minOut)conflict(`Driver wants at most ${home} days out; carrier requires at least ${minOut}.`);
+  const days=Number(home);
+  if(!Number.isFinite(days))missing('Flexible home-time preference needs discussion against the carrier schedule.');
+  else if(days<minOut)conflict(`Driver wants at most ${home} days out; carrier requires at least ${minOut}.`);
   else align(`Driver's ${home}-day out preference supports the ${minOut}-day minimum.`,priorityWeight(c,'home_time'));
  }
  if(home&&!minOut){
-  if(route==='Local'&&k.routes.includes('Local')&&home==='1')align('Local home-daily preference is consistent; confirm the specific account.',priorityWeight(c,'home_time'));
+  if(!Number.isFinite(Number(home)))missing('Flexible home-time preference needs discussion against the carrier schedule.');
+  else if(route==='Local'&&k.routes.includes('Local')&&home==='1')align('Local home-daily preference is consistent; confirm the specific account.',priorityWeight(c,'home_time'));
   else missing('Exact home-time cycle for this program needs confirmation.');
  }
  if(!state&&Object.keys(k.stateMinimumOutDays).length)missing('Residence affects the minimum time out; confirm the home state.');

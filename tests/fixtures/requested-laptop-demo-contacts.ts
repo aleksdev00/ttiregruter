@@ -1,7 +1,8 @@
-import type {Contact} from '../contracts/index.ts';
-import {currentRevision,guardedBatch} from './store.ts';
+// Historical synthetic in-memory test fixtures. Never imported by the application.
+import type {Contact} from '../../src/contracts/index.ts';
+import {currentRevision,guardedBatch} from '../../src/server/store.ts';
 import {requestedDemoScenarios} from './requested-demo-contacts.ts';
-import {alexLaptopRemovalMarker} from './requested-demo-removal.ts';
+import {alexLaptopRemovalMarker} from '../../src/server/requested-demo-removal.ts';
 // New explicit request supersedes removal only for this verified account.
 // Old archived contacts, restrictions and all other accounts remain untouched.
 const email='cvetanovicaleksa45@gmail.com';

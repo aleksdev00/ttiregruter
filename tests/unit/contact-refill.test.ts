@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
 
-test('contact refill assigns distinct queues by approved email, preserves restrictions and reruns without duplicate changes',()=>{
+test('code-only schema migration preserves queues and restrictions without importing or assigning data',()=>{
  const db=new DatabaseSync(':memory:');
  for(const file of ['0000_familiar_nemesis','0001_flawless_frog_thor','0003_lively_prowler'])db.exec(readFileSync(`drizzle/${file}.sql`,'utf8'));
  db.prepare('INSERT INTO recruiters(id,email,role,active,data_json) VALUES(?,?,?,?,?)').run('bootstrap-aleksa','cvetanovicaleksa45@gmail.com','admin',1,'{}');
@@ -22,14 +22,11 @@ test('contact refill assigns distinct queues by approved email, preserves restri
  db.exec("INSERT INTO quo_line_allocations(driver_id,line_id,batch_id,allocated_at) VALUES('5003','PNfixture','original',1)");
  const protectedBefore=db.prepare("SELECT * FROM drivers WHERE id IN ('0','5000','5001','5002','5003') ORDER BY id").all();
  const migration=readFileSync('drizzle/0006_recruiter_contact_refill.sql','utf8');db.exec(migration);
- const reports=db.prepare('SELECT * FROM recruiter_contact_refill ORDER BY email').all();
- assert.equal(reports.length,9);assert.ok(reports.every(r=>r.available_after===500&&r.status==='completed'));
- assert.equal(reports.reduce((sum,r)=>sum+Number(r.assigned),0),4001);
- const items=db.prepare('SELECT * FROM recruiter_contact_refill_backups').all();assert.equal(items.length,4001);
- for(const item of items){const after=db.prepare('SELECT data_json FROM drivers WHERE id=?').get(item.driver_id)!.data_json;assert.deepEqual(JSON.parse(String(after)),{...JSON.parse(String(item.before_json)),ownerRecruiterId:item.recruiter_id});}
+ assert.equal(db.prepare('SELECT COUNT(*) AS n FROM recruiter_contact_refill').get()!.n,0);
+ assert.equal(db.prepare('SELECT COUNT(*) AS n FROM recruiter_contact_refill_backups').get()!.n,0);
+ const after=db.prepare('SELECT * FROM drivers ORDER BY id').all();
  assert.deepEqual(db.prepare("SELECT * FROM drivers WHERE id IN ('0','5000','5001','5002','5003') ORDER BY id").all(),protectedBefore);
- const after=db.prepare('SELECT * FROM drivers ORDER BY id').all();db.exec(migration);
- assert.deepEqual(db.prepare('SELECT * FROM drivers ORDER BY id').all(),after);
- assert.equal(db.prepare('SELECT value FROM store_revision').get()!.value,1);
+ db.exec(migration);assert.deepEqual(db.prepare('SELECT * FROM drivers ORDER BY id').all(),after);
+ assert.equal(db.prepare('SELECT value FROM store_revision').get()!.value,0);
  db.close();
 });

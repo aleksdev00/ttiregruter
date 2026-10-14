@@ -14,6 +14,8 @@ export interface PlaybookState {
   externalReceipt?:{id:string;evidence:string;receivedAt:string;confirmedBy:string;source:string};
   communicationStatus:'not_prepared'|'draft_prepared'|'copied'|'manual_sent_reported'|'opened';
   communicationPermission:'unknown'|'allowed'|'declined';
+  companyFinderFilters?:Record<string,string>;
+  finderRecommendation?:{requestId:string;offerId:string;companyName:string;program:string;offerSnapshotVersion:string;filters:Record<string,string>;matchState?:'match'|'potential_fit'|'needs_confirmation';missingFacts?:string[];savedAt:string;savedBy:string};
 }
 export const emptyNotes:CallNotes={nonNegotiables:'',verifiedTermsDiscussed:'',unresolvedQuestion:'',contactPreferences:'',nextAction:'',owner:'',dueAt:null,dueTimeZone:'',channel:'unknown'};
 export const emptyPlaybookState:PlaybookState={notes:emptyNotes,last1099StepId:null,applicationStatus:'unknown',communicationStatus:'not_prepared',communicationPermission:'unknown'};

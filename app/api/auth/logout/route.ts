@@ -1,5 +1,3 @@
-import {env} from '@/src/server/platform';
-import {checkOrigin,failure} from '@/src/server/runtime';
-import {revokePrivateSession} from '@/src/server/private-auth';
+import {env} from '@/src/server/platform';import {ServiceError} from '@/src/server/access';import {checkAuthOrigin,failure,json} from '@/src/server/runtime';import {revokePrivateSession} from '@/src/server/private-auth';
 export const dynamic='force-dynamic';
-export async function POST(r:Request){try{checkOrigin(r);if(!env.DB)throw new Error('Private test database unavailable.');await revokePrivateSession(env.DB);return Response.json({ok:true},{headers:{'cache-control':'no-store'}});}catch(e){return failure(e);}}
+export async function POST(r:Request){try{checkAuthOrigin(r);if(!env.DB)throw new ServiceError('Application database is not configured.',503,'not_configured');await revokePrivateSession(env.DB);return json({ok:true});}catch(e){return failure(e);}}

@@ -1,6 +1,7 @@
-import type {Contact} from '../contracts/index.ts';
-import {ServiceError,type Actor} from './access.ts';
-import {currentRevision,guardedBatch} from './store.ts';
+// Historical synthetic in-memory test fixtures. Never imported by the application.
+import type {Contact} from '../../src/contracts/index.ts';
+import {ServiceError,type Actor} from '../../src/server/access.ts';
+import {currentRevision,guardedBatch} from '../../src/server/store.ts';
 
 const recipientEmail='cvetanovicaleksa45@gmail.com';
 const batchId='alex-extra-ten-20261004';
