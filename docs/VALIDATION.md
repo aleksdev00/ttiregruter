@@ -1,37 +1,24 @@
-# Validation — 14 October 2026
+# Validation status — Supabase cutover preparation
 
-- Production Next.js/Vercel build: passed.
-- TypeScript: passed.
-- Targeted login, crypto/session, libSQL adapter and database export tests: 14 passed, zero failed. Auth tests cover role/identity binding, forced password change, 24-hour absolute expiry through refresh, logout, recovery isolation/expiry, disabled accounts, tampered ciphertext and bounded login attempts. They use synthetic data and a mocked Supabase provider.
-- Local production HTTP: login renders; anonymous dashboard/admin/workspace requests redirect to login; identity rejects anonymous access; cross-origin login POST is denied.
-- Full unit suite: 270 passed, five failed. The same five failures were independently reproduced in the unchanged current live source: workbook/catalog tests expect older carrier counts, and a legacy demo-removal fixture expects a contact now excluded by availability rules. This update does not claim to fix those existing workflow issues.
-- Targeted lint for new authentication routes/components/session engine/tests: passed. Full-project lint still reports errors and warnings in existing workflow and legacy tests; it is not a clean project-wide lint result.
-- Migration 0010 was generated against the existing GitHub journal and contains only CREATE TABLE/INDEX statements, no contact imports or mutations of business rows. Code-only historical migration tests now verify that those schema migrations do not provision recruiters, refill queues or create demo records.
-- No JWT/refresh token is returned by auth endpoints or rendered into client props. Supabase SDK runs in the server-only authentication wrapper. The browser session uses an opaque HttpOnly Secure SameSite cookie.
+## Current changes
 
-## Unverified integration
+- Fourteen owner-created, confirmed Supabase Auth identities match existing recruiter emails exactly. All fourteen are linked in the hosted `recruiter_login_bindings` table: 3 admins, 11 recruiters. No recruiter IDs, roles, aliases, ownership or assignments were changed.
+- Three profiles the owner excluded are inactive and unbound. Historical rows are preserved. A recoverable account-setup snapshot was stored before these changes.
+- Hosted schema-only login/session/attempt migrations and private JSON helper applied successfully. RLS is enabled on new tables. Anonymous/authenticated roles cannot directly read them; the helper is not callable by those roles.
+- Hosted verification after writes: 41,003 drivers, 223 conversations, 31 companies, 46 offers remain. No driver or conversation rows were edited. Auth passwords were entered by the owner; no passwords or tokens were read or committed.
+- PostgreSQL adapter uses TLS certificate validation, a small connection pool, no prepared statements, parameterized values, atomic batches and safe integer conversion. It translates the reviewed existing server SQL, including JSON projections/updates and revision guards. An explicitly configured PostgreSQL connection never falls back to Turso on failure.
+- `postgres-runtime.test.ts`: 11 tests including nested subtests passed. Synthetic embedded PostgreSQL runs real contact creation, ownership isolation, conversation claim, answers/save/reload, idempotent retry, callback completion, offer projection, admin overview, rollback on stale revisions, JSON array queries, schema readiness and encrypted AuthEngine sessions/logout/24-hour expiry. More than 80 static runtime queries are planned against PostgreSQL. A mocked Supabase provider is used for login tests; these do not prove hosted authentication.
+- Full unit suite: 288 tests, 283 passed, 5 failed. Failures are the same pre-existing workbook/catalog expectations and legacy demo-removal fixture documented in the previous release. The new adapter does not change those carrier rules.
+- TypeScript and targeted lint passed. Production Next.js build passed.
 
-Real Supabase login, account provisioning, recovery email delivery, role-scoped live data and production Vercel deployment are not verified. At the earlier source push, the connected Supabase scope did not expose the TTI project. This was superseded by the verified project-specific checks below; Vercel project-settings access still returns 403. No unrelated project was changed, no invitations or recovery emails were sent, and no live database was written.
+## Still unverified
 
-Existing Vercel storage uses Turso/Blob. A Supabase PostgreSQL data import alone is not sufficient for this checkout to read it; database-adapter migration/cutover remains a separate integration task. See LOGIN-DEPLOYMENT.md.
+Vercel project settings return 403 for the connected scope. The live app's environment variable presence and PostgreSQL network connection are not confirmed. Auth users and bindings are ready, but real browser login/password change/logout and production save/refresh remain deployment acceptance checks. No live recovery email or integration message was sent.
 
-Automatic repository review initially rejected the inherited global demo-seeding operation. The safer revision removes the UI control and all runtime creation paths; the endpoint explicitly denies every role. Historical synthetic builders are isolated under tests/fixtures and only run against in-memory databases. Existing demo cleanup protection is retained.
+Set server-only `SUPABASE_DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `AUTH_SESSION_ENCRYPTION_KEY` on the intended Vercel environment. Preserve existing private Blob and integration configuration. Configure the actual application origin/recovery URL in Supabase Auth; the last observed value was localhost. Reconcile live source edits since the imported snapshot before production cutover. See LOGIN-DEPLOYMENT.md.
 
-## Supabase business import — verified against the hosted database
+Only document metadata was imported. Actual private objects still need storage access verification. Native PostgreSQL backups replace the old SQLite/D1 export path, which is intentionally rejected rather than generating an incomplete export.
 
-Project `fewcligraztpfsawarbn` was read directly on 14 October 2026 after the owner completed the SQL import. No business records or auth users were written during these checks.
+## Earlier verified business import
 
-- All 31 source business tables match their snapshot counts: 57,470 rows total.
-- Drivers: 41,003. Recruiters: 17. Companies: 31. Offers: 46. Conversations: 223. Completion notifications: 175. Applications: 0. Document metadata: 2.
-- All required source columns exist with expected PostgreSQL types.
-- All 31 exported foreign-key relationships have zero orphan rows.
-- Every source business table has RLS enabled. `anon` and `authenticated` have no direct SELECT access. Auth binding/session tables are also protected.
-- Supabase Auth users: 0. Importing recruiter business rows did not create login users.
-- The imported approved accounts retain these database roles: Alex Jones admin, John admin, Nate Mitchell recruiter. Provisioning now accepts and preserves the existing valid role instead of requiring an obsolete private role.
-- GitHub reports both Vercel deployments for commit cbed93a completed successfully. This confirms deployment, not functional Supabase login or application reads.
-
-The reusable read-only check is `integrations/supabase/verify-import.sql`. Snapshot counts can legitimately differ after business writes begin; this check measures snapshot completeness, not current activity. It does not compare every field byte-for-byte and does not validate document bytes in object storage.
-
-Remaining integration gaps: the application still reads Turso via its SQLite-compatible adapter; Supabase PostgreSQL is not wired into that adapter. The imported `tti_auth_bindings`/`tti_app_sessions` schema differs from the new auth engine's `recruiter_login_*` schema. Account provisioning and storage/database cutover require that mismatch to be resolved and tested. Vercel settings access remains 403 under `pavles-projects-a7c42e44`. No connection password or secret key was requested or committed.
-
-Post-import source checks: the read-only SQL verification ran successfully on the hosted TTI project; TypeScript and 16 targeted auth/provisioning/adapter/export tests passed. No production API calls, account invitations, HQ submissions, emails or contact changes were performed.
+The original snapshot contained 31 business tables and 57,470 rows. Required columns/types and all 31 foreign-key relationships were checked on the hosted project, with no orphan rows. All business tables had RLS enabled and no direct anon/authenticated table access. Auth users were initially absent; the owner has since created the 14 active users above. Snapshot counts can legitimately change after authorized writes (the account setup backup adds a row). `integrations/supabase/verify-import.sql` remains a read-only snapshot completeness check, not a current activity assertion.

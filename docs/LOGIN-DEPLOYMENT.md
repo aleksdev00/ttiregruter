@@ -1,18 +1,32 @@
-# Live workflow with the private login on Vercel
+# Supabase login and PostgreSQL deployment
 
-This checkout contains the current live recruiter workflow with Supabase password authentication. It does not contain a contact export, credentials, or a database backup. Existing workspace storage remains Turso and private Vercel Blob. This change does not migrate workspace records to Supabase PostgreSQL; a separate data adapter and verified cutover are required for that move.
+The current workflow supports Supabase password authentication and the imported Supabase PostgreSQL business database. It preserves recruiter IDs, assignments, names, aliases and database roles. No passwords, tokens, driver exports or private documents belong in Git.
 
-1. Connect the SAME existing Turso database and private Blob store. Do not replace them with an empty database. Set server-only variables in `.env.example`, including `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and a random 32-byte base64url `AUTH_SESSION_ENCRYPTION_KEY`. Never put service credentials in `NEXT_PUBLIC_` variables.
-2. Back up Turso before running `pnpm db:migrate:turso`. Migration 0010 adds login bindings, encrypted sessions, attempt limits, and export snapshot tables; it contains no driver records. Existing migration tracking must accurately reflect already applied migrations.
-3. Configure Supabase Auth Site URL to the actual HTTPS deployment origin and allow its `/auth/recovery` URL. In the Reset Password email template, use this link:
+## Applied to the authorized project
+
+Project `fewcligraztpfsawarbn` contains 41,003 drivers, 223 conversations, 31 companies and 46 offers. The owner created the Auth users. Fourteen confirmed Auth identities are linked by exact normalized email in `recruiter_login_bindings`: three admins and eleven recruiters. No roles were inferred from aliases or user metadata. Three profiles explicitly removed by the owner are inactive and have no binding. Their historical records remain. A recoverable `account_setup_backups` record was taken before linking/deactivation. Source Sites applications were not changed.
+
+The schema-only migrations in `integrations/supabase/20261014_login_runtime.sql` and `20261014_json_compat.sql` have been applied. Existing legacy `tti_auth_bindings` / `tti_app_sessions` tables are retained; the current auth engine uses `recruiter_login_*` tables. All fourteen new bindings require an initial password change. These SQL files do not create Auth users or passwords.
+
+## Vercel configuration and release
+
+1. In the intended recruiter's Vercel project, set these **server-only** variables in the target environment:
+   - `SUPABASE_DATABASE_URL`: full PostgreSQL Transaction pooler URL from Supabase **Connect**, including the database password. Use the supplied project. URL-encode reserved password characters. This is the database password, not a recruiter password or API key. TLS certificate validation is enforced; prepared statements are disabled for pooler compatibility.
+   - `SUPABASE_URL`: `https://fewcligraztpfsawarbn.supabase.co`.
+   - `SUPABASE_PUBLISHABLE_KEY`: this project's publishable/anon key.
+   - `AUTH_SESSION_ENCRYPTION_KEY`: a cryptographically random 32-byte key encoded as base64url. Generate/store it privately. Retain the same key across deployments; changing it invalidates encrypted sessions.
+   - Keep the existing private `BLOB_READ_WRITE_TOKEN` and integration settings unchanged unless separately reviewed. The SQL migration copies document metadata, not private Blob/R2 objects.
+2. `SUPABASE_SERVICE_ROLE_KEY` is not required by normal login or the PostgreSQL runtime. Never expose it to the browser. The older `provision-private-accounts.mjs` is a legacy Turso provisioning command for three accounts; do not run it for this cutover or recreate the manually created users.
+3. `SUPABASE_DATABASE_URL` takes precedence over Turso. Failed PostgreSQL connections never silently fall back to Turso. Before production cutover, reconcile any edits in the old live database after the imported snapshot. Do not run independent writers against diverging databases.
+4. Set Supabase Auth **Site URL** to the approved HTTPS application origin and allow its `/auth/recovery` URL. The last observed dashboard setting was localhost. In the Reset Password email template use:
 
    `{{ .SiteURL }}/auth/recovery?token_hash={{ .TokenHash }}&type=recovery`
 
-   The server consumes this one-time hash. Do not use a browser-fragment access-token recovery template. Configure and verify Supabase email delivery with an authorized account before claiming recovery works.
-4. Set `SUPABASE_SERVICE_ROLE_KEY` only in the trusted provisioning environment. Run `node scripts/provision-private-accounts.mjs` for a read-only dry run, then add `--apply`. The script checks every paginated Auth user and exact existing recruiter email/role. It provisions the approved emails for Alex Jones, John, and Nate Mitchell, preserving their existing IDs, database roles, and assignments. The actual imported database records Alex as admin, John as admin, and Nate as recruiter; the script does not demote an existing administrator. Missing/ambiguous recruiters and binding conflicts stop the script. New passwords are entered in a hidden terminal prompt, never committed; existing passwords are untouched. No invitations, contact writes, or external messages are sent. First use requires a password change.
-5. Additional recruiters must be linked by an administrator using the same verified-email/UUID mapping. User metadata never grants a role. Existing source `user_id` values are preserved; `recruiter_login_bindings` is the separate Supabase identity mapping.
-6. Publish only after configuration and bindings are ready. Validate login, forced change, logout, reset email/recovery, recruiter data isolation, and a real refresh. The app denies unbound or disabled identities.
+   The server consumes this one-time hash; the browser does not receive an access-token fragment. Email delivery requires a separately authorized test.
+5. Push the reviewed commit to the branch connected to the intended Vercel environment. Verify its build and real login, first password change, logout/login, role-scoped contacts and save/refresh before promotion. Compilation alone does not verify connectivity or login.
 
-The browser receives only an opaque HttpOnly Secure SameSite cookie. Supabase access and refresh tokens remain encrypted on the server. Sessions expire absolutely 24 hours after login; token refresh does not extend this deadline. Recovery sessions last 15 minutes and cannot access the workspace. Password changes revoke all local sessions. Temporary login passwords from older source revisions no longer authenticate this implementation; repository-history cleanup, if required, is a separate operation.
+The browser receives only an opaque HttpOnly Secure SameSite cookie. Supabase tokens stay encrypted in the server database. Login expires absolutely after 24 hours; refresh does not extend the deadline. Recovery lasts 15 minutes and cannot access the workspace. Password changes revoke local sessions. Disabled/unbound identities are denied.
 
-The business import in project `fewcligraztpfsawarbn` has been verified. Supabase Auth currently contains zero users. Live account creation and login have not been verified; Vercel project settings remain inaccessible (403). Unit tests use synthetic identities and do not send emails or access live databases.
+## Operational limits
+
+Vercel project-settings access currently returns 403, so environment presence and live connectivity cannot be confirmed here. Storage objects and external deliveries are not verified by SQL import. SQLite/D1 export SQL is intentionally rejected on PostgreSQL; use native PostgreSQL backups. Verification triggered no live emails, application submissions or Quo actions.
