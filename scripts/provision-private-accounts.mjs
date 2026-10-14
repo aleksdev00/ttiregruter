@@ -3,10 +3,11 @@ import {createClient as databaseClient} from '@libsql/client';
 import {createClient} from '@supabase/supabase-js';
 import {createInterface} from 'node:readline/promises';
 import {Writable} from 'node:stream';
+import {existingRecruiter} from './lib/recruiter-identity.mjs';
 const roster=[
- {email:'cvetanovicaleksa45@gmail.com',role:'admin',name:'Aleksa Cvetanović',alias:'Alex Jones'},
- {email:'lakikiller09@gmail.com',role:'recruiter',name:'Lazar Jevtic',alias:'John'},
- {email:'mikicn956@gmail.com',role:'recruiter',name:'Nemanja Mikic',alias:'Nate Mitchell'},
+ {email:'cvetanovicaleksa45@gmail.com',name:'Aleksa Cvetanović',alias:'Alex Jones'},
+ {email:'lakikiller09@gmail.com',name:'Lazar Jevtic',alias:'John'},
+ {email:'mikicn956@gmail.com',name:'Nemanja Mikic',alias:'Nate Mitchell'},
 ];
 for(const key of ['TURSO_DATABASE_URL','TURSO_AUTH_TOKEN','SUPABASE_URL','SUPABASE_SERVICE_ROLE_KEY'])if(!process.env[key])throw Error(`Missing server configuration: ${key}`);
 const url=new URL(process.env.SUPABASE_URL);if(url.protocol!=='https:'||!url.hostname.endsWith('.supabase.co'))throw Error('Use the approved HTTPS Supabase project.');
@@ -17,7 +18,7 @@ while(true){const {data,error}=await auth.listUsers({page,perPage:100});if(error
 const plan=[];
 for(const item of roster){
  const rows=(await db.execute({sql:'SELECT id,email,role,active,data_json FROM recruiters WHERE lower(email)=?',args:[item.email]})).rows;
- if(rows.length!==1||rows[0].active!==1||rows[0].role!==item.role)throw Error(`Resolve the existing recruiter identity/role before provisioning ${item.email}. No recruiter rows are created or reassigned.`);
+ existingRecruiter(rows,item.email);
  const matches=users.filter(u=>u.email?.toLowerCase()===item.email);if(matches.length>1)throw Error(`Ambiguous Auth identity for ${item.email}`);
  const binding=(await db.execute({sql:'SELECT auth_user_id,verified_email FROM recruiter_login_bindings WHERE recruiter_id=?',args:[rows[0].id]})).rows[0];
  if(binding&&(!matches[0]||binding.auth_user_id!==matches[0].id||binding.verified_email!==item.email))throw Error(`Binding conflict for ${item.email}. Owner review required.`);
