@@ -48,7 +48,10 @@ export function getPostgresDatabase():D1Database|undefined {
   if(parsed.searchParams.has('sslmode')&&!['require','verify-full','verify-ca'].includes(parsed.searchParams.get('sslmode')!))throw new Error('PostgreSQL TLS cannot be disabled.');
   if(!database){
     const client=postgres(url,{ssl:'verify-full',prepare:false,max:3,idle_timeout:20,connect_timeout:10,types:{bigint:postgres.BigInt,numeric:{to:1700,from:[1700],serialize:String,parse:Number}},connection:{application_name:'tti-recruiter',search_path:'public'}});
-    const execute=(sql:postgres.Sql)=>async(query:string,values:readonly DatabaseValue[])=>{
+    // Keep the configured parser types on both the root client and transaction
+    // client. postgres.Sql's default generic is Sql<{}>, which is incompatible
+    // with this client when TypeScript uses the configured bigint/numeric types.
+    const execute=(sql:typeof client)=>async(query:string,values:readonly DatabaseValue[])=>{
       try {
         const result=await sql.unsafe(query,values as postgres.ParameterOrJSON<never>[]);
         return {rows:Array.from(result) as Record<string,unknown>[],count:result.count};
@@ -57,7 +60,7 @@ export function getPostgresDatabase():D1Database|undefined {
         throw error;
       }
     };
-    database=createPostgresDatabase({query:execute(client),transaction:run=>client.begin(async sql=>run(execute(sql as unknown as postgres.Sql))) as Promise<Awaited<ReturnType<typeof run>>>});
+    database=createPostgresDatabase({query:execute(client),transaction:run=>client.begin(async sql=>run(execute(sql as unknown as typeof client))) as Promise<Awaited<ReturnType<typeof run>>>});
   }
   return database;
 }
