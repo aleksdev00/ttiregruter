@@ -18,7 +18,17 @@ function engine(db:D1Database){
 }
 function database(db?:D1Database){const value=db??env.DB;if(!value)throw new ServiceError('Application database is not configured.',503,'not_configured');return value;}
 async function writeCookie(name:string,value:string,maxAge:number){(await cookies()).set(name,value,{httpOnly:true,secure:true,sameSite:'strict',path:'/',maxAge});}
-export async function authStatus(db:D1Database){const configured=Boolean(process.env.SUPABASE_URL&&process.env.SUPABASE_PUBLISHABLE_KEY&&process.env.AUTH_SESSION_ENCRYPTION_KEY);let sessionsTableReady=false;try{await db.prepare('SELECT token_hash FROM recruiter_login_sessions LIMIT 0').all();sessionsTableReady=true;}catch{/* The status endpoint should report unavailable configuration without exposing storage errors. */}return {configured:configured&&sessionsTableReady,pending:false};}
+export async function authStatus(db:D1Database){
+ const checks={
+  databaseUrl:Boolean(process.env.SUPABASE_DATABASE_URL?.trim()),
+  supabaseUrl:Boolean(process.env.SUPABASE_URL?.trim()),
+  publishableKey:Boolean(process.env.SUPABASE_PUBLISHABLE_KEY?.trim()),
+  sessionEncryptionKey:Boolean(process.env.AUTH_SESSION_ENCRYPTION_KEY?.trim()),
+ };
+ let sessionStoreReady=false;
+ try{await db.prepare('SELECT token_hash FROM recruiter_login_sessions LIMIT 0').all();sessionStoreReady=true;}catch{/* Expose readiness only, never database details or secret values. */}
+ return {configured:Object.values(checks).every(Boolean)&&sessionStoreReady,pending:false,checks:{...checks,sessionStoreReady}};
+}
 export async function signIn(db:D1Database,email:string,password:string){const login=await engine(db).login(email,password);await writeCookie(COOKIE,login.token,SESSION_MS/1000);return login.user;}
 export async function getPrivateUser(db?:D1Database):Promise<LoginUser|null>{const token=(await cookies()).get(COOKIE)?.value;if(!token)return null;const session=await engine(database(db)).read(token);return session?.user??null;}
 export async function requirePrivateUser(returnTo:string,allowPasswordChange=false){const user=await getPrivateUser();if(user){if(user.mustChangePassword&&!allowPasswordChange)redirect('/change-password?return_to='+encodeURIComponent(safeReturnPath(returnTo)));return user;}redirect('/login?return_to='+encodeURIComponent(safeReturnPath(returnTo)));}
