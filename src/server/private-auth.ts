@@ -25,9 +25,9 @@ export async function authStatus(db:D1Database){
   publishableKey:Boolean(process.env.SUPABASE_PUBLISHABLE_KEY?.trim()),
   sessionEncryptionKey:Boolean(process.env.AUTH_SESSION_ENCRYPTION_KEY?.trim()),
  };
- let sessionStoreReady=false;
- try{await db.prepare('SELECT token_hash FROM recruiter_login_sessions LIMIT 0').all();sessionStoreReady=true;}catch{/* Expose readiness only, never database details or secret values. */}
- return {configured:Object.values(checks).every(Boolean)&&sessionStoreReady,pending:false,checks:{...checks,sessionStoreReady}};
+ let sessionStoreReady=false,sessionStoreErrorCode:string|null=null;
+ try{await db.prepare('SELECT token_hash FROM recruiter_login_sessions LIMIT 0').all();sessionStoreReady=true;}catch(error){const code=error&&typeof error==='object'&&'code' in error?(error as {code?:unknown}).code:null;sessionStoreErrorCode=typeof code==='string'?code.slice(0,24):error instanceof Error?error.name.slice(0,48):'unknown';}
+ return {configured:Object.values(checks).every(Boolean)&&sessionStoreReady,pending:false,checks:{...checks,sessionStoreReady,sessionStoreErrorCode}};
 }
 export async function signIn(db:D1Database,email:string,password:string){const login=await engine(db).login(email,password);await writeCookie(COOKIE,login.token,SESSION_MS/1000);return login.user;}
 export async function getPrivateUser(db?:D1Database):Promise<LoginUser|null>{const token=(await cookies()).get(COOKIE)?.value;if(!token)return null;const session=await engine(database(db)).read(token);return session?.user??null;}
