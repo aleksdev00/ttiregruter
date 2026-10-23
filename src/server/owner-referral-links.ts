@@ -43,20 +43,29 @@ export function matchOwnerReferrals(accounts:Account[]){
 // sessions can apply the authorized batch; recruiter sessions only update self.
 export async function applyOwnerReferrals(db:D1Database,actor:Actor){
  const accounts=(await db.prepare('SELECT id,email,data_json FROM recruiters WHERE active=1').all<Account>()).results;
- const matches=matchOwnerReferrals(accounts),revision=await currentRevision(db),statements:D1PreparedStatement[]=[],applied:Account[]=[];
- for(const {link,account} of matches){
-  if(!account||!isAdmin(actor)&&account.id!==actor.id)continue;
+ const matches=matchOwnerReferrals(accounts),statements:D1PreparedStatement[]=[],applied:Account[]=[];
+ const candidates=matches.filter(({account})=>account&&(isAdmin(actor)||account.id===actor.id)).flatMap(({link,account})=>{
+  if(!account)return [];
   const marker=`owner-referral-20261004:${link.key}:${account.id}`;
-  if(await db.prepare('SELECT id FROM audit WHERE id=?').bind(marker).first())continue;
   const prior=JSON.parse(account.data_json) as Recruiter;
   // Do not replace a link configured by an administrator after the mapping was
   // added, and keep the TTI Recruiting owner account intentionally unlinked.
-  if(prior.referralUrl||account.email.trim().toLowerCase()==='tticdlrecruiting@gmail.com')continue;
+  if(prior.referralUrl||account.email.trim().toLowerCase()==='tticdlrecruiting@gmail.com')return [];
+  return [{link,account,marker,prior}];
+ });
+ const existingMarkers=candidates.length
+  ?new Set((await db.prepare(`SELECT id FROM audit WHERE id IN (${candidates.map(()=>'?').join(',')})`).bind(...candidates.map(x=>x.marker)).all<{id:string}>()).results.map(row=>row.id))
+  :new Set<string>();
+ const pending=candidates.filter(x=>!existingMarkers.has(x.marker));
+ if(pending.length){
+  const revision=await currentRevision(db);
+  for(const {link,account,marker,prior} of pending){
   statements.push(db.prepare("UPDATE recruiters SET data_json=json_set(data_json,'$.referralUrl',?) WHERE id=? AND email=? AND active=1").bind(link.url,account.id,account.email));
   statements.push(db.prepare("INSERT INTO audit(id,actor_id,type,at,data_json) VALUES(?,?,'owner_referral_configured',?,?)").bind(marker,actor.id,Date.now(),JSON.stringify({recruiterId:account.id,previousReferralUrl:prior.referralUrl,nextReferralUrl:link.url,source:'User supplied exact referral destinations, 2026-10-04',noExternalActions:true})));
   applied.push({...account,data_json:JSON.stringify({...prior,referralUrl:link.url})});
+  }
+  await guardedBatch(db,revision,statements);
  }
- if(statements.length)await guardedBatch(db,revision,statements);
  const current=applied.find(account=>account.id===actor.id);if(current)actor.profile=JSON.parse(current.data_json);
  return {updated:applied.length,unresolved:matches.filter(x=>!x.account).map(x=>x.link.key)};
 }
