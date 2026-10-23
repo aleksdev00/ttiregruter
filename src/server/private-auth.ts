@@ -17,7 +17,7 @@ function engine(db:D1Database){
  return new AuthEngine(db,()=>createClient(parsed.origin,key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}}),secret);
 }
 function database(db?:D1Database){const value=db??env.DB;if(!value)throw new ServiceError('Application database is not configured.',503,'not_configured');return value;}
-async function writeCookie(name:string,value:string,maxAge:number){(await cookies()).set(name,value,{httpOnly:true,secure:true,sameSite:'strict',path:'/',maxAge});}
+async function writeCookie(name:string,value:string,maxAge:number,sameSite:'strict'|'lax'='strict'){(await cookies()).set(name,value,{httpOnly:true,secure:true,sameSite,path:'/',maxAge});}
 export async function authStatus(db:D1Database){
  const checks={
   databaseUrl:Boolean(process.env.SUPABASE_DATABASE_URL?.trim()),
@@ -35,6 +35,6 @@ export async function requirePrivateUser(returnTo:string,allowPasswordChange=fal
 export async function revokePrivateSession(db:D1Database){const token=(await cookies()).get(COOKIE)?.value;await engine(db).logout(token);await writeCookie(COOKIE,'',0);await writeCookie(RECOVERY_COOKIE,'',0);}
 export async function changePrivatePassword(db:D1Database,_user:LoginUser,currentPassword:string|undefined,newPassword:string){await engine(db).changePassword((await cookies()).get(COOKIE)?.value,currentPassword,newPassword);await writeCookie(COOKIE,'',0);await writeCookie(RECOVERY_COOKIE,'',0);}
 export async function requestPrivatePasswordReset(db:D1Database,email:string,origin:string){await engine(db).requestReset(email,origin);return true;}
-export async function beginRecovery(tokenHash:string){const result=await engine(database()).startRecovery(tokenHash);await writeCookie(RECOVERY_COOKIE,result.token,15*60);}
+export async function beginRecovery(tokenHash:string){const result=await engine(database()).startRecovery(tokenHash);await writeCookie(RECOVERY_COOKIE,result.token,15*60,'lax');}
 export async function hasRecoverySession(){const token=(await cookies()).get(RECOVERY_COOKIE)?.value;if(!token)return false;return Boolean(await engine(database()).read(token,'recovery'));}
 export async function resetPrivatePassword(db:D1Database,password:string){await engine(db).changePassword((await cookies()).get(RECOVERY_COOKIE)?.value,undefined,password,'recovery');await writeCookie(COOKIE,'',0);await writeCookie(RECOVERY_COOKIE,'',0);}
