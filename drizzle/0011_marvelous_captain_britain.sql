@@ -1,0 +1,1 @@
+CREATE INDEX `tasks_driver_status` ON `tasks` (`driver_id`,`status`);

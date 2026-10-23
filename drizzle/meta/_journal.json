@@ -78,6 +78,20 @@
       "when": 1792003010595,
       "tag": "0010_slow_natasha_romanoff",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1792792744880,
+      "tag": "0011_marvelous_captain_britain",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1792792858922,
+      "tag": "0012_lovely_nextwave",
+      "breakpoints": true
     }
   ]
 }
