@@ -1,5 +1,6 @@
 import postgres from 'postgres';
 import {postgresStatement,type DatabaseValue} from './postgres-sql.ts';
+import {SUPABASE_ROOT_CA} from './supabase-root-ca.ts';
 
 // Only server code obtains this adapter; browsers have no direct table grants.
 type QueryResult = {rows: Record<string,unknown>[]; count:number};
@@ -47,7 +48,12 @@ export function getPostgresDatabase():D1Database|undefined {
   if(!['postgres:','postgresql:'].includes(parsed.protocol)||!parsed.password)throw new Error('Configure a complete server-only SUPABASE_DATABASE_URL.');
   if(parsed.searchParams.has('sslmode')&&!['require','verify-full','verify-ca'].includes(parsed.searchParams.get('sslmode')!))throw new Error('PostgreSQL TLS cannot be disabled.');
   if(!database){
-    const client=postgres(url,{ssl:'verify-full',prepare:false,max:3,idle_timeout:20,connect_timeout:10,types:{bigint:postgres.BigInt,numeric:{to:1700,from:[1700],serialize:String,parse:Number}},connection:{application_name:'tti-recruiter',search_path:'public'}});
+    // Supabase uses a project root CA that is not present in every serverless
+    // runtime's default trust store. Keep full certificate and hostname
+    // verification enabled while trusting only the Supabase root CA.
+    const connectionUrl=new URL(url);connectionUrl.searchParams.delete('sslmode');connectionUrl.searchParams.delete('sslrootcert');
+    const ca=process.env.SUPABASE_DATABASE_CA_CERT?.trim()||SUPABASE_ROOT_CA;
+    const client=postgres(connectionUrl.toString(),{ssl:{ca,rejectUnauthorized:true},prepare:false,max:3,idle_timeout:20,connect_timeout:10,types:{bigint:postgres.BigInt,numeric:{to:1700,from:[1700],serialize:String,parse:Number}},connection:{application_name:'tti-recruiter',search_path:'public'}});
     // Keep the configured parser types on both the root client and transaction
     // client. postgres.Sql's default generic is Sql<{}>, which is incompatible
     // with this client when TypeScript uses the configured bigint/numeric types.
