@@ -31,14 +31,25 @@ export class AuthEngine {
  }
  async read(token:string|undefined,purpose:'login'|'recovery'='login'){
   if(!token||!/^[A-Za-z0-9_-]{43}$/.test(token))return null;
-  const row=await this.db.prepare('SELECT * FROM recruiter_login_sessions WHERE token_hash=? AND purpose=?').bind(await tokenHash(token),purpose).first<StoredSession>();
+  // The opaque cookie is a random, server-side session handle. Login already
+  // verifies the Supabase identity and binds it to a verified recruiter email.
+  // Rechecking Supabase /user on every application API call made routine page
+  // loads depend on a slow external request (observed up to 115 seconds).
+  // Revalidate the session and its active recruiter binding locally instead.
+  const row=await this.db.prepare(`SELECT s.token_hash,s.recruiter_id,s.auth_user_id,s.email,s.encrypted_tokens,s.purpose,s.created_at,s.expires_at,
+   r.id,r.email,r.role,r.active,r.data_json,b.auth_user_id,b.must_change
+   FROM recruiter_login_sessions s
+   JOIN recruiters r ON r.id=s.recruiter_id
+   JOIN recruiter_login_bindings b ON b.recruiter_id=r.id
+   WHERE s.token_hash=? AND s.purpose=? AND s.expires_at>?
+    AND r.active=1 AND b.auth_user_id=s.auth_user_id
+    AND lower(r.email)=lower(s.email) AND lower(b.verified_email)=lower(s.email)`)
+   .bind(await tokenHash(token),purpose,this.now()).first<StoredSession&Binding>();
   if(!row||!sessionValid(row.created_at,row.expires_at,this.now()))return null;
+  if(!['owner','admin','recruiter'].includes(row.role))return null;
   let pair;try{pair=await decryptTokens(this.secret,row.encrypted_tokens);}catch{return null;}
   const client=this.makeClient();
-  if(pair.expires_at*1000<=this.now()+30000){const {data,error}=await client.auth.refreshSession({refresh_token:pair.refresh_token});if(error||!data.session||data.session.user.id!==row.auth_user_id)return null;pair={access_token:data.session.access_token,refresh_token:data.session.refresh_token,expires_at:data.session.expires_at??this.now()/1000+data.session.expires_in};await this.db.prepare('UPDATE recruiter_login_sessions SET encrypted_tokens=? WHERE token_hash=? AND expires_at>?').bind(await encryptTokens(this.secret,pair),row.token_hash,this.now()).run();}
-  const verified=await client.auth.getUser(pair.access_token);if(verified.error||!verified.data.user||verified.data.user.id!==row.auth_user_id||verified.data.user.email?.toLowerCase()!==row.email.toLowerCase())return null;
-  let binding;try{binding=await this.binding(verified.data.user);}catch{return null;}
-  return {user:this.user(binding,row.auth_user_id,row.expires_at),pair,row,client};
+  return {user:this.user(row,row.auth_user_id,row.expires_at),pair,row,client};
  }
  async logout(token:string|undefined){if(!token)return;const hash=await tokenHash(token);const row=await this.db.prepare('SELECT encrypted_tokens FROM recruiter_login_sessions WHERE token_hash=?').bind(hash).first<{encrypted_tokens:string}>();await this.db.prepare('DELETE FROM recruiter_login_sessions WHERE token_hash=?').bind(hash).run();if(row)try{const pair=await decryptTokens(this.secret,row.encrypted_tokens);await this.makeClient().auth.admin.signOut(pair.access_token,'local');}catch{/* The app session is already revoked; remote refresh tokens are never sent to clients. */}}
  async requestReset(email:string,origin:string){if(email.length>254)throw new ServiceError('Enter a valid email.');await this.rateLimit('reset',email.trim(),3);const normalized=email.trim().toLowerCase();const bound=await this.db.prepare('SELECT r.id FROM recruiters r JOIN recruiter_login_bindings b ON b.recruiter_id=r.id WHERE lower(r.email)=? AND r.active=1 AND lower(b.verified_email)=?').bind(normalized,normalized).first();if(!bound)return;const {error}=await this.makeClient().auth.resetPasswordForEmail(normalized,{redirectTo:origin+'/auth/recovery'});if(error)throw new ServiceError('Supabase could not accept the recovery request. Check Auth email configuration.',503,'recovery_unavailable');}
