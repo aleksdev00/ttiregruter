@@ -27,7 +27,7 @@ test('admin provisions an active recruiter login, links the exact approved email
  const f=fixture();
  const result=await provisionRecruiterLoginCore(f.db,f.actor,{recruiterId:'approved-test'},'https://recruiter.ttirecruiting.us',f.deps);
  assert.equal(result.linked,true);assert.equal(result.emailAccepted,true);assert.equal(f.counts.createCalls,1);assert.equal(f.counts.resetCalls,1);
- assert.ok(f.counts.temporaryPassword.length>=32);assert.ok(!JSON.stringify(result).includes(f.counts.temporaryPassword));
+ assert.ok(f.counts.temporaryPassword.length>=32);assert.ok(f.counts.temporaryPassword.length<=72);assert.ok(!JSON.stringify(result).includes(f.counts.temporaryPassword));
  assert.deepEqual({...f.sql.prepare('SELECT recruiter_id,auth_user_id,verified_email,must_change FROM recruiter_login_bindings').get()},{recruiter_id:'approved-test',auth_user_id:'auth-test-uuid',verified_email:'recruiter@example.test',must_change:1});
  assert.equal(f.sql.prepare('SELECT user_id FROM recruiters WHERE id=?').get('approved-test')?.user_id,'auth-test-uuid');
 });

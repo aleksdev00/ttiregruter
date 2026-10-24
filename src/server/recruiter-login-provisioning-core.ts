@@ -33,7 +33,7 @@ export async function provisionRecruiterLoginCore(db:D1Database,actor:Actor,inpu
  let identity=existingBindings[0]?await findIdentityById(config.admin,existingBindings[0].auth_user_id):await findIdentity(config.admin,email);
  let created=false;
  if(!identity){
-  const temporaryPassword=`${crypto.randomUUID()}${crypto.randomUUID()}!aA9`;
+  const temporaryPassword=`${Array.from(crypto.getRandomValues(new Uint8Array(32)),byte=>byte.toString(16).padStart(2,'0')).join('')}!aA9`;
   const result=await config.admin.createUser({email,password:temporaryPassword,email_confirm:true,user_metadata:{full_name:profile.fullName??'',recruiter_alias:profile.alias??''}});
   identity=result.data?.user??null;
   if(result.error||!identity){
