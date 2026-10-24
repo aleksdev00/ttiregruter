@@ -16,33 +16,40 @@ function fixture(){
  function prepared(query:string,args:SQLInputValue[]=[]){return {bind(...values:SQLInputValue[]){return prepared(query,values);},async first<T>(){return (sql.prepare(query).get(...args) as T|undefined)??null;},async all<T>(){return {results:sql.prepare(query).all(...args) as T[],success:true};},async run(){return {success:true,meta:sql.prepare(query).run(...args)};}};}
  const db={prepare:prepared,async batch(statements:ReturnType<typeof prepared>[]){sql.exec('BEGIN');try{const values=[];for(const statement of statements)values.push(await statement.run());sql.exec('COMMIT');return values;}catch(error){sql.exec('ROLLBACK');throw error;}}} as unknown as D1Database;
  const users:Array<{id:string;email:string;email_confirmed_at:string|null}> = [];
- let createCalls=0,resetCalls=0,temporaryPassword='';
- const admin={async listUsers({page,perPage}:{page:number;perPage:number}){const start=(page-1)*perPage;return {data:{users:users.slice(start,start+perPage)},error:null};},async createUser(input:{email:string;password:string;email_confirm:true;user_metadata:Record<string,string>}){createCalls++;temporaryPassword=input.password;const user={id:'auth-test-uuid',email:input.email,email_confirmed_at:'2026-10-24T00:00:00Z'};users.push(user);return {data:{user},error:null};}};
- const deps={admin,async sendReset(){resetCalls++;return true;},now:()=>1234};
+ let createCalls=0,updateCalls=0,temporaryPassword='';
+ const admin={async listUsers({page,perPage}:{page:number;perPage:number}){const start=(page-1)*perPage;return {data:{users:users.slice(start,start+perPage)},error:null};},async createUser(input:{email:string;password:string;email_confirm:true;user_metadata:Record<string,string>}){createCalls++;temporaryPassword=input.password;const user={id:'auth-test-uuid',email:input.email,email_confirmed_at:'2026-10-24T00:00:00Z'};users.push(user);return {data:{user},error:null};},async updateUserById(id:string,input:{password:string;user_metadata:Record<string,string>}){updateCalls++;temporaryPassword=input.password;const user=users.find(u=>u.id===id)??null;return {data:{user},error:null};}};
+ const deps={admin,now:()=>1234};
  const actor={id:'admin-1',userId:'auth-admin',email:'admin@example.test',role:'admin',profile:{id:'admin-1',fullName:'Admin',alias:'Admin',referralUrl:null,callbackNumber:null,contactEmail:'admin@example.test',reportingTimeZone:'UTC',isDemo:false}} as Actor;
- return {db,sql,users,deps,actor,get counts(){return {createCalls,resetCalls,temporaryPassword};}};
+ return {db,sql,users,deps,actor,get counts(){return {createCalls,updateCalls,temporaryPassword};}};
 }
 
-test('admin provisions an active recruiter login, links the exact approved email, and sends password setup',async()=>{
+test('admin provisions an active recruiter login with the requested temporary password and forces a change',async()=>{
  const f=fixture();
  const result=await provisionRecruiterLoginCore(f.db,f.actor,{recruiterId:'approved-test'},'https://recruiter.ttirecruiting.us',f.deps);
- assert.equal(result.linked,true);assert.equal(result.emailAccepted,true);assert.equal(f.counts.createCalls,1);assert.equal(f.counts.resetCalls,1);
- assert.ok(f.counts.temporaryPassword.length>=32);assert.ok(f.counts.temporaryPassword.length<=72);assert.ok(!JSON.stringify(result).includes(f.counts.temporaryPassword));
+ assert.equal(result.linked,true);assert.equal(f.counts.createCalls,1);assert.equal(f.counts.updateCalls,0);
+ assert.equal(f.counts.temporaryPassword,'test.recruiter2026');assert.ok(f.counts.temporaryPassword.length<=72);assert.ok(JSON.stringify(result).includes(f.counts.temporaryPassword));
  assert.deepEqual({...f.sql.prepare('SELECT recruiter_id,auth_user_id,verified_email,must_change FROM recruiter_login_bindings').get()},{recruiter_id:'approved-test',auth_user_id:'auth-test-uuid',verified_email:'recruiter@example.test',must_change:1});
  assert.equal(f.sql.prepare('SELECT user_id FROM recruiters WHERE id=?').get('approved-test')?.user_id,'auth-test-uuid');
 });
 
-test('re-running setup reuses the existing Auth identity and binding without creating a duplicate',async()=>{
+test('re-running setup resets an existing Auth identity and requires a password change again',async()=>{
  const f=fixture();
  await provisionRecruiterLoginCore(f.db,f.actor,{recruiterId:'approved-test'},'https://recruiter.ttirecruiting.us',f.deps);
+ f.sql.prepare('UPDATE recruiter_login_bindings SET must_change=0 WHERE recruiter_id=?').run('approved-test');
  await provisionRecruiterLoginCore(f.db,f.actor,{recruiterId:'approved-test'},'https://recruiter.ttirecruiting.us',f.deps);
- assert.equal(f.counts.createCalls,1);assert.equal(f.counts.resetCalls,2);
+ assert.equal(f.counts.createCalls,1);assert.equal(f.counts.updateCalls,1);assert.equal(f.sql.prepare('SELECT must_change FROM recruiter_login_bindings WHERE recruiter_id=?').get('approved-test')?.must_change,1);
 });
 
 test('setup refuses an unconfirmed Auth identity and never links it',async()=>{
  const f=fixture();f.users.push({id:'existing-auth',email:'recruiter@example.test',email_confirmed_at:null});
  await assert.rejects(provisionRecruiterLoginCore(f.db,f.actor,{recruiterId:'approved-test'},'https://recruiter.ttirecruiting.us',f.deps),/has not verified/);
- assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM recruiter_login_bindings').get()?.n,0);assert.equal(f.counts.resetCalls,0);
+ assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM recruiter_login_bindings').get()?.n,0);assert.equal(f.counts.updateCalls,0);
+});
+
+test('temporary password needs a real first and last name',async()=>{
+ const f=fixture();f.sql.prepare('UPDATE recruiters SET data_json=? WHERE id=?').run(JSON.stringify({fullName:'Recruiter',alias:'Test'}),'approved-test');
+ await assert.rejects(provisionRecruiterLoginCore(f.db,f.actor,{recruiterId:'approved-test'},'https://recruiter.ttirecruiting.us',f.deps),/first and last name/);
+ assert.equal(f.counts.createCalls,0);
 });
 
 test('inactive accounts and non-admin actors cannot provision logins',async()=>{
