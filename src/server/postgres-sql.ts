@@ -68,7 +68,11 @@ export function postgresStatement(sql: string, values: readonly DatabaseValue[] 
           let result = '(' + args[0] + ')::jsonb';
           for (let k = 1; k < args.length; k += 2) result = 'tti_private.json_set(' + result + ',' + path(args[k]).sql + ',(jsonb_build_array(' + typed(args[k + 1]) + ')->0))';
           output.push('(' + result + ')::text');
-        } else if (name === 'json_each') output.push('jsonb_array_elements_text((' + args[0] + ')::jsonb)');
+        // The postgres-js driver can bind a JSON-looking string to a placeholder
+        // whose inferred server type is jsonb as JSON, which double-encodes it
+        // as a scalar string. Force the bound value through text before parsing
+        // it so JSON arrays passed by json_each(?) stay arrays in production.
+        } else if (name === 'json_each') output.push('jsonb_array_elements_text(((' + args[0] + ')::text)::jsonb)');
         else if (name === 'json') output.push('(' + args[0] + ')::jsonb');
         else if (name === 'json_object') output.push('(jsonb_build_object(' + args.map(typed).join(',') + '))::text');
         else if (name === 'json_group_array') output.push("COALESCE(jsonb_agg((" + args[0] + ")::jsonb),'[]'::jsonb)::text");

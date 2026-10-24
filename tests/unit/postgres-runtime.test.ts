@@ -8,6 +8,7 @@ import {createPostgresDatabase} from '../../src/server/postgres-db.ts';
 import {postgresSchema} from '../../src/server/export/schema.ts';
 import {loadSnapshot,workflowMutation,guardedBatch,currentRevision} from '../../src/server/store.ts';
 import {operation,overview} from '../../src/server/operations.ts';
+import {previewAssignment,commitAssignment} from '../../src/server/admin.ts';
 import {seed} from '../../src/adapters/demo/seed.ts';
 import {AuthEngine} from '../../src/server/auth/engine.ts';
 import type {SupabaseClient} from '@supabase/supabase-js';
@@ -22,6 +23,7 @@ test('SQL values stay bound, quoted question marks stay literal, and unreviewed 
  assert.throws(()=>postgresStatement('SELECT ?',[]),/parameter count/);
  assert.throws(()=>postgresStatement("SELECT json_extract(data_json,'$[0]')"),/JSON path/);
  assert.throws(()=>postgresStatement('INSERT OR REPLACE INTO drivers(id) VALUES(?)',['x']),/Unreviewed/);
+ assert.ok(postgresStatement('SELECT value FROM json_each(?)',['["a","b"]']).sql.includes('::text)::jsonb'));
 });
 
 test('PostgreSQL runs the actual recruiter workflow, JSON projection, atomic saves and encrypted sessions',async t=>{
@@ -69,6 +71,18 @@ test('PostgreSQL runs the actual recruiter workflow, JSON projection, atomic sav
    await db.prepare('INSERT INTO companies(id,name,status,version,data_json) VALUES(?,?,?,?,?)').bind('synthetic-company',offer.companyName,'active',1,'{"urgent":1}').run();
    await db.prepare('INSERT INTO offers(id,company_id,version,data_json) VALUES(?,?,?,?)').bind(offer.id,'synthetic-company','1',JSON.stringify(offer)).run();
    assert.equal((await loadSnapshot(db,a)).offers[0].urgent,true);assert.equal((await overview(db,admin)).role,'admin');
+ });
+ await t.test('admin assignment preview and commit accept a JSON list through the PostgreSQL adapter',async()=>{
+   const assignmentRecruiter=actor('assignment-target');
+   await db.prepare('INSERT INTO recruiters(id,user_id,email,role,active,data_json) VALUES(?,?,?,\'recruiter\',1,?)').bind(assignmentRecruiter.id,assignmentRecruiter.userId,assignmentRecruiter.email,JSON.stringify(assignmentRecruiter.profile)).run();
+   const ids=Array.from({length:3},(_,i)=>'assignment-driver-'+i);
+   for(const [i,id] of ids.entries())await db.prepare('INSERT INTO drivers(id,phone,owner_id,blocked,duplicate,data_json,next_action) VALUES(?,?,NULL,0,0,?,?)').bind(id,'+12025551'+String(900+i).slice(-3),JSON.stringify({firstName:'Synthetic',lastName:'Driver '+id,status:'available',isDemo:false,activeConversationId:null}),'Available for call').run();
+   const preview=await previewAssignment(db,admin,{recruiterId:assignmentRecruiter.id,count:ids.length,reason:'Synthetic adapter test',requestId:'postgres-assignment'});
+   assert.equal(preview.available,ids.length);
+   const {available: _available,sample: _sample,...commit}=preview;
+   const result=await commitAssignment(db,admin,commit);
+   assert.equal(result.assigned,ids.length);
+   assert.equal((await db.prepare('SELECT COUNT(*) AS n FROM drivers WHERE owner_id=?').bind(assignmentRecruiter.id).first<{n:number}>())!.n,ids.length);
  });
  await t.test('explicit completion persists locally without application submission or a network action',async()=>{
    ok(await workflowMutation(db,a,'finish',[conversation.id,'callback','2035-01-01T12:00:00.000Z',{requestId:'postgres-finish'}]));
