@@ -3,6 +3,7 @@ export class AuthTransportError extends Error {
  constructor(message:string,code:'site_access'|'invalid_response'|'connection'){super(message);this.code=code;}
 }
 type Envelope<T>={ok:boolean;value?:T;message?:string};
+const AUTH_API='/api/auth';
 export async function readAuthResponse<T>(response:Response):Promise<Envelope<T>> {
  if(response.type==='opaqueredirect'||response.redirected||response.status>=300&&response.status<400)
   throw new AuthTransportError('Sign-in was redirected. Reload the application and try again.','site_access');
@@ -19,7 +20,7 @@ export async function readAuthResponse<T>(response:Response):Promise<Envelope<T>
 }
 export async function authRequest<T>(action:'login'|'forgot-password'|'reset-password'|'change-password'|'logout',body?:unknown):Promise<Envelope<T>> {
  let response:Response;
- try{response=await fetch('/api/private-login/'+action,{method:'POST',credentials:'same-origin',redirect:'manual',cache:'no-store',headers:{'content-type':'application/json','accept':'application/json'},body:JSON.stringify(body??{})});}
+ try{response=await fetch(`${AUTH_API}/${action}`,{method:'POST',credentials:'same-origin',redirect:'manual',cache:'no-store',headers:{'content-type':'application/json','accept':'application/json'},body:JSON.stringify(body??{})});}
  catch{throw new AuthTransportError('The sign-in service could not be reached. Your entered information is preserved; reconnect Site access or retry.','connection');}
  const result=await readAuthResponse<T>(response);
  if(action==='login'&&(!result.value||typeof result.value!=='object'||!('mustChangePassword' in result.value)||typeof result.value.mustChangePassword!=='boolean'))
