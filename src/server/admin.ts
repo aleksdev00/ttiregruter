@@ -46,14 +46,14 @@ export async function commitAssignment(db:D1Database,a:Actor,input:unknown){
  ]);return value;
 }
 
-export async function adminOverview(db:D1Database,a:Actor,page=0){
+export async function adminOverview(db:D1Database,a:Actor,page=0,section='Recruiters'){
  requireAdmin(a);if(!Number.isSafeInteger(page)||page<0||page>10000)throw new ServiceError('Invalid activity page.');
  const [roster,catalog,activity,notifications,calls]=await Promise.all([
   db.prepare("SELECT r.id,r.email,r.role,r.active,r.user_id,r.data_json,COUNT(d.id) AS assigned,SUM(CASE WHEN json_extract(d.data_json,'$.status')='available' AND d.blocked=0 AND d.duplicate=0 AND json_extract(d.data_json,'$.activeConversationId') IS NULL THEN 1 ELSE 0 END) AS available FROM recruiters r LEFT JOIN drivers d ON d.owner_id=r.id GROUP BY r.id ORDER BY r.email").all(),
   db.prepare("SELECT c.id AS companyId,c.name,c.status,c.version,COALESCE(json_extract(c.data_json,\'$.urgent\'),0) AS urgent,o.data_json AS offer FROM companies c JOIN offers o ON o.company_id=c.id WHERE json_extract(c.data_json, '$.deletedAt') IS NULL ORDER BY c.name,o.id").all(),
-  db.prepare("SELECT a.id,a.type,a.at,a.data_json,r.email AS actor FROM audit a LEFT JOIN recruiters r ON r.id=a.actor_id WHERE a.type<>'workflow' ORDER BY a.at DESC,a.id DESC LIMIT 25 OFFSET ?").bind(page*25).all(),
-  db.prepare("SELECT n.id,n.status,n.message,n.updated_at,c.driver_id,r.email AS recruiter,d.data_json AS driver FROM completion_notifications n JOIN conversations c ON c.id=n.conversation_id JOIN drivers d ON d.id=c.driver_id LEFT JOIN recruiters r ON r.id=c.recruiter_id ORDER BY n.updated_at DESC LIMIT 50").all(),
-  db.prepare("SELECT c.id,c.status,c.data_json,r.email AS recruiter,d.data_json AS driver FROM conversations c JOIN drivers d ON d.id=c.driver_id LEFT JOIN recruiters r ON r.id=c.recruiter_id WHERE c.status IN ('closed','cancelled') ORDER BY json_extract(c.data_json,'$.updatedAt') DESC LIMIT 50").all(),
+  section==='Activity'?db.prepare("SELECT a.id,a.type,a.at,a.data_json,r.email AS actor FROM audit a LEFT JOIN recruiters r ON r.id=a.actor_id WHERE a.type<>'workflow' ORDER BY a.at DESC,a.id DESC LIMIT 25 OFFSET ?").bind(page*25).all():Promise.resolve({results:[]}),
+  section==='Applications & calls'?db.prepare("SELECT n.id,n.status,n.message,n.updated_at,c.driver_id,r.email AS recruiter,d.data_json AS driver FROM completion_notifications n JOIN conversations c ON c.id=n.conversation_id JOIN drivers d ON d.id=c.driver_id LEFT JOIN recruiters r ON r.id=c.recruiter_id ORDER BY n.updated_at DESC LIMIT 50").all():Promise.resolve({results:[]}),
+  section==='Applications & calls'?db.prepare("SELECT c.id,c.status,c.data_json,r.email AS recruiter,d.data_json AS driver FROM conversations c JOIN drivers d ON d.id=c.driver_id LEFT JOIN recruiters r ON r.id=c.recruiter_id WHERE c.status IN ('closed','cancelled') ORDER BY json_extract(c.data_json,'$.updatedAt') DESC LIMIT 50").all():Promise.resolve({results:[]}),
  ]);
  return {role:a.role,email:a.email,roster:roster.results,eligible:0,eligibleCountDeferred:true,catalog:catalog.results.filter(row=>!removedCatalogCompany(String(row.companyId),String(row.name))).map(row=>({...row,offer:effectiveCatalogOffer(JSON.parse(String(row.offer)) as Offer)})),
   activity:activity.results.map(row=>{const data=JSON.parse(String(row.data_json));return {id:row.id,type:row.type,at:row.at,actor:row.actor??'System',summary:data.reason??data.input?.reason??data.evidence??(data.assigned!==undefined?`${data.assigned} contacts assigned`:data.urgent!==undefined?`Urgent hiring ${data.urgent?'enabled':'disabled'}`:data.source??'Recorded change')};}),page,
