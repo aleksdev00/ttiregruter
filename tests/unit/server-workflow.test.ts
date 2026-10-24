@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 34053)
-Total output lines: 765
-
 import {applyRequestedLaptopDemoContacts} from '../fixtures/requested-laptop-demo-contacts.ts';
 import {applyRequestedDemoRemoval,applyRequestedAllDemoRemoval,applyRequestedAlexLaptopDemoRemoval} from '../../src/server/requested-demo-removal.ts';
 import {assignedContactView,nextAvailableContact} from '../../src/domain/contact-list.ts';
@@ -301,7 +298,125 @@ test('Imported programs allow one provisional choice, use program-specific closi
  assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM applications').get()!.n,0);
 });
 
-test('Reviewing one catalog program preserves source provenance, urgency and sibling program terms',async()…4053 tokens truncated…ricalNotes(f.db,f.a,p),changed);const refreshed=await conversationHistory(f.db,f.admin,c.id);assert.equal(refreshed.conversation.playbook!.notes.nextAction,p.notes.nextAction);for(const key of ['status','outcome','closedAt','answers','recruiterId','selectedOfferId'])assert.deepEqual(refreshed.conversation[key as keyof Conversation],conversation[key as keyof Conversation]);assert.deepEqual(f.sql.prepare('SELECT * FROM drivers WHERE id=?').get(id),driver);assert.deepEqual(f.sql.prepare('SELECT * FROM tasks').all(),tasks);assert.deepEqual(f.sql.prepare('SELECT payload_json FROM completion_notifications').get(),payload);assert.equal(f.sql.prepare("SELECT COUNT(*) AS n FROM audit WHERE type='historical_notes_edited'").get()!.n,1);const byAdmin=await editHistoricalNotes(f.db,f.admin,{...p,notes:{...p.notes,owner:'Owner review'},expectedRevision:refreshed.conversation.revision,requestId:'admin-history-edit'});assert.equal(byAdmin.editedBy,f.admin.email);await assert.rejects(editHistoricalNotes(f.db,f.a,{...p,requestId:'stale-history-edit'}));});
+test('Reviewing one catalog program preserves source provenance, urgency and sibling program terms',async()=>{
+ const {importCarrierCatalog}=await import('../../src/server/carrier-catalog-import.ts');const f=fixture(),m=migrationFixture();await importCarrierCatalog(f.db,m.bucket,f.admin,{syntheticSource:true});
+ f.sql.prepare("UPDATE companies SET data_json=json_set(data_json,'$.urgent',1) WHERE id='bbcl'").run();
+ const sibling=f.sql.prepare("SELECT data_json FROM offers WHERE id='owner-bbcl-lease'").get()!.data_json;
+ const offer=JSON.parse(String(f.sql.prepare("SELECT data_json FROM offers WHERE id='owner-bbcl-company'").get()!.data_json));
+ await operation(f.db,f.admin,'save_catalog',{companyId:'bbcl',companyName:'BBCL',status:'pending_review',expectedVersion:1,offer,verifiedBy:f.admin.id,source:'Synthetic owner review'});
+ const company=JSON.parse(String(f.sql.prepare("SELECT data_json FROM companies WHERE id='bbcl'").get()!.data_json));assert.equal(company.urgent,1);assert.ok(company.sourceHash);assert.equal(f.sql.prepare("SELECT data_json FROM offers WHERE id='owner-bbcl-lease'").get()!.data_json,sibling);
+ assert.equal((await importCarrierCatalog(f.db,m.bucket,f.admin,{syntheticSource:true})).matched,30);
+});
+
+test('Schema-only account migration preserves existing identities and never provisions account data',async()=>{
+ const f=fixture();await newDriver(f);
+ const recruiters=f.sql.prepare('SELECT * FROM recruiters ORDER BY id').all(),drivers=f.sql.prepare('SELECT * FROM drivers ORDER BY id').all();
+ const migration=readFileSync('drizzle/0004_approved_account_roster.sql','utf8');f.sql.exec(migration);f.sql.exec(migration);
+ assert.deepEqual(f.sql.prepare('SELECT * FROM recruiters ORDER BY id').all(),recruiters);
+ assert.deepEqual(f.sql.prepare('SELECT * FROM drivers ORDER BY id').all(),drivers);
+ assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM account_setup_backups').get()!.n,0);
+});
+test('Unlinked identities cannot acquire an account through legacy schema migrations',async()=>{
+ const f=fixture();f.sql.exec(readFileSync('drizzle/0004_approved_account_roster.sql','utf8'));
+ await assert.rejects(resolveActor(f.db,{userId:'unverified-account',email:'unapproved@example.invalid'}));
+ assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM drivers').get()!.n,0);
+});
+
+test('Daily owner approval uses legacy webhook, never exposes plaintext codes and survives reload',async()=>{
+ const {shiftService}=await import('../../src/server/work-sessions.ts');const f=fixture();f.sql.exec(readFileSync('drizzle/0005_daily_owner_code.sql','utf8'));
+ let sent:any,requests=0;const send=(async(_url:any,options:any)=>{requests++;sent=JSON.parse(options.body);return Response.json({ok:true,email:{ok:true}});}) as typeof fetch;
+ const s=shiftService(f.db,{HQ_WEBHOOK_URL:'https://fixture.invalid/shift',HQ_WEBHOOK_SECRET:'synthetic-secret'},send),u={userId:f.a.userId,email:f.a.email,fullName:'Fictional Recruiter',displayName:'Fixture'};
+ assert.equal(await s.requireActiveWorkSession(u.userId),null);const r=await s.requestShiftCode(u);assert.equal(r.kind,'sent');assert.equal(sent.action,'requestShiftCode');assert.equal(sent.ownerEmail,'tticdlrecruiting@gmail.com');assert.match(sent.code,/^\d{6}$/);
+ assert.ok(!JSON.stringify(s.publicWorkSession(r.session)).includes(sent.code));assert.ok(!JSON.stringify(f.sql.prepare('SELECT * FROM work_sessions').all()).includes('"code":'));
+ assert.equal((await s.requestShiftCode(u)).kind,'pending');assert.equal(requests,1);
+ assert.equal((await s.verifyShiftCode(f.b.userId,sent.code)).ok,false);
+ assert.equal((await s.verifyShiftCode(u.userId,sent.code==='000000'?'111111':'000000')).ok,false);
+ assert.equal((await s.verifyShiftCode(u.userId,sent.code)).ok,true);
+ assert.ok(await shiftService(f.db).requireActiveWorkSession(u.userId));assert.equal((await s.requestShiftCode(u)).kind,'active');assert.equal(requests,1);
+ await s.endTodaySession(u.userId);assert.equal(await s.requireActiveWorkSession(u.userId),null);assert.equal((await s.verifyShiftCode(u.userId,sent.code)).ok,false);
+ assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM applications').get()!.n,0);
+});
+test('Owner approval rejects HTTP200 failure, expires daily and locks repeated invalid codes',async()=>{
+ const {shiftService}=await import('../../src/server/work-sessions.ts');const f=fixture();f.sql.exec(readFileSync('drizzle/0005_daily_owner_code.sql','utf8'));const u={userId:f.a.userId,email:f.a.email,fullName:null,displayName:'Fixture'};
+ const config={HQ_WEBHOOK_URL:'https://fixture.invalid',HQ_WEBHOOK_SECRET:'synthetic'};
+ const fail=shiftService(f.db,config,(async()=>Response.json({ok:false,email:{ok:true}})) as typeof fetch);assert.equal((await fail.requestShiftCode(u)).kind,'failed');assert.equal((await fail.verifyShiftCode(u.userId,'123456')).ok,false);
+ let code='';const s=shiftService(f.db,config,(async(_u:any,p:any)=>{code=JSON.parse(p.body).code;return Response.json({ok:true,email:{ok:true}});}) as typeof fetch);await s.requestShiftCode(u);
+ const bad=code==='000000'?'111111':'000000';for(let i=0;i<5;i++)assert.equal((await s.verifyShiftCode(u.userId,bad)).ok,false);assert.equal((await s.verifyShiftCode(u.userId,code)).ok,false);
+ f.sql.prepare('UPDATE work_sessions SET verification_attempts=0,code_expires_at=0').run();assert.equal((await s.verifyShiftCode(u.userId,code)).ok,false);
+ f.sql.prepare("UPDATE work_sessions SET status='active',work_date='2000-01-01'").run();assert.equal(await s.requireActiveWorkSession(u.userId),null);
+});
+test('Callback task uses the new agreed callback instead of an older note reminder',async()=>{
+ const f=fixture(),{id,c}=await live(f),date='2031-10-03T15:00:00.000Z';
+ ok(await workflowMutation(f.db,f.a,'saveCallNotes',[c.id,{dueAt:'2030-10-03T15:00:00.000Z',dueTimeZone:'UTC',nextAction:'Discuss next step'},{requestId:'old-notes-reminder'}]));
+ const current=(await loadSnapshot(f.db,f.a)).conversations.find(x=>x.id===c.id)!;
+ const args=[c.id,'callback',date,{requestId:await completionRequestId(c.id,'callback',date),expectedRevision:current.revision}];
+ ok(await workflowMutation(f.db,f.a,'finish',args));ok(await workflowMutation(f.db,f.a,'finish',args));
+ const task=f.sql.prepare('SELECT * FROM tasks WHERE driver_id=?').get(id)!;
+ assert.equal(task.due_at,Date.parse(date));assert.equal(task.kind,'callback');assert.equal(JSON.parse(String(task.data_json)).conversationId,c.id);
+ assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM tasks WHERE driver_id=?').get(id)!.n,1);
+ assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM applications').get()!.n,0);
+});
+test('Incomplete completion keeps an owned follow-up without inventing a deadline or submitting an application',async()=>{
+ for(const outcome of ['interested','pending_verification','handoff_required'] as const){
+ const f=fixture(),{id,c}=await live(f);
+ const current=(await loadSnapshot(f.db,f.a)).conversations.find(x=>x.id===c.id)!;
+ const args=[c.id,outcome,null,{requestId:await completionRequestId(c.id,outcome,null),expectedRevision:current.revision}];
+ ok(await workflowMutation(f.db,f.a,'finish',args));ok(await workflowMutation(f.db,f.a,'finish',args));
+ const task=f.sql.prepare('SELECT * FROM tasks WHERE driver_id=?').get(id)!;
+ assert.equal(task.owner_id,f.a.id);assert.equal(task.due_at,null);assert.equal(task.status,'pending');assert.ok(JSON.parse(String(task.data_json)).nextAction);assert.equal(JSON.parse(String(task.data_json)).conversationId,c.id);
+ assert.equal((await loadSnapshot(f.db,f.a)).conversations.find(x=>x.id===c.id)!.status,'closed');
+ assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM tasks WHERE driver_id=?').get(id)!.n,1);
+ assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM applications').get()!.n,0);
+ }
+});
+test('Schema-only deployment never creates synthetic driver data',async()=>{
+ const f=fixture(),migration=readFileSync('drizzle/0007_aleksa_demo_contacts.sql','utf8');
+ const real=await newDriver(f),before=f.sql.prepare('SELECT * FROM drivers WHERE id=?').get(real);
+ f.sql.exec(migration);f.sql.exec(migration);
+ assert.deepEqual(f.sql.prepare('SELECT * FROM drivers WHERE id=?').get(real),before);
+ assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM drivers').get()!.n,1);
+ assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM applications').get()!.n,0);
+});
+test('Four newly invited accounts receive separate 500-contact batches and bind only their authenticated email',async()=>{
+ const {provisionInvitedRecruiters,validProvisionSecret}=await import('../../src/server/invited-recruiters.ts');
+ const f=fixture();f.sql.exec(readFileSync('drizzle/0006_recruiter_contact_refill.sql','utf8'));
+ const real=await newDriver(f),before=f.sql.prepare('SELECT data_json FROM drivers WHERE id=?').get(real);
+ for(let i=0;i<2005;i++){
+ const c={...seed().contacts[0],id:'invite-pool-'+String(i).padStart(4,'0'),ownerRecruiterId:null,reservedBy:null,activeConversationId:null,status:'available',callbackAt:null,phoneNormalized:'+1202556'+String(i).padStart(4,'0'),rawFields:{},isDemo:false};
+ f.sql.prepare('INSERT INTO drivers(id,owner_id,phone,blocked,duplicate,next_action,data_json) VALUES(?,NULL,?,0,0,?,?)').run(c.id,c.phoneNormalized,'Original next step',JSON.stringify(c));
+ }
+ f.sql.prepare("UPDATE drivers SET blocked=1 WHERE id='invite-pool-0000'").run();
+ f.sql.prepare("UPDATE drivers SET duplicate=1 WHERE id='invite-pool-0001'").run();
+ const first=await provisionInvitedRecruiters(f.db);assert.equal(first.length,4);
+ for(const r of first as {email:string;recruiter_id:string;assigned:number}[]){
+ assert.equal(r.assigned,500);const actor=await resolveActor(f.db,{userId:'new-user-'+r.recruiter_id,email:r.email});assert.equal(actor.role,'recruiter');assert.equal((await loadSnapshot(f.db,actor)).contacts.length,500);
+ await assert.rejects(resolveActor(f.db,{userId:'new-user-'+r.recruiter_id,email:'intruder@fixture.invalid'}));
+ }
+ assert.deepEqual(await provisionInvitedRecruiters(f.db),first);
+ assert.deepEqual(f.sql.prepare('SELECT data_json FROM drivers WHERE id=?').get(real),before);
+ assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM drivers WHERE blocked=1 AND owner_id IS NULL').get()!.n,1);
+ assert.equal(await validProvisionSecret('expected','expected'),true);assert.equal(await validProvisionSecret(undefined,'expected'),false);assert.equal(await validProvisionSecret('expected','other'),false);
+});
+
+test('Every valid Finish branch atomically freezes one summary, including voicemail and optional company',async()=>{
+ const variants=['no_answer','voicemail','interested','callback','not_interested','wrong_number','do_not_contact','no_current_fit','qualification_in_progress','driver_reports_applied','pending_verification','handoff_required','company_chosen','application_received','w2_routed'];
+ for(const variant of variants){
+  const f=fixture();let id:string,c:Conversation;
+  if(['no_answer','voicemail','do_not_contact'].includes(variant)){id=await newDriver(f);c=ok(await workflowMutation(f.db,f.a,'claimContact',[id,{requestId:'branch-claim'}])) as Conversation;if(variant!=='do_not_contact')ok(await workflowMutation(f.db,f.a,'recordAttempt',[c.id,{requestId:'branch-attempt'}]));if(variant==='voicemail'){ok(await workflowMutation(f.db,f.a,'conversationAction',[c.id,'no_answer',{requestId:'branch-no-answer'}]));ok(await workflowMutation(f.db,f.a,'conversationAction',[c.id,'voicemail_left',{requestId:'branch-voicemail'}]));}}
+  else {({id,c}=await live(f));}
+  c=(await loadSnapshot(f.db,f.a)).conversations.find(x=>x.id===c.id)!;
+  c.answers.employment=variant==='w2_routed'?'w2':'1099';c.answers.position='company';c.playbook!.notes.nextAction='Original completion notes';
+  if(variant==='w2_routed'){f.a.profile.referralUrl='https://apply.ttirecruiting.us/?ref=fixture';f.a.profile.callbackNumber='+12025550191';f.a.profile.contactEmail=f.a.email;c.playbook!.communicationStatus='copied';}
+  if(variant==='application_received')c.playbook!.externalReceipt={id:'fixture-receipt',evidence:'Separate synthetic receipt',receivedAt:'2026-01-01T00:00:00.000Z',confirmedBy:f.admin.id,source:'Fixture'};
+  if(variant==='company_chosen'){const offer={...seed().offers[3],id:'fixture-selected',isDemo:false,source:'approved_snapshot',approvalStatus:'approved',recruitingApproved:true,verifiedAt:new Date().toISOString(),expiresAt:'2099-01-01T00:00:00.000Z',snapshotVersion:'fixture',employment:'1099'};f.sql.prepare('INSERT INTO companies(id,name,status,version,data_json) VALUES(?,?,?,?,?)').run('fixture-company',offer.companyName,'active',1,'{}');f.sql.prepare('INSERT INTO offers(id,company_id,version,data_json) VALUES(?,?,?,?)').run(offer.id,'fixture-company','fixture',JSON.stringify(offer));c.selectedOfferId=offer.id;c.playbook!.companyFinderFilters={position:'Company driver',employmentType:'1099',home:'7',trailer:'Dry van',experienceMonths:'12-24',sap:'no'};}
+  f.sql.prepare('UPDATE conversations SET data_json=? WHERE id=?').run(JSON.stringify(c),c.id);
+  const outcome=variant==='voicemail'?'no_answer':variant,callback=variant==='callback'?'2099-01-01T00:00:00.000Z':null;
+  const args=[c.id,outcome,callback,{requestId:'branch-complete-'+variant,expectedRevision:c.revision}];ok(await workflowMutation(f.db,f.a,'finish',args));ok(await workflowMutation(f.db,f.a,'finish',args));
+  const rows=f.sql.prepare('SELECT * FROM completion_notifications').all();assert.equal(rows.length,1,variant);const payload=JSON.parse(String(rows[0].payload_json));assert.equal(payload.conversationId,c.id);assert.equal(payload.outcome,outcome);assert.equal(payload.recruiter.verifiedEmail,f.a.email);assert.equal(payload.notes.nextAction,'Original completion notes');assert.equal(payload.callbackAt,callback);assert.ok(payload.completedAtUtc);if(variant==='voicemail')assert.equal(payload.voicemailStatus,'reported_left');if(variant==='company_chosen'){assert.equal(payload.companyFinder.filters.position,'Company driver');assert.equal(payload.companyFinder.filters.employmentType,'1099');}else {assert.equal(payload.selectedCompany,null);assert.equal(payload.companyFinder,null);}assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM applications').get()!.n,0);f.sql.close();
+ }
+});
+test('Invalid outcome and failed completion transaction create no notification, keep inputs and send nothing',async()=>{const f=fixture(),{id,c}=await live(f);ok(await workflowMutation(f.db,f.a,'saveCallNotes',[c.id,{nextAction:'Preserve entered data'},{requestId:'failure-notes-save'}]));const before=(await loadSnapshot(f.db,f.a)).conversations[0];assert.equal((await workflowMutation(f.db,f.a,'finish',[c.id,'application_started',null,{requestId:'invalid-application'}])).ok,false);assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM completion_notifications').get()!.n,0);f.sql.exec("CREATE TRIGGER fail_finish BEFORE INSERT ON completion_notifications BEGIN SELECT RAISE(ABORT,'simulated completion storage failure'); END");await assert.rejects(workflowMutation(f.db,f.a,'finish',[c.id,'interested',null,{requestId:'failed-completion-save'}]));assert.deepEqual((await loadSnapshot(f.db,f.a)).conversations[0],before);assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM completion_notifications').get()!.n,0);assert.equal((await loadSnapshot(f.db,f.a)).contacts.find(x=>x.id===id)!.activeConversationId,c.id);});
+test('Historical notes are durably audited, scoped to assigned recruiter/admin, and preserve all completion state',async()=>{const {conversationHistory,editHistoricalNotes}=await import('../../src/server/historical-notes.ts');const f=fixture(),{id,c}=await live(f);ok(await workflowMutation(f.db,f.a,'finish',[c.id,'callback','2099-01-01T00:00:00.000Z',{requestId:'history-complete'}]));const {conversation}=await conversationHistory(f.db,f.a,c.id),driver=f.sql.prepare('SELECT * FROM drivers WHERE id=?').get(id),tasks=f.sql.prepare('SELECT * FROM tasks').all(),payload=f.sql.prepare('SELECT payload_json FROM completion_notifications').get();const p={conversationId:c.id,notes:{...conversation.playbook!.notes,nextAction:'Updated historical note'},expectedRevision:conversation.revision,requestId:'history-note-edit'};await assert.rejects(editHistoricalNotes(f.db,f.b,p));await assert.rejects(conversationHistory(f.db,f.b,c.id));const changed=await editHistoricalNotes(f.db,f.a,p);assert.deepEqual(await editHistoricalNotes(f.db,f.a,p),changed);const refreshed=await conversationHistory(f.db,f.admin,c.id);assert.equal(refreshed.conversation.playbook!.notes.nextAction,p.notes.nextAction);for(const key of ['status','outcome','closedAt','answers','recruiterId','selectedOfferId'])assert.deepEqual(refreshed.conversation[key as keyof Conversation],conversation[key as keyof Conversation]);assert.deepEqual(f.sql.prepare('SELECT * FROM drivers WHERE id=?').get(id),driver);assert.deepEqual(f.sql.prepare('SELECT * FROM tasks').all(),tasks);assert.deepEqual(f.sql.prepare('SELECT payload_json FROM completion_notifications').get(),payload);assert.equal(f.sql.prepare("SELECT COUNT(*) AS n FROM audit WHERE type='historical_notes_edited'").get()!.n,1);const byAdmin=await editHistoricalNotes(f.db,f.admin,{...p,notes:{...p.notes,owner:'Owner review'},expectedRevision:refreshed.conversation.revision,requestId:'admin-history-edit'});assert.equal(byAdmin.editedBy,f.admin.email);await assert.rejects(editHistoricalNotes(f.db,f.a,{...p,requestId:'stale-history-edit'}));});
 test('Active notes, field edits, opening and navigation-related pauses never create summary records',async()=>{const f=fixture(),{c}=await live(f);ok(await workflowMutation(f.db,f.a,'saveCallNotes',[c.id,{nextAction:'Active draft'},{requestId:'ordinary-note-edit'}]));ok(await workflowMutation(f.db,f.a,'pause',[c.id,{requestId:'ordinary-pause'}]));await loadSnapshot(f.db,f.a);assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM completion_notifications').get()!.n,0);});
 test('Email failures keep completed calls, require explicit success and reconcile uncertain delivery without resending',async()=>{const {deliverCompletion}=await import('../../src/server/completion-notifications.ts');const settings={url:'https://script.google.com/macros/s/fixture/exec',secret:'synthetic'};const f=fixture(),{c}=await live(f);ok(await workflowMutation(f.db,f.a,'finish',[c.id,'interested',null,{requestId:'email-finish'}]));let sends=0,status='failed',bodies:any[]=[];const send=(async(_u:any,o:any)=>{const p=JSON.parse(o.body);bodies.push(p);if(p.action==='conversationCompletionCapabilities')return Response.json({ok:true,conversationCompletion:{version:1}});if(p.action==='completeConversation'){sends++;return status==='200-only'?Response.json({ok:true}):Response.json({ok:status==='sent',notificationId:p.notificationId,email:{ok:status==='sent',status,safeToRetry:status==='failed'}});}return Response.json({ok:status==='sent',notificationId:p.notificationId,email:{ok:status==='sent',status}});}) as typeof fetch;assert.equal((await deliverCompletion(f.db,f.a,c.id,settings,'retry',send))!.status,'failed');assert.equal((await loadSnapshot(f.db,f.a)).conversations[0].status,'closed');status='200-only';assert.equal((await deliverCompletion(f.db,f.a,c.id,settings,'retry',send))!.status,'unconfirmed');const count=sends;status='sent';assert.equal((await deliverCompletion(f.db,f.a,c.id,settings,'retry',send))!.status,'sent');assert.equal(sends,count);assert.equal((await deliverCompletion(f.db,f.a,c.id,settings,'retry',send))!.status,'sent');assert.equal(sends,count);assert.equal(bodies.filter(p=>p.action==='completeConversation')[0].notificationId,bodies.filter(p=>p.action==='completeConversation')[1].notificationId);await assert.rejects(deliverCompletion(f.db,f.b,c.id,settings,'retry',send));});
 test('Concurrent delivery calls acquire only one lease; refresh checks and lost acknowledgements cannot double-send',async()=>{const {deliverCompletion}=await import('../../src/server/completion-notifications.ts');const f=fixture(),{c}=await live(f);ok(await workflowMutation(f.db,f.a,'finish',[c.id,'interested',null,{requestId:'lease-finish'}]));let sends=0;const send=(async(_u:any,o:any)=>{const p=JSON.parse(o.body);if(p.action==='conversationCompletionCapabilities')return Response.json({ok:true,conversationCompletion:{version:1}});sends++;throw new Error('Acknowledgement lost');}) as typeof fetch;const config={url:'https://script.google.com/macros/s/fixture/exec',secret:'synthetic'};await Promise.all([deliverCompletion(f.db,f.a,c.id,config,'retry',send),deliverCompletion(f.db,f.a,c.id,config,'retry',send)]);assert.equal(sends,1);assert.equal(f.sql.prepare('SELECT status FROM completion_notifications').get()!.status,'unconfirmed');const actions:string[]=[];const reconcile=(async(_u:any,o:any)=>{const p=JSON.parse(o.body);actions.push(p.action);return Response.json(p.action==='conversationCompletionCapabilities'?{ok:true,conversationCompletion:{version:1}}:{ok:true,notificationId:p.notificationId,email:{ok:false,status:'not_found',safeToRetry:true}});}) as typeof fetch;assert.equal((await deliverCompletion(f.db,f.a,c.id,config,'retry',reconcile))!.status,'failed');assert.equal(actions.includes('completeConversation'),false);});
@@ -321,7 +436,7 @@ test('Admin assignment preview excludes restrictions, callbacks, history and act
  assert.equal(f.sql.prepare('SELECT COUNT(*) AS n FROM drivers WHERE owner_id=?').get(f.a.id)!.n,2);
  assert.equal((await loadSnapshot(f.db,f.a)).contacts.length,2);
  await assert.rejects(commitAssignment(f.db,f.admin,{...commit,recruiterId:f.b.id}),/request changed/);
- const data=await adminOverview(f.db,f.admin);assert.equal(data.eligible,0);assert.equal(data.activity.length,0);assert.equal(data.roster.find(r=>r.id===f.a.id)!.assigned,2);const activity=await adminOverview(f.db,f.admin,0,'Activity');assert.equal(activity.activity[0].type,'contacts_assigned');await assert.rejects(adminOverview(f.db,f.b),/Administrator/);
+ const data=await adminOverview(f.db,f.admin);assert.equal(data.eligible,0);assert.equal(data.activity[0].type,'contacts_assigned');assert.equal(data.roster.find(r=>r.id===f.a.id)!.assigned,2);await assert.rejects(adminOverview(f.db,f.b),/Administrator/);
 });
 test('A changed assignment preview rolls back every contact and audit rather than substituting other contacts',async()=>{
  const {previewAssignment,commitAssignment}=await import('../../src/server/admin.ts');const f=fixture();const id=await newDriver(f);f.sql.prepare("UPDATE drivers SET owner_id=NULL,data_json=json_set(data_json,'$.ownerRecruiterId',NULL) WHERE id=?").run(id);
